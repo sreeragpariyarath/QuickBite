@@ -1,0 +1,21 @@
+{
+  "name": "quickbite",
+  "version": "1.0.0",
+  "description": "",
+  "private": true,
+  "scripts": {},
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.5.2",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {
+    "@nestjs/cli": "^11.0.21",
+    "turbo": "^2.9.16"
+  }
+}
