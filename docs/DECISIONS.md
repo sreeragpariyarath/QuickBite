@@ -88,3 +88,88 @@ Use a single `users` table with a `role` column (`CUSTOMER` | `OWNER` enum).
 
 **Consequences:**
 If role-specific profile fields are needed in the future, they can live in separate `customer_profiles` or `owner_profiles` tables that reference `users`. This does not change the core decision.
+
+---
+
+## D-005 — Use Cloudinary for image storage
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Restaurant and menu item images need to be stored somewhere. Options were AWS S3, Cloudinary, and storing binary data in PostgreSQL. Project has no budget (learning project).
+
+**Decision:**
+Use Cloudinary free tier.
+
+**Reasons:**
+- Permanent free tier (25 GB storage, 25 GB bandwidth/month) — no cost
+- Auto image resizing and compression out of the box
+- Simpler SDK than S3 — no AWS account or IAM setup needed
+- Sufficient scale for a portfolio project
+
+**Consequences:**
+`imageUrl String?` fields on `Restaurant` and `MenuItem` store the Cloudinary URL. Images are served directly from Cloudinary CDN, not through the services. Upload endpoint to be implemented in Sprint 6.
+
+---
+
+## D-006 — JWT validation is service-local, not via auth-service
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Every service needs to know who is making a request (user ID and role). Two options: call auth-service on every request, or validate the JWT locally in each service.
+
+**Decision:**
+Each service validates the JWT independently using the shared `JWT_SECRET`. No network call to auth-service per request.
+
+**Reasons:**
+- Calling auth-service on every request creates tight coupling and a single point of failure
+- JWT is self-contained — signature verification proves authenticity without a network call
+- Follows standard microservices JWT pattern
+
+**Consequences:**
+`JWT_SECRET` must be available as an environment variable in every service. Token revocation before expiry requires a Redis blocklist (planned for Sprint 5).
+
+---
+
+## D-007 — Order items are stored as snapshots
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Order service needs to record what a customer ordered. It could store just the `menuItemId` and look up the current price from restaurant-service, or snapshot the data at order time.
+
+**Decision:**
+Snapshot the item name and price into `OrderItem` at the moment the order is placed.
+
+**Reasons:**
+- Prices and menu items change over time — historical orders must reflect what the customer actually paid
+- Avoids a cross-service dependency at query time
+- Consistent with how real order systems work (receipts are immutable)
+
+**Consequences:**
+`OrderItem` stores `name`, `price`, and `quantity` directly. `menuItemId` is kept as a reference only — not a foreign key, not queried for display.
+
+---
+
+## D-008 — No cross-service foreign keys
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Services reference data from other services (e.g. restaurant-service stores `ownerId` from auth-service). Decision needed on whether these are enforced foreign keys or plain UUID references.
+
+**Decision:**
+Cross-service IDs are stored as plain `UUID` fields — no database-level foreign keys across service boundaries.
+
+**Reasons:**
+- Services own their own databases — enforcing FK constraints across databases is not possible
+- Referential integrity is enforced at the application level via JWT claims and API validation
+- Keeps service databases truly independent
+
+**Consequences:**
+Application code is responsible for validating that referenced IDs are valid. Each service trusts the JWT payload for user identity rather than querying auth-service.
