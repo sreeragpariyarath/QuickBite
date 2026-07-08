@@ -1,80 +1,57 @@
-# QuickBite
+# Project Context
 
-## Project Overview
+## What is QuickBite?
 
-QuickBite is a microservices-based food delivery platform built to learn:
+QuickBite is a microservices-based food delivery platform built to be production-grade and portfolio-worthy. It serves as a practical vehicle for learning:
 
-- Microservices Architecture
+- Microservices architecture
 - NestJS
 - RabbitMQ
 - Redis
 - Docker
-- CI/CD
-- AWS
-
-The project is intended to be production-grade and portfolio-worthy.
+- CI/CD with GitHub Actions
+- AWS deployment
 
 ---
 
 ## Business Domain
 
-QuickBite allows customers to browse restaurants and place food orders.
-
-Restaurant owners can manage restaurants and menu items.
+QuickBite connects **customers** with **restaurants**. Customers browse menus and place orders; restaurant owners manage their restaurants and fulfill incoming orders.
 
 ---
 
 ## User Roles
 
-### CUSTOMER
+### Customer
 
-Permissions:
+| Permissions | Restrictions |
+|---|---|
+| Register and log in | Cannot create or manage restaurants |
+| Browse restaurants and menus | Cannot manage menu items |
+| Create orders | Cannot view other customers' orders |
+| View own order history | — |
 
-- Register
-- Login
-- Browse restaurants
-- Browse menus
-- Create orders
-- View own orders
+### Owner
 
-Restrictions:
-
-- Cannot create restaurants
-- Cannot manage menus
-
----
-
-### OWNER
-
-Permissions:
-
-- Register
-- Login
-- Create restaurants
-- Manage menus
-- View incoming orders
-- Accept orders
-- Reject orders
-
-Restrictions:
-
-- Cannot access another owner's restaurant
+| Permissions | Restrictions |
+|---|---|
+| Register and log in | Cannot access another owner's restaurant |
+| Create and manage restaurants | Cannot place customer orders |
+| Manage menu items and categories | — |
+| View, accept, and reject incoming orders | — |
 
 ---
 
 ## Current Phase
 
-Current Sprint:
-Sprint 1
+**Sprint 1 — Auth Service**
 
-Current Focus:
-Auth Service
+Current focus:
 
-Current Goals:
+- PostgreSQL and Prisma setup
+- User registration
+- Login with email and password
+- JWT access tokens
+- Refresh tokens
 
-- Setup PostgreSQL
-- Setup Prisma
-- User Registration
-- Login
-- JWT
-- Refresh Tokens
+See [ROADMAP.md](ROADMAP.md) for the full sprint plan.
