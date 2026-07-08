@@ -61,6 +61,7 @@ Service is available at `http://localhost:3000`.
 
 | Method | Path | Description | Status |
 |---|---|---|---|
+| `GET` | `/health` | Service + database health check | Live |
 | `POST` | `/auth/register` | Register a new user | Planned |
 | `POST` | `/auth/login` | Login and receive access + refresh tokens | Planned |
 | `POST` | `/auth/refresh` | Exchange refresh token for a new access token | Planned |

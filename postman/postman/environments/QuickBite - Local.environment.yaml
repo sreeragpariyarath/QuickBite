@@ -1,0 +1,8 @@
+name: QuickBite - Local
+values:
+  - key: base_url
+    value: ''
+  - key: restaurant_url
+    value: ''
+  - key: order_url
+    value: ''
