@@ -16,7 +16,7 @@
 - [x] JWT access token issuance
 - [x] Refresh token flow (`POST /auth/refresh`)
 - [x] JWT auth guard (used by `POST /auth/logout`)
-- [ ] Role decorator (`@Roles('OWNER')`) — needed from Sprint 2
+- [x] Role decorator (`@Roles('OWNER')`) — built in restaurant-service
 
 ---
 
@@ -24,11 +24,12 @@
 
 **Goal:** Owners can create and manage restaurants and menus.
 
-- [ ] Scaffold restaurant-service
-- [ ] Restaurant CRUD (owner-scoped)
-- [ ] Category management
-- [ ] Menu item CRUD
-- [ ] OWNER role guard integration
+- [x] Scaffold restaurant-service (port 3001, `restaurant_db`)
+- [x] Restaurant CRUD (owner-scoped, cross-owner protected)
+- [x] Category management
+- [x] Menu item CRUD (create, update, delete, availability flag)
+- [x] OWNER role guard integration (`JwtAuthGuard` + `RolesGuard` + `@Roles`)
+- [x] Public browse endpoints (list + detail with menu)
 
 ---
 

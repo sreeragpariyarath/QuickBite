@@ -40,8 +40,8 @@ Customers browse restaurants and place orders. Restaurant owners manage menus an
 
 | Service | Responsibility | Status | Port |
 |---|---|---|---|
-| `auth-service` | Registration, authentication, JWT | In progress | `3000` |
-| `restaurant-service` | Restaurants, categories, menus | Planned | — |
+| `auth-service` | Registration, authentication, JWT | Live | `3000` |
+| `restaurant-service` | Restaurants, categories, menus | Live | `3001` |
 | `order-service` | Order lifecycle management | Planned | — |
 | `notification-service` | Email and SMS alerts | Planned | — |
 

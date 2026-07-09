@@ -253,8 +253,22 @@
     },
     {
       "name": "Restaurant Service",
-      "description": "Coming in Sprint 2.\n\nBase URL: {{restaurant_url}} (default: http://localhost:3001)\n\nAll write endpoints require: Authorization: Bearer {{access_token}} with OWNER role.",
+      "description": "Restaurant, category, and menu management.\n\nBase URL: {{restaurant_url}} (default: http://localhost:3001)\n\nAll write endpoints require: Authorization: Bearer {{access_token}} with OWNER role.\nLogin as owner@example.com first!",
       "item": [
+        {
+          "name": "Health Check",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{restaurant_url}}/health",
+              "host": ["{{restaurant_url}}"],
+              "path": ["health"]
+            },
+            "description": "Check if the restaurant service and its database are up.\n\nExpected response: 200 OK\n{\n  \"status\": \"ok\",\n  \"service\": \"restaurant-service\",\n  \"database\": \"up\"\n}"
+          },
+          "response": []
+        },
         {
           "name": "Get All Restaurants",
           "request": {
@@ -265,7 +279,7 @@
               "host": ["{{restaurant_url}}"],
               "path": ["restaurants"]
             },
-            "description": "List all active restaurants. Public — no auth required.\n\n[Sprint 2]"
+            "description": "List all active restaurants. Public — no auth required.\n\nExpected response: 200 OK — array of restaurants"
           },
           "response": []
         },
@@ -285,12 +299,26 @@
                 }
               ]
             },
-            "description": "Get a single restaurant with its menu. Public — no auth required.\n\n[Sprint 2]"
+            "description": "Get a single restaurant with categories and available menu items. Public — no auth required.\n\nExpected response: 200 OK\nError cases:\n- 404 Not Found — restaurant does not exist"
           },
           "response": []
         },
         {
           "name": "Create Restaurant",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set('restaurant_id', pm.response.json().id);",
+                  "    console.log('restaurant_id saved to environment.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -317,12 +345,116 @@
               "host": ["{{restaurant_url}}"],
               "path": ["restaurants"]
             },
-            "description": "Create a new restaurant. OWNER role required.\n\n[Sprint 2]"
+            "description": "Create a new restaurant. OWNER role required.\n\nOn success, restaurant_id is saved to the environment automatically.\n\nExpected response: 201 Created\nError cases:\n- 401 Unauthorized — missing/invalid token\n- 403 Forbidden — CUSTOMER role cannot create restaurants"
+          },
+          "response": []
+        },
+        {
+          "name": "Update Restaurant",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"description\": \"Authentic Indian cuisine — now with tandoor specials\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{restaurant_url}}/restaurants/:id",
+              "host": ["{{restaurant_url}}"],
+              "path": ["restaurants", ":id"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{restaurant_id}}"
+                }
+              ]
+            },
+            "description": "Update restaurant fields (name, description, address, imageUrl, isActive). Owner of this restaurant only.\n\nError cases:\n- 403 Forbidden — you do not own this restaurant\n- 404 Not Found"
+          },
+          "response": []
+        },
+        {
+          "name": "Add Category",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set('category_id', pm.response.json().id);",
+                  "    console.log('category_id saved to environment.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Main Course\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{restaurant_url}}/restaurants/:id/categories",
+              "host": ["{{restaurant_url}}"],
+              "path": ["restaurants", ":id", "categories"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{restaurant_id}}"
+                }
+              ]
+            },
+            "description": "Add a menu category to your restaurant. Owner only.\n\nOn success, category_id is saved to the environment automatically."
           },
           "response": []
         },
         {
           "name": "Add Menu Item",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 201) {",
+                  "    pm.environment.set('menu_item_id', pm.response.json().id);",
+                  "    console.log('menu_item_id saved to environment.');",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
           "request": {
             "method": "POST",
             "header": [
@@ -355,7 +487,78 @@
                 }
               ]
             },
-            "description": "Add a menu item to a restaurant. OWNER role required.\n\n[Sprint 2]"
+            "description": "Add a menu item to your restaurant. Owner only. categoryId is optional.\n\nOn success, menu_item_id is saved to the environment automatically."
+          },
+          "response": []
+        },
+        {
+          "name": "Update Menu Item",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"price\": 275.50,\n  \"isAvailable\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{restaurant_url}}/restaurants/:id/menu-items/:itemId",
+              "host": ["{{restaurant_url}}"],
+              "path": ["restaurants", ":id", "menu-items", ":itemId"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{restaurant_id}}"
+                },
+                {
+                  "key": "itemId",
+                  "value": "{{menu_item_id}}"
+                }
+              ]
+            },
+            "description": "Update a menu item (name, description, price, categoryId, imageUrl, isAvailable). Owner only."
+          },
+          "response": []
+        },
+        {
+          "name": "Delete Menu Item",
+          "request": {
+            "method": "DELETE",
+            "header": [
+              {
+                "key": "Authorization",
+                "value": "Bearer {{access_token}}"
+              }
+            ],
+            "url": {
+              "raw": "{{restaurant_url}}/restaurants/:id/menu-items/:itemId",
+              "host": ["{{restaurant_url}}"],
+              "path": ["restaurants", ":id", "menu-items", ":itemId"],
+              "variable": [
+                {
+                  "key": "id",
+                  "value": "{{restaurant_id}}"
+                },
+                {
+                  "key": "itemId",
+                  "value": "{{menu_item_id}}"
+                }
+              ]
+            },
+            "description": "Remove a menu item from your restaurant. Owner only.\n\nExpected response: 204 No Content"
           },
           "response": []
         }
