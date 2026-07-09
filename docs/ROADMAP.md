@@ -10,12 +10,13 @@
 - [x] Scaffold auth-service with NestJS
 - [x] Set up PostgreSQL with Docker
 - [x] Set up Prisma with User schema and initial migration
-- [ ] User registration endpoint (`POST /auth/register`)
-- [ ] Password hashing with bcrypt
-- [ ] Login endpoint (`POST /auth/login`)
-- [ ] JWT access token issuance
-- [ ] Refresh token flow (`POST /auth/refresh`)
-- [ ] Auth guards and role decorators
+- [x] User registration endpoint (`POST /auth/register`)
+- [x] Password hashing with bcrypt
+- [x] Login endpoint (`POST /auth/login`)
+- [x] JWT access token issuance
+- [x] Refresh token flow (`POST /auth/refresh`)
+- [x] JWT auth guard (used by `POST /auth/logout`)
+- [ ] Role decorator (`@Roles('OWNER')`) — needed from Sprint 2
 
 ---
 

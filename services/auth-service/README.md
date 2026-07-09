@@ -21,7 +21,7 @@ PostgreSQL — `auth_db`
 | Table | Key Columns |
 |---|---|
 | `users` | `id` (UUID), `email`, `password`, `role`, `createdAt`, `updatedAt` |
-| `refresh_tokens` | _(planned)_ `id`, `token`, `expiresAt`, `userId` |
+| `refresh_tokens` | `id`, `token` (sha256 hash), `userId`, `expiresAt`, `createdAt` |
 
 ---
 
@@ -31,10 +31,9 @@ PostgreSQL — `auth_db`
 |---|---|---|
 | `DATABASE_URL` | PostgreSQL connection string | `postgresql://quickbite:quickbite123@localhost:5432/auth_db` |
 | `PORT` | Port the service listens on | `3000` |
-| `JWT_SECRET` | _(planned)_ Secret for signing access tokens | `supersecret` |
-| `JWT_EXPIRES_IN` | _(planned)_ Access token expiry | `15m` |
-| `REFRESH_SECRET` | _(planned)_ Secret for signing refresh tokens | `refreshsecret` |
-| `REFRESH_EXPIRES_IN` | _(planned)_ Refresh token expiry | `7d` |
+| `JWT_SECRET` | Secret for signing access tokens | `dev-only-change-me-in-production` |
+| `JWT_EXPIRES_IN_SECONDS` | Access token expiry in seconds | `900` |
+| `REFRESH_EXPIRES_IN_DAYS` | Refresh token expiry in days | `7` |
 
 ---
 
@@ -62,10 +61,10 @@ Service is available at `http://localhost:3000`.
 | Method | Path | Description | Status |
 |---|---|---|---|
 | `GET` | `/health` | Service + database health check | Live |
-| `POST` | `/auth/register` | Register a new user | Planned |
-| `POST` | `/auth/login` | Login and receive access + refresh tokens | Planned |
-| `POST` | `/auth/refresh` | Exchange refresh token for a new access token | Planned |
-| `POST` | `/auth/logout` | Revoke the refresh token | Planned |
+| `POST` | `/auth/register` | Register a new user | Live |
+| `POST` | `/auth/login` | Login and receive access + refresh tokens | Live |
+| `POST` | `/auth/refresh` | Exchange refresh token for a new access token | Live |
+| `POST` | `/auth/logout` | Revoke the refresh token (requires Bearer token) | Live |
 
 ---
 
