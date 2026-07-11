@@ -64,17 +64,27 @@ Token payload:
 ```
 User
   id          UUID        PK
-  email       String      UNIQUE
-  password    String      bcrypt hashed
+  phone       String?     UNIQUE — primary identifier (OTP auth)
+  email       String?     UNIQUE — secondary auth
+  password    String?     bcrypt hashed (only for email auth)
+  name        String?
   role        CUSTOMER | OWNER
   createdAt   DateTime
   updatedAt   DateTime
 
 RefreshToken
   id          UUID        PK
-  token       String      hashed
+  token       String      sha256 hashed
   userId      UUID        → User (cascades on delete)
   expiresAt   DateTime
+  createdAt   DateTime
+
+Otp
+  id          UUID        PK
+  phone       String      indexed
+  codeHash    String      sha256 of 6-digit code
+  attempts    Int         max 5 verify attempts
+  expiresAt   DateTime    5-minute TTL
   createdAt   DateTime
 ```
 
@@ -205,10 +215,14 @@ Responsibilities:
 Endpoints:
 | Method | Path | Description |
 |---|---|---|
-| `POST` | `/auth/register` | Register a new user |
-| `POST` | `/auth/login` | Login, receive access + refresh tokens |
+| `POST` | `/auth/otp/request` | Send OTP to phone (primary flow) |
+| `POST` | `/auth/otp/verify` | Verify OTP → tokens; auto-registers new phones |
+| `POST` | `/auth/register` | Register with email+password (secondary) |
+| `POST` | `/auth/login` | Login with email+password (secondary) |
 | `POST` | `/auth/refresh` | Exchange refresh token for new access token |
 | `POST` | `/auth/logout` | Revoke refresh token |
+
+SMS delivery: `SmsProvider` interface → MSG91 in production, console logger in dev (see D-010).
 
 ---
 

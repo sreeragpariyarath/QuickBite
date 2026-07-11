@@ -6,6 +6,8 @@ values:
     value: 'http://localhost:3001'
   - key: order_url
     value: 'http://localhost:3002'
+  - key: dev_otp
+    value: ''
   - key: access_token
     value: ''
   - key: refresh_token

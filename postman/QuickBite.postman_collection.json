@@ -25,6 +25,95 @@
           "response": []
         },
         {
+          "name": "OTP — Request",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const res = pm.response.json();",
+                  "    if (res.devOtp) {",
+                  "        pm.environment.set('dev_otp', res.devOtp);",
+                  "        console.log('devOtp saved to environment: ' + res.devOtp);",
+                  "    }",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+919876543210\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/otp/request",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "otp", "request"]
+            },
+            "description": "Send a 6-digit OTP to an Indian phone number (+91XXXXXXXXXX).\n\nPRIMARY auth flow. Without MSG91 credentials configured, the response includes devOtp (saved to the environment automatically) so you can test.\n\nExpected response: 200 OK\n{\n  \"message\": \"OTP sent\",\n  \"expiresInSeconds\": 300,\n  \"devOtp\": \"123456\"  // dev mode only\n}\n\nError cases:\n- 400 Bad Request — invalid phone format\n- 429 Too Many Requests — more than 3 requests per 15 minutes"
+          },
+          "response": []
+        },
+        {
+          "name": "OTP — Verify (login/register)",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "if (pm.response.code === 200) {",
+                  "    const res = pm.response.json();",
+                  "    pm.environment.set('access_token', res.accessToken);",
+                  "    pm.environment.set('refresh_token', res.refreshToken);",
+                  "    console.log('Tokens saved. isNewUser: ' + res.isNewUser);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"+919876543210\",\n  \"otp\": \"{{dev_otp}}\",\n  \"role\": \"CUSTOMER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "{{base_url}}/auth/otp/verify",
+              "host": ["{{base_url}}"],
+              "path": ["auth", "otp", "verify"]
+            },
+            "description": "Verify the OTP. Registers the phone automatically if it's new (role applies only then; defaults to CUSTOMER).\n\n{{dev_otp}} is filled automatically by 'OTP — Request' in dev mode. With real SMS, type the received code.\n\nOn success, access_token and refresh_token are saved automatically.\n\nExpected response: 200 OK\n{\n  \"accessToken\": \"...\",\n  \"refreshToken\": \"...\",\n  \"isNewUser\": true,\n  \"user\": { \"id\": \"...\", \"phone\": \"+91...\", \"role\": \"CUSTOMER\" }\n}\n\nError cases:\n- 401 Unauthorized — invalid, expired, or already-used OTP; or too many wrong attempts"
+          },
+          "response": []
+        },
+        {
           "name": "Register — Customer",
           "request": {
             "method": "POST",

@@ -34,6 +34,8 @@ PostgreSQL — `auth_db`
 | `JWT_SECRET` | Secret for signing access tokens | `dev-only-change-me-in-production` |
 | `JWT_EXPIRES_IN_SECONDS` | Access token expiry in seconds | `900` |
 | `REFRESH_EXPIRES_IN_DAYS` | Refresh token expiry in days | `7` |
+| `MSG91_AUTH_KEY` | MSG91 auth key (empty → console SMS provider) | `""` |
+| `MSG91_TEMPLATE_ID` | DLT-approved MSG91 template with `##otp##` var | `""` |
 
 ---
 
@@ -61,10 +63,15 @@ Service is available at `http://localhost:3000`.
 | Method | Path | Description | Status |
 |---|---|---|---|
 | `GET` | `/health` | Service + database health check | Live |
-| `POST` | `/auth/register` | Register a new user | Live |
-| `POST` | `/auth/login` | Login and receive access + refresh tokens | Live |
+| `POST` | `/auth/otp/request` | Send a 6-digit OTP to a phone (`+91XXXXXXXXXX`) | Live |
+| `POST` | `/auth/otp/verify` | Verify OTP → tokens; auto-registers new phones | Live |
+| `POST` | `/auth/register` | Register with email + password (secondary flow) | Live |
+| `POST` | `/auth/login` | Login with email + password (secondary flow) | Live |
 | `POST` | `/auth/refresh` | Exchange refresh token for a new access token | Live |
 | `POST` | `/auth/logout` | Revoke the refresh token (requires Bearer token) | Live |
+
+OTP limits: 5-minute expiry, single-use, 3 requests per phone per 15 minutes, 5 verify attempts.
+Without MSG91 credentials the response includes `devOtp` (console provider) for testing.
 
 ---
 

@@ -1,0 +1,5 @@
+$kind: http-request
+name: menu-items
+url: ""
+method: GET
+order: 2000

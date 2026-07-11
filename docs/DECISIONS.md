@@ -173,3 +173,41 @@ Cross-service IDs are stored as plain `UUID` fields — no database-level foreig
 
 **Consequences:**
 Application code is responsible for validating that referenced IDs are valid. Each service trusts the JWT payload for user identity rather than querying auth-service.
+
+---
+
+## D-009 — Phone OTP is the primary authentication method
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+QuickBite pivoted from learning project to product targeting the Indian market, where phone-OTP login is the standard for food apps (Swiggy, Zomato). Email+password had already been built.
+
+**Decision:**
+Phone number + OTP is the primary registration/login flow for both CUSTOMER and OWNER roles. Email+password remains as a secondary option.
+
+**Details:**
+- `users.phone` is unique and nullable; `email`/`password` are now optional
+- OTPs are 6-digit, sha256-hashed at rest, expire in 5 minutes, single-use
+- Rate limits: 3 OTP requests per phone per 15 minutes, 5 verify attempts per OTP
+- Verify auto-registers unknown phones (`isNewUser` flag in the response)
+
+**Consequences:**
+The frontend needs only one auth screen (phone → OTP). Users may exist with no email. Account recovery is inherently solved (possession of the phone).
+
+---
+
+## D-010 — MSG91 for SMS, behind a provider interface
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+OTP delivery in India requires a DLT-registered SMS provider. MSG91 is the market standard (~₹0.20/SMS). Development must not depend on paid credentials being present.
+
+**Decision:**
+SMS goes through an `SmsProvider` interface. `Msg91SmsProvider` (Flow API + DLT template) is used when `MSG91_AUTH_KEY`/`MSG91_TEMPLATE_ID` are configured; otherwise a `ConsoleSmsProvider` logs the OTP and the API response includes `devOtp` so the flow stays testable.
+
+**Consequences:**
+Going live requires an MSG91 account, DLT registration, and two env vars — zero code changes. The same interface will later serve order-status SMS notifications.

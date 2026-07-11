@@ -7,8 +7,10 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { createHash, randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
+import { OtpService } from './otp.service';
 import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 
 const SALT_ROUNDS = 10;
 
@@ -17,7 +19,33 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
+    private readonly otpService: OtpService,
   ) {}
+
+  async verifyOtp(dto: VerifyOtpDto) {
+    await this.otpService.assertValid(dto.phone, dto.otp);
+
+    let user = await this.prisma.user.findUnique({
+      where: { phone: dto.phone },
+    });
+    const isNewUser = !user;
+
+    if (!user) {
+      user = await this.prisma.user.create({
+        data: { phone: dto.phone, role: dto.role ?? 'CUSTOMER' },
+      });
+    }
+
+    const accessToken = await this.signAccessToken(user.id, user.role);
+    const refreshToken = await this.issueRefreshToken(user.id);
+
+    return {
+      accessToken,
+      refreshToken,
+      isNewUser,
+      user: { id: user.id, phone: user.phone, role: user.role },
+    };
+  }
 
   async register(dto: RegisterDto) {
     const existing = await this.prisma.user.findUnique({
@@ -45,7 +73,7 @@ export class AuthService {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
-    if (!user) {
+    if (!user || !user.password) {
       throw new UnauthorizedException('Invalid email or password');
     }
 
