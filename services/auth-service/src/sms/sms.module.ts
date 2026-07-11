@@ -8,11 +8,15 @@ import { ConsoleSmsProvider } from './console-sms.provider';
     {
       provide: SMS_PROVIDER,
       useFactory: () => {
-        if (process.env.MSG91_AUTH_KEY && process.env.MSG91_TEMPLATE_ID) {
+        if (process.env.MSG91_AUTH_KEY) {
+          const mode = process.env.MSG91_TEMPLATE_ID
+            ? 'DLT template'
+            : 'MSG91 default template (trial — delivers to your verified number only)';
+          new Logger('SmsModule').log(`SMS via MSG91 SendOTP API — ${mode}`);
           return new Msg91SmsProvider();
         }
         new Logger('SmsModule').warn(
-          'MSG91_AUTH_KEY/MSG91_TEMPLATE_ID not set — using console SMS provider (OTP is logged, not sent)',
+          'MSG91_AUTH_KEY not set — using console SMS provider (OTP is logged, not sent)',
         );
         return new ConsoleSmsProvider();
       },

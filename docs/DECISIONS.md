@@ -207,7 +207,11 @@ The frontend needs only one auth screen (phone → OTP). Users may exist with no
 OTP delivery in India requires a DLT-registered SMS provider. MSG91 is the market standard (~₹0.20/SMS). Development must not depend on paid credentials being present.
 
 **Decision:**
-SMS goes through an `SmsProvider` interface. `Msg91SmsProvider` (Flow API + DLT template) is used when `MSG91_AUTH_KEY`/`MSG91_TEMPLATE_ID` are configured; otherwise a `ConsoleSmsProvider` logs the OTP and the API response includes `devOtp` so the flow stays testable.
+SMS goes through an `SmsProvider` interface. `Msg91SmsProvider` uses MSG91's SendOTP API (`/api/v5/otp`) with **our** generated OTP passed as a parameter, so OTP verification stays in our OtpService (hash compare) — MSG91 is delivery only. Provider selection:
+
+- `MSG91_AUTH_KEY` + `MSG91_TEMPLATE_ID` → DLT template (production)
+- `MSG91_AUTH_KEY` only → MSG91's default OTP template (trial mode — delivers only to the phone number verified on the MSG91 account; usable before DLT registration)
+- neither → `ConsoleSmsProvider` logs the OTP and the API response includes `devOtp`
 
 **Consequences:**
-Going live requires an MSG91 account, DLT registration, and two env vars — zero code changes. The same interface will later serve order-status SMS notifications.
+Real SMS to the developer's own phone works before DLT. Going fully live requires business + DLT registration and setting `MSG91_TEMPLATE_ID` — zero code changes. The same interface will later serve order-status SMS notifications.
