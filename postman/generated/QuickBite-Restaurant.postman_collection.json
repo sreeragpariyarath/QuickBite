@@ -1,0 +1,1638 @@
+{
+  "item": [
+    {
+      "id": "53f78ec5-1404-4612-bb5d-c3dee5b2bf26",
+      "name": "health",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f6b4f2c4-b58f-4bf2-884d-38c00aca3601",
+          "name": "Service + database health check",
+          "request": {
+            "name": "Service + database health check",
+            "description": {},
+            "url": {
+              "path": [
+                "health"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "65be3468-6194-465a-b33b-e180cef33167",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c7654ce6-cddf-40d7-a446-c7529ea770eb",
+              "name": "Database unreachable",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "health"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "eb917271-f07f-4d69-80fb-68f2c86a8bad",
+      "name": "restaurants",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "10012df8-654e-4303-a22a-8b9f1a3e08d9",
+          "name": "List all active restaurants (public)",
+          "request": {
+            "name": "List all active restaurants (public)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "8baaa320-b5dd-4dcf-a89d-bd97eb85ea04",
+              "name": "Array of active restaurants",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d7f4778b-b638-4f43-b109-9013ec943cd7",
+          "name": "Create a restaurant (OWNER)",
+          "request": {
+            "name": "Create a restaurant (OWNER)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spice Garden\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b704d924-1bf0-41b3-a7a2-1806c681db3d",
+              "name": "Restaurant created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spice Garden\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4a82a626-1998-4db2-856b-4a9daf8c4042",
+              "name": "Missing or invalid access token",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spice Garden\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "43a83bb9-a056-41ac-b8e1-8508d18b6ec3",
+              "name": "CUSTOMER role cannot create restaurants",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spice Garden\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "576dba4d-5792-4edf-97e0-584aa326069c",
+          "name": "Restaurant detail with categories and available menu items (public)",
+          "request": {
+            "name": "Restaurant detail with categories and available menu items (public)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "GET"
+          },
+          "response": [
+            {
+              "id": "bc18fc58-a82f-4740-a74c-c38106af38f7",
+              "name": "Restaurant with nested menu",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "12d28cfe-a42d-413a-aba1-d5bb43ea0402",
+              "name": "Restaurant not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "cce7d614-d04a-4671-a2e8-6d2503e5fd5b",
+          "name": "Update a restaurant (owner of it only)",
+          "request": {
+            "name": "Update a restaurant (owner of it only)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants",
+                ":id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spice Garden\",\n  \"description\": \"Now with tandoor specials\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\",\n  \"isActive\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5fa132e3-71fa-44ac-83ab-81758ed1cb2d",
+              "name": "Restaurant updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spice Garden\",\n  \"description\": \"Now with tandoor specials\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\",\n  \"isActive\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "95945bd2-8fce-4f5c-a0a6-74bb6739fd3f",
+              "name": "You do not own this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spice Garden\",\n  \"description\": \"Now with tandoor specials\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\",\n  \"isActive\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "e0542bbe-24c9-4465-85f1-f191a5769d48",
+              "name": "Restaurant not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Spice Garden\",\n  \"description\": \"Now with tandoor specials\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\",\n  \"isActive\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8de63fea-0c9f-4bbf-89d0-07c1d9b61978",
+          "name": "Add a category (owner of the restaurant only)",
+          "request": {
+            "name": "Add a category (owner of the restaurant only)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants",
+                ":id",
+                "categories"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Main Course\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "21f47311-0a63-49fa-9025-ea81d4d2a162",
+              "name": "Category created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Main Course\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "4ab7aca3-b04c-40e5-b27d-0f250fff6878",
+              "name": "You do not own this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Main Course\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1d6e9fd4-3fb8-42de-8b6a-c05590f31e5c",
+              "name": "Restaurant not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "categories"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Main Course\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d6696089-bb78-42d4-a258-24e3af4a13fa",
+          "name": "Add a menu item (owner of the restaurant only)",
+          "request": {
+            "name": "Add a menu item (owner of the restaurant only)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants",
+                ":id",
+                "menu-items"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "id",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5a0724de-e764-4e49-a206-5c03ec9d37e2",
+              "name": "Menu item created",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Created",
+              "code": 201,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "3fb7615e-242d-495a-bea0-838d0efe9fb4",
+              "name": "You do not own this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aefcd73f-ceff-41d0-adac-e0817ea111f6",
+              "name": "Restaurant or category not found in this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a0ddaf9e-fc91-4cc1-b9f8-c4f8efbdffd6",
+          "name": "Update a menu item (owner of the restaurant only)",
+          "request": {
+            "name": "Update a menu item (owner of the restaurant only)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants",
+                ":id",
+                "menu-items",
+                ":itemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "a3fee7e2-0244-4991-b3f4-6823f2941f1a",
+              "name": "Menu item updated",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5aa7e9b-8c32-4706-b206-d8055bbd612a",
+              "name": "You do not own this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "a05a132b-df2b-4b53-af94-aa23bb8ce035",
+              "name": "Menu item not found in this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "32c4ab65-636d-4fd7-bf65-24685ebc9241",
+          "name": "Delete a menu item (owner of the restaurant only)",
+          "request": {
+            "name": "Delete a menu item (owner of the restaurant only)",
+            "description": {},
+            "url": {
+              "path": [
+                "restaurants",
+                ":id",
+                "menu-items",
+                ":itemId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "id",
+                  "description": "(Required) "
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "key": "itemId",
+                  "description": "(Required) "
+                }
+              ]
+            },
+            "method": "DELETE"
+          },
+          "response": [
+            {
+              "id": "092780ce-d4c8-4e8c-8610-1a17866221d2",
+              "name": "Menu item deleted",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2436674b-846d-448c-9f70-9522e7dfc45a",
+              "name": "You do not own this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d19afa64-d89e-45ad-960c-7a6ffce3a49f",
+              "name": "Menu item not found in this restaurant",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "restaurants",
+                    ":id",
+                    "menu-items",
+                    ":itemId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "id",
+                      "description": "(Required) "
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "key": "itemId",
+                      "description": "(Required) "
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "let body; try { body = pm.response.json(); } catch (e) { body = null; }",
+          "if (!body || pm.response.code >= 400) { return; }",
+          "if (body.accessToken) pm.environment.set('accessToken', body.accessToken);",
+          "if (body.refreshToken) pm.environment.set('refreshToken', body.refreshToken);",
+          "if (body.devOtp) pm.environment.set('devOtp', String(body.devOtp));",
+          "if (body.user && body.user.id) pm.environment.set('userId', body.user.id);",
+          "if (body.id) {",
+          "  if (body.ownerId) { pm.environment.set('restaurantId', body.id); }",
+          "  else if (body.price !== undefined) { pm.environment.set('menuItemId', body.id); }",
+          "  else if (body.customerId || body.total !== undefined) { pm.environment.set('orderId', body.id); }",
+          "  else if (body.restaurantId) { pm.environment.set('categoryId', body.id); }",
+          "  else if (body.role) { pm.environment.set('userId', body.id); }",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "{{restaurantBaseUrl}}"
+    }
+  ],
+  "info": {
+    "_postman_id": "78a4ddb2-c479-4609-ac12-8bd5c08d5737",
+    "name": "QuickBite — Restaurant Service",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "GENERATED FILE — do not edit. Regenerate with `pnpm openapi` (service) + `pnpm postman` (root). Uses the Local environment: baseUrl variables, {{accessToken}} bearer auth, and auto-saved ids via the collection post-response script."
+    }
+  },
+  "auth": {
+    "type": "bearer",
+    "bearer": [
+      {
+        "key": "token",
+        "value": "{{accessToken}}",
+        "type": "string"
+      }
+    ]
+  }
+}

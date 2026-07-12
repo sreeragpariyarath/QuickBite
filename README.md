@@ -86,27 +86,42 @@ The backend is the single source of truth — Swagger docs are generated from co
 
 **Authorize in Swagger:** click **Authorize**, paste the JWT from login/OTP verify (without the `Bearer ` prefix) — all protected endpoints then send it automatically.
 
-**Export OpenAPI specs** (writes to `docs/openapi/*.openapi.json`):
+### Postman workflow
+
+```
+NestJS controllers → Swagger decorators → OpenAPI JSON → generated Postman collections → Import
+```
+
+Postman collections are **build artifacts** — never edit them by hand.
+
+**1. After changing endpoints, regenerate:**
 
 ```bash
+# export fresh OpenAPI specs
 cd services/auth-service && pnpm openapi
 cd services/restaurant-service && pnpm openapi
+
+# convert to Postman collections (from repo root)
+pnpm postman
 ```
 
-**Import into Postman:** `File → Import` → pick `docs/openapi/<service>.openapi.json` (or paste the live `/docs-json` URL). Re-import after adding endpoints — no manual collection maintenance.
+**2. Import into Postman:** `File → Import` → pick both files from `postman/generated/` → choose **Replace** when prompted.
 
-**Token auto-save in Postman (optional, one-time):** after importing, open the collection → Scripts → Post-response and paste:
+The generated collections already include:
+- Collection-level auth: `Bearer {{accessToken}}` (all guarded requests inherit it)
+- A collection-level post-response script that auto-saves `accessToken`, `refreshToken`, `userId`, `restaurantId`, `categoryId`, `menuItemId`, `orderId`, and `devOtp` to the active environment whenever a response contains them
+- Requests organized in folders by backend module (Swagger tags)
+- Base URLs via variables — no hardcoded hosts
 
-```js
-try {
-  const b = pm.response.json();
-  if (b.accessToken) pm.environment.set('access_token', b.accessToken);
-  if (b.refreshToken) pm.environment.set('refresh_token', b.refreshToken);
-  if (b.devOtp) pm.environment.set('dev_otp', b.devOtp);
-} catch (e) {}
-```
+**3. Environment:** select the existing **Local** environment. It must define:
 
-Set the collection's auth to Bearer `{{access_token}}` and every login/OTP response feeds the next request.
+| Variable | Value |
+|---|---|
+| `authBaseUrl` | `http://localhost:3000` |
+| `restaurantBaseUrl` | `http://localhost:3001` |
+| `accessToken`, `refreshToken`, `userId`, `restaurantId`, `categoryId`, `menuItemId`, `orderId`, `devOtp` | empty — filled automatically |
+
+Typical session: `OTP Request` → `OTP Verify` (tokens saved) → any guarded request just works.
 
 ## Getting Started
 
