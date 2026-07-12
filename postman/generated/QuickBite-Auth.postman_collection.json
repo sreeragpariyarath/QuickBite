@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "427bf0bd-b41c-4240-a090-8951413878ba",
+      "id": "835223df-df01-4968-8e08-e288c985e2ae",
       "name": "health",
       "description": {
         "content": "",
@@ -9,10 +9,10 @@
       },
       "item": [
         {
-          "id": "222c478b-7ef0-4761-8c47-652d01bbbc17",
-          "name": "Service + database health check",
+          "id": "23d519cc-86c3-415a-b1fa-44fa6a614c7d",
+          "name": "GET /health",
           "request": {
-            "name": "Service + database health check",
+            "name": "{{baseUrl}}/health",
             "description": {},
             "url": {
               "path": [
@@ -32,71 +32,7 @@
             ],
             "method": "GET"
           },
-          "response": [
-            {
-              "id": "0371a8c0-0097-4370-952e-c4871e147c27",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "health"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "GET",
-                "body": {}
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "af56a5f6-9367-4849-9c8c-8dd52319140a",
-              "name": "Database unreachable",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "health"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Service Unavailable",
-              "code": 503,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
@@ -106,7 +42,7 @@
       "event": []
     },
     {
-      "id": "6fbf71be-e027-4af4-a918-980dd8ee4ac5",
+      "id": "41ee6d1e-9e42-49cf-a5de-1f52ae30e38b",
       "name": "auth",
       "description": {
         "content": "",
@@ -114,10 +50,10 @@
       },
       "item": [
         {
-          "id": "ea332206-f035-4405-83cb-275e2bd1d92a",
-          "name": "Send a 6-digit OTP to a phone (primary auth flow)",
+          "id": "74eb88f2-4ffc-4690-a4ba-0bccd8ed0719",
+          "name": "POST /auth/otp/request",
           "request": {
-            "name": "Send a 6-digit OTP to a phone (primary auth flow)",
+            "name": "{{baseUrl}}/auth/otp/request",
             "description": {
               "content": "OTP expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.",
               "type": "text/plain"
@@ -155,101 +91,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "3d2e506c-0fc6-45b9-907e-1afada1922b5",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "otp",
-                    "request"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"phone\": \"+919876543210\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "55d01c9b-db36-40ad-9232-910a50d021da",
-              "name": "More than 3 requests in 15 minutes for this phone",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "otp",
-                    "request"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"phone\": \"+919876543210\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "1a4360d9-9fe6-47c3-a849-00a548f6b3cf",
-          "name": "Verify OTP — logs in, auto-registers unknown phones",
+          "id": "f1853070-3623-4d69-8b71-fdb6a19aee24",
+          "name": "POST /auth/otp/verify",
           "request": {
-            "name": "Verify OTP — logs in, auto-registers unknown phones",
+            "name": "{{baseUrl}}/auth/otp/verify",
             "description": {},
             "url": {
               "path": [
@@ -284,101 +136,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "93e003d5-d907-4e4e-854f-7dff8a2c8349",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "otp",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"phone\": \"+919876543210\",\n  \"otp\": \"123456\",\n  \"role\": \"CUSTOMER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "eb54c361-d709-48aa-8148-42ed40dcf782",
-              "name": "Invalid, expired, or already-used OTP; or attempt limit hit",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "otp",
-                    "verify"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"phone\": \"+919876543210\",\n  \"otp\": \"123456\",\n  \"role\": \"CUSTOMER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "131e5915-8576-40b7-805d-5802c9d1f036",
-          "name": "Register with email + password",
+          "id": "a5b7a521-07e1-4f3c-8ce6-ac53e279f7f4",
+          "name": "POST /auth/register/email",
           "request": {
-            "name": "Register with email + password",
+            "name": "{{baseUrl}}/auth/register/email",
             "description": {
               "content": "Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.",
               "type": "text/plain"
@@ -416,101 +184,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "40608d07-bbaf-4454-9267-87d3432b29c5",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "register",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"CUSTOMER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Created",
-              "code": 201,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "1d285283-8919-4dcd-87c8-a8f8cca6588b",
-              "name": "Email already registered",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "register",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"name\": \"John\",\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\",\n  \"role\": \"CUSTOMER\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "408c793d-cc75-4fd9-bf29-c2391eedbd04",
-          "name": "Verify email from the link — redirects, auto-login for email-first users",
+          "id": "b3145d0e-fe6c-44b7-ac56-569661e29172",
+          "name": "GET /auth/verify-email",
           "request": {
-            "name": "Verify email from the link — redirects, auto-login for email-first users",
+            "name": "{{baseUrl}}/auth/verify-email",
             "description": {
               "content": "Single-use token. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.",
               "type": "text/plain"
@@ -535,88 +219,17 @@
             },
             "method": "GET"
           },
-          "response": [
-            {
-              "id": "aa543d98-bc2f-4805-8061-d8e4cbfa713d",
-              "name": "Redirect to FRONTEND_URL/auth/verified",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "verify-email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "token",
-                      "value": "string"
-                    }
-                  ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Found",
-              "code": 302,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "1cb958bf-135c-41cb-b1b3-7bffba2a370a",
-              "name": "Link invalid, expired, or already used",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "verify-email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [
-                    {
-                      "key": "token",
-                      "value": "string"
-                    }
-                  ],
-                  "variable": []
-                },
-                "method": "GET",
-                "body": {}
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "2a288645-f910-42cf-ae57-39e4963bf1c6",
-          "name": "Login with email + password (verified email required)",
+          "id": "355a7aac-9c0b-4323-826c-493fec90a030",
+          "name": "POST /auth/login/email",
           "request": {
-            "name": "Login with email + password (verified email required)",
+            "name": "{{baseUrl}}/auth/login/email",
             "description": {},
             "url": {
               "path": [
@@ -651,140 +264,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "e607c7db-75d5-4217-b382-df0a2ad52568",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "login",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"Password123!\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "feff595e-a5e0-4b08-a8db-620cb8d732e5",
-              "name": "Invalid email or password",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "login",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"Password123!\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "60ffcaea-d967-466d-b462-209d7484c187",
-              "name": "Please verify your email.",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "login",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"customer@example.com\",\n  \"password\": \"Password123!\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "72431a85-7ac9-49ad-ac27-23ec01f028b0",
-          "name": "Resend the verification email",
+          "id": "ea0bf84a-4119-4ba4-8715-3a1c43f90458",
+          "name": "POST /auth/email/resend",
           "request": {
-            "name": "Resend the verification email",
+            "name": "{{baseUrl}}/auth/email/resend",
             "description": {},
             "url": {
               "path": [
@@ -819,179 +309,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "5d8fd0cf-46a6-4674-92e3-7adb13a5afdc",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "email",
-                    "resend"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "0222e756-5cc5-4d10-8db0-de31fd01822a",
-              "name": "No account with this email",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "email",
-                    "resend"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Not Found",
-              "code": 404,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "a740cd22-bbc4-44e0-b089-b8ecd16217b8",
-              "name": "Email is already verified",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "email",
-                    "resend"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "9cdac37b-54b0-47ff-9567-d994aa98836f",
-              "name": "Wait 60 seconds between resends",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "email",
-                    "resend"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Too Many Requests",
-              "code": 429,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "d6c46463-bde6-49db-86bd-2e99e7a64a40",
-          "name": "Attach an email to the logged-in (phone) account",
+          "id": "0cd7e8ba-aaa3-4d3f-a461-2d49eaef93cd",
+          "name": "PATCH /auth/me/email",
           "request": {
-            "name": "Attach an email to the logged-in (phone) account",
+            "name": "{{baseUrl}}/auth/me/email",
             "description": {
               "content": "Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.",
               "type": "text/plain"
@@ -1029,168 +357,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "72442b0a-caf3-40a9-9c9d-759780998eed",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "me",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "b863c7e3-3aa2-4844-8936-183b31e6f654",
-              "name": "Missing or invalid access token",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "me",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            },
-            {
-              "id": "535c64e0-cd52-4884-90a4-5f8d041951b5",
-              "name": "Account already has an email, or email is taken",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "me",
-                    "email"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "PATCH",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"email\": \"john@example.com\",\n  \"password\": \"Password123!\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Conflict",
-              "code": 409,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "a041aa77-66cc-410b-a53a-1d09ddf57786",
-          "name": "Exchange refresh token for a new access token",
+          "id": "22b50079-d8cc-4533-b8cb-c4e1b3d55d8f",
+          "name": "POST /auth/refresh",
           "request": {
-            "name": "Exchange refresh token for a new access token",
+            "name": "{{baseUrl}}/auth/refresh",
             "description": {
               "content": "Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.",
               "type": "text/plain"
@@ -1227,99 +404,17 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "7ca7eb16-1b31-4044-a1fb-9defe5298bbe",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"1961487d8735bfc171879d604d7cae57ab6b8c25c246c5d5…\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "3b11f062-b9a0-4e27-9aa7-cc3618932bf2",
-              "name": "Refresh token missing, invalid, or expired",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "refresh"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"1961487d8735bfc171879d604d7cae57ab6b8c25c246c5d5…\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
           }
         },
         {
-          "id": "57261e7b-bfb4-4a62-a7c2-e9df8b87f894",
-          "name": "Revoke the refresh token",
+          "id": "7bbb0b23-723a-4685-9614-cf21be2eb2e2",
+          "name": "POST /auth/logout",
           "request": {
-            "name": "Revoke the refresh token",
+            "name": "{{baseUrl}}/auth/logout",
             "description": {
               "content": "Accepts the token from the body or the refresh_token cookie; clears the cookie.",
               "type": "text/plain"
@@ -1356,107 +451,7 @@
               }
             }
           },
-          "response": [
-            {
-              "id": "50f3684c-ff90-4405-ab6c-c29ee8a2a3f0",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "logout"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  },
-                  {
-                    "key": "Accept",
-                    "value": "application/json"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"1961487d8735bfc171879d604d7cae57ab6b8c25c246c5d5…\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "OK",
-              "code": 200,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "application/json"
-                }
-              ],
-              "body": "{}",
-              "cookie": [],
-              "_postman_previewlanguage": "json"
-            },
-            {
-              "id": "95fbff32-fd9c-43b8-a218-4d487a40e240",
-              "name": "Missing or invalid access token",
-              "originalRequest": {
-                "url": {
-                  "path": [
-                    "auth",
-                    "logout"
-                  ],
-                  "host": [
-                    "{{baseUrl}}"
-                  ],
-                  "query": [],
-                  "variable": []
-                },
-                "header": [
-                  {
-                    "description": {
-                      "content": "Added as a part of security scheme: bearer",
-                      "type": "text/plain"
-                    },
-                    "key": "Authorization",
-                    "value": "Bearer <token>"
-                  }
-                ],
-                "method": "POST",
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"refreshToken\": \"1961487d8735bfc171879d604d7cae57ab6b8c25c246c5d5…\"\n}",
-                  "options": {
-                    "raw": {
-                      "language": "json"
-                    }
-                  }
-                }
-              },
-              "status": "Unauthorized",
-              "code": 401,
-              "header": [
-                {
-                  "key": "Content-Type",
-                  "value": "text/plain"
-                }
-              ],
-              "body": "",
-              "cookie": [],
-              "_postman_previewlanguage": "text"
-            }
-          ],
+          "response": [],
           "event": [],
           "protocolProfileBehavior": {
             "disableBodyPruning": true
@@ -1496,7 +491,7 @@
     }
   ],
   "info": {
-    "_postman_id": "971252c0-59e7-42c9-acfc-d13ca7124bde",
+    "_postman_id": "29948504-3747-4630-b386-f729ad59451e",
     "name": "QuickBite — Auth Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

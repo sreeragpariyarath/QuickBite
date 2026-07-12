@@ -62,6 +62,27 @@ function stripRequestAuth(items) {
   }
 }
 
+// Saved example responses ("Untitled Response", one per documented status
+// code) clutter the sidebar — expected responses are documented in each
+// request's description instead.
+function stripSavedExamples(items) {
+  for (const item of items) {
+    if (item.response) item.response = [];
+    if (item.item) stripSavedExamples(item.item);
+  }
+}
+
+// "{{baseUrl}}/auth/login" → "POST /auth/login"
+function cleanRequestNames(items) {
+  for (const item of items) {
+    if (item.request) {
+      const path = item.name.replace('{{baseUrl}}', '') || '/';
+      item.name = `${item.request.method} ${path}`;
+    }
+    if (item.item) cleanRequestNames(item.item);
+  }
+}
+
 function convert(service) {
   const specPath = path.join(SPEC_DIR, service.spec);
   const spec = fs.readFileSync(specPath, 'utf8');
@@ -71,6 +92,7 @@ function convert(service) {
       { type: 'string', data: spec },
       {
         folderStrategy: 'Tags',
+        requestNameSource: 'URL',
         requestParametersResolution: 'Example',
         exampleParametersResolution: 'Example',
         enableOptionalParameters: false,
@@ -95,6 +117,8 @@ function convert(service) {
           bearer: [{ key: 'token', value: '{{accessToken}}', type: 'string' }],
         };
         stripRequestAuth(collection.item);
+        stripSavedExamples(collection.item);
+        cleanRequestNames(collection.item);
 
         // Collection-level post-response script
         collection.event = [
