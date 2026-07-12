@@ -42,7 +42,10 @@ export class RestaurantsController {
   // ---------- Public ----------
 
   @Get()
-  @ApiOperation({ summary: 'List all active restaurants (public)' })
+  @ApiOperation({
+    summary: 'List restaurants',
+    description: 'All active restaurants. Public — no auth required.',
+  })
   @ApiOkResponse({ description: 'Array of active restaurants' })
   findAll() {
     return this.restaurantsService.findAll();
@@ -50,7 +53,9 @@ export class RestaurantsController {
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Restaurant detail with categories and available menu items (public)',
+    summary: 'Restaurant details (with menu)',
+    description:
+      'Restaurant with its categories and available menu items. Public — no auth required.',
   })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiOkResponse({ description: 'Restaurant with nested menu' })
@@ -65,7 +70,10 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Create a restaurant (OWNER)' })
+  @ApiOperation({
+    summary: 'Create restaurant',
+    description: 'OWNER role required.',
+  })
   @ApiCreatedResponse({ description: 'Restaurant created' })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
   @ApiForbiddenResponse({ description: 'CUSTOMER role cannot create restaurants' })
@@ -77,7 +85,10 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update a restaurant (owner of it only)' })
+  @ApiOperation({
+    summary: 'Update restaurant',
+    description: 'Only the owner of this restaurant.',
+  })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiOkResponse({ description: 'Restaurant updated' })
   @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
@@ -94,7 +105,10 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Add a category (owner of the restaurant only)' })
+  @ApiOperation({
+    summary: 'Add category',
+    description: 'Only the owner of this restaurant.',
+  })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiCreatedResponse({ description: 'Category created' })
   @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
@@ -111,7 +125,11 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Add a menu item (owner of the restaurant only)' })
+  @ApiOperation({
+    summary: 'Add menu item',
+    description:
+      'Only the owner of this restaurant. categoryId is optional.',
+  })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiCreatedResponse({ description: 'Menu item created' })
   @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
@@ -130,7 +148,10 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Update a menu item (owner of the restaurant only)' })
+  @ApiOperation({
+    summary: 'Update menu item',
+    description: 'Only the owner of this restaurant.',
+  })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiParam({ name: 'itemId', format: 'uuid' })
   @ApiOkResponse({ description: 'Menu item updated' })
@@ -150,7 +171,10 @@ export class RestaurantsController {
   @Roles('OWNER')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Delete a menu item (owner of the restaurant only)' })
+  @ApiOperation({
+    summary: 'Delete menu item',
+    description: 'Only the owner of this restaurant. Returns 204.',
+  })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiParam({ name: 'itemId', format: 'uuid' })
   @ApiNoContentResponse({ description: 'Menu item deleted' })

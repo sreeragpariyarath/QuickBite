@@ -3,6 +3,7 @@
   "paths": {
     "/health": {
       "get": {
+        "description": "Service + database connectivity check.",
         "operationId": "AppController_getHealth",
         "parameters": [],
         "responses": {
@@ -25,7 +26,7 @@
             "description": "Database unreachable"
           }
         },
-        "summary": "Service + database health check",
+        "summary": "Health check",
         "tags": [
           "health"
         ]
@@ -33,7 +34,7 @@
     },
     "/auth/otp/request": {
       "post": {
-        "description": "OTP expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.",
+        "description": "Sends a 6-digit OTP to a phone (primary auth flow). Expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.",
         "operationId": "AuthController_requestOtp",
         "parameters": [],
         "requestBody": {
@@ -65,7 +66,7 @@
             "description": "More than 3 requests in 15 minutes for this phone"
           }
         },
-        "summary": "Send a 6-digit OTP to a phone (primary auth flow)",
+        "summary": "Request OTP",
         "tags": [
           "auth"
         ]
@@ -73,6 +74,7 @@
     },
     "/auth/otp/verify": {
       "post": {
+        "description": "Verifies the OTP and logs the user in. Unknown phone numbers are registered automatically (role applies only then; defaults to CUSTOMER).",
         "operationId": "AuthController_verifyOtp",
         "parameters": [],
         "requestBody": {
@@ -109,7 +111,7 @@
             "description": "Invalid, expired, or already-used OTP; or attempt limit hit"
           }
         },
-        "summary": "Verify OTP — logs in, auto-registers unknown phones",
+        "summary": "Verify OTP (login / register)",
         "tags": [
           "auth"
         ]
@@ -117,7 +119,7 @@
     },
     "/auth/register/email": {
       "post": {
-        "description": "Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.",
+        "description": "Registers with email + password. Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.",
         "operationId": "AuthController_registerEmail",
         "parameters": [],
         "requestBody": {
@@ -147,7 +149,7 @@
             "description": "Email already registered"
           }
         },
-        "summary": "Register with email + password",
+        "summary": "Email register (customer / owner)",
         "tags": [
           "auth"
         ]
@@ -155,7 +157,7 @@
     },
     "/auth/verify-email": {
       "get": {
-        "description": "Single-use token. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.",
+        "description": "Consumes the emailed single-use token and redirects to the frontend. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.",
         "operationId": "AuthController_verifyEmail",
         "parameters": [
           {
@@ -176,7 +178,7 @@
             "description": "Link invalid, expired, or already used"
           }
         },
-        "summary": "Verify email from the link — redirects, auto-login for email-first users",
+        "summary": "Verify email link",
         "tags": [
           "auth"
         ]
@@ -184,6 +186,7 @@
     },
     "/auth/login/email": {
       "post": {
+        "description": "Login with email + password. The email must be verified, otherwise 409 is returned.",
         "operationId": "AuthController_loginEmail",
         "parameters": [],
         "requestBody": {
@@ -217,7 +220,7 @@
             "description": "Please verify your email."
           }
         },
-        "summary": "Login with email + password (verified email required)",
+        "summary": "Email login",
         "tags": [
           "auth"
         ]
@@ -225,6 +228,7 @@
     },
     "/auth/email/resend": {
       "post": {
+        "description": "One resend per 60 seconds per account.",
         "operationId": "AuthController_resendVerification",
         "parameters": [],
         "requestBody": {
@@ -260,7 +264,7 @@
             "description": "Wait 60 seconds between resends"
           }
         },
-        "summary": "Resend the verification email",
+        "summary": "Resend verification email",
         "tags": [
           "auth"
         ]
@@ -268,7 +272,7 @@
     },
     "/auth/me/email": {
       "patch": {
-        "description": "Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.",
+        "description": "Adds an email to the logged-in (phone) account. Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.",
         "operationId": "AuthController_attachEmail",
         "parameters": [],
         "requestBody": {
@@ -306,7 +310,7 @@
             "bearer": []
           }
         ],
-        "summary": "Attach an email to the logged-in (phone) account",
+        "summary": "Attach email to account",
         "tags": [
           "auth"
         ]
@@ -314,7 +318,7 @@
     },
     "/auth/refresh": {
       "post": {
-        "description": "Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.",
+        "description": "Exchanges the refresh token for a new access token. Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.",
         "operationId": "AuthController_refresh",
         "parameters": [],
         "requestBody": {
@@ -344,7 +348,7 @@
             "description": "Refresh token missing, invalid, or expired"
           }
         },
-        "summary": "Exchange refresh token for a new access token",
+        "summary": "Refresh access token",
         "tags": [
           "auth"
         ]
@@ -352,7 +356,7 @@
     },
     "/auth/logout": {
       "post": {
-        "description": "Accepts the token from the body or the refresh_token cookie; clears the cookie.",
+        "description": "Revokes the refresh token. Accepts it from the body or the refresh_token cookie; clears the cookie.",
         "operationId": "AuthController_logout",
         "parameters": [],
         "requestBody": {
@@ -387,7 +391,7 @@
             "bearer": []
           }
         ],
-        "summary": "Revoke the refresh token",
+        "summary": "Logout",
         "tags": [
           "auth"
         ]

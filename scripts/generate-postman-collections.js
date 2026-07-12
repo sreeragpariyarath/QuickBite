@@ -72,10 +72,10 @@ function stripSavedExamples(items) {
   }
 }
 
-// "{{baseUrl}}/auth/login" → "POST /auth/login"
+// Fallback for endpoints without a summary: "{{baseUrl}}/x" → "METHOD /x"
 function cleanRequestNames(items) {
   for (const item of items) {
-    if (item.request) {
+    if (item.request && item.name.includes('{{baseUrl}}')) {
       const path = item.name.replace('{{baseUrl}}', '') || '/';
       item.name = `${item.request.method} ${path}`;
     }
@@ -92,7 +92,8 @@ function convert(service) {
       { type: 'string', data: spec },
       {
         folderStrategy: 'Tags',
-        requestNameSource: 'URL',
+        // Names come from @ApiOperation summaries — keep them short in code
+        requestNameSource: 'Fallback',
         requestParametersResolution: 'Example',
         exampleParametersResolution: 'Example',
         enableOptionalParameters: false,

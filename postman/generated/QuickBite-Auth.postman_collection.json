@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "835223df-df01-4968-8e08-e288c985e2ae",
+      "id": "2d17fed6-25fa-481e-b91e-f001ce87a1f9",
       "name": "health",
       "description": {
         "content": "",
@@ -9,11 +9,14 @@
       },
       "item": [
         {
-          "id": "23d519cc-86c3-415a-b1fa-44fa6a614c7d",
-          "name": "GET /health",
+          "id": "8aad83d3-c71b-45f1-9a67-b667a74a1be3",
+          "name": "Health check",
           "request": {
-            "name": "{{baseUrl}}/health",
-            "description": {},
+            "name": "Health check",
+            "description": {
+              "content": "Service + database connectivity check.",
+              "type": "text/plain"
+            },
             "url": {
               "path": [
                 "health"
@@ -42,7 +45,7 @@
       "event": []
     },
     {
-      "id": "41ee6d1e-9e42-49cf-a5de-1f52ae30e38b",
+      "id": "9cc11daf-d33d-4e0c-8753-9c9fb57efe51",
       "name": "auth",
       "description": {
         "content": "",
@@ -50,12 +53,12 @@
       },
       "item": [
         {
-          "id": "74eb88f2-4ffc-4690-a4ba-0bccd8ed0719",
-          "name": "POST /auth/otp/request",
+          "id": "1b00c8e7-2136-4595-a31d-54ecc4446a7a",
+          "name": "Request OTP",
           "request": {
-            "name": "{{baseUrl}}/auth/otp/request",
+            "name": "Request OTP",
             "description": {
-              "content": "OTP expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.",
+              "content": "Sends a 6-digit OTP to a phone (primary auth flow). Expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.",
               "type": "text/plain"
             },
             "url": {
@@ -98,11 +101,14 @@
           }
         },
         {
-          "id": "f1853070-3623-4d69-8b71-fdb6a19aee24",
-          "name": "POST /auth/otp/verify",
+          "id": "38303112-6b72-4e3d-b62f-4f94c3432047",
+          "name": "Verify OTP (login / register)",
           "request": {
-            "name": "{{baseUrl}}/auth/otp/verify",
-            "description": {},
+            "name": "Verify OTP (login / register)",
+            "description": {
+              "content": "Verifies the OTP and logs the user in. Unknown phone numbers are registered automatically (role applies only then; defaults to CUSTOMER).",
+              "type": "text/plain"
+            },
             "url": {
               "path": [
                 "auth",
@@ -143,12 +149,12 @@
           }
         },
         {
-          "id": "a5b7a521-07e1-4f3c-8ce6-ac53e279f7f4",
-          "name": "POST /auth/register/email",
+          "id": "e8c91fbb-f6fe-4fa6-bbd2-3ba7435670c8",
+          "name": "Email register (customer / owner)",
           "request": {
-            "name": "{{baseUrl}}/auth/register/email",
+            "name": "Email register (customer / owner)",
             "description": {
-              "content": "Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.",
+              "content": "Registers with email + password. Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.",
               "type": "text/plain"
             },
             "url": {
@@ -191,12 +197,12 @@
           }
         },
         {
-          "id": "b3145d0e-fe6c-44b7-ac56-569661e29172",
-          "name": "GET /auth/verify-email",
+          "id": "bfe00239-418c-44c5-a71f-f011dc477140",
+          "name": "Verify email link",
           "request": {
-            "name": "{{baseUrl}}/auth/verify-email",
+            "name": "Verify email link",
             "description": {
-              "content": "Single-use token. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.",
+              "content": "Consumes the emailed single-use token and redirects to the frontend. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.",
               "type": "text/plain"
             },
             "url": {
@@ -226,11 +232,14 @@
           }
         },
         {
-          "id": "355a7aac-9c0b-4323-826c-493fec90a030",
-          "name": "POST /auth/login/email",
+          "id": "0ad5c2f0-8548-4368-bebe-411958b1790e",
+          "name": "Email login",
           "request": {
-            "name": "{{baseUrl}}/auth/login/email",
-            "description": {},
+            "name": "Email login",
+            "description": {
+              "content": "Login with email + password. The email must be verified, otherwise 409 is returned.",
+              "type": "text/plain"
+            },
             "url": {
               "path": [
                 "auth",
@@ -271,11 +280,14 @@
           }
         },
         {
-          "id": "ea0bf84a-4119-4ba4-8715-3a1c43f90458",
-          "name": "POST /auth/email/resend",
+          "id": "16c88d9a-8692-4857-8960-1c2f014dd63b",
+          "name": "Resend verification email",
           "request": {
-            "name": "{{baseUrl}}/auth/email/resend",
-            "description": {},
+            "name": "Resend verification email",
+            "description": {
+              "content": "One resend per 60 seconds per account.",
+              "type": "text/plain"
+            },
             "url": {
               "path": [
                 "auth",
@@ -316,12 +328,12 @@
           }
         },
         {
-          "id": "0cd7e8ba-aaa3-4d3f-a461-2d49eaef93cd",
-          "name": "PATCH /auth/me/email",
+          "id": "f53f31a0-8f00-4588-bfce-3a94241d874a",
+          "name": "Attach email to account",
           "request": {
-            "name": "{{baseUrl}}/auth/me/email",
+            "name": "Attach email to account",
             "description": {
-              "content": "Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.",
+              "content": "Adds an email to the logged-in (phone) account. Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.",
               "type": "text/plain"
             },
             "url": {
@@ -364,12 +376,12 @@
           }
         },
         {
-          "id": "22b50079-d8cc-4533-b8cb-c4e1b3d55d8f",
-          "name": "POST /auth/refresh",
+          "id": "c4cd3806-6209-46d0-909b-0a2566239567",
+          "name": "Refresh access token",
           "request": {
-            "name": "{{baseUrl}}/auth/refresh",
+            "name": "Refresh access token",
             "description": {
-              "content": "Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.",
+              "content": "Exchanges the refresh token for a new access token. Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.",
               "type": "text/plain"
             },
             "url": {
@@ -411,12 +423,12 @@
           }
         },
         {
-          "id": "7bbb0b23-723a-4685-9614-cf21be2eb2e2",
-          "name": "POST /auth/logout",
+          "id": "defbac34-fdf1-4370-a825-baac3b0c65e9",
+          "name": "Logout",
           "request": {
-            "name": "{{baseUrl}}/auth/logout",
+            "name": "Logout",
             "description": {
-              "content": "Accepts the token from the body or the refresh_token cookie; clears the cookie.",
+              "content": "Revokes the refresh token. Accepts it from the body or the refresh_token cookie; clears the cookie.",
               "type": "text/plain"
             },
             "url": {
@@ -491,7 +503,7 @@
     }
   ],
   "info": {
-    "_postman_id": "29948504-3747-4630-b386-f729ad59451e",
+    "_postman_id": "808f3a5a-589c-40ba-ab1d-478e6a5cd094",
     "name": "QuickBite — Auth Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

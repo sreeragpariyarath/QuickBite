@@ -3,6 +3,7 @@
   "paths": {
     "/health": {
       "get": {
+        "description": "Service + database connectivity check.",
         "operationId": "AppController_getHealth",
         "parameters": [],
         "responses": {
@@ -25,7 +26,7 @@
             "description": "Database unreachable"
           }
         },
-        "summary": "Service + database health check",
+        "summary": "Health check",
         "tags": [
           "health"
         ]
@@ -33,6 +34,7 @@
     },
     "/restaurants": {
       "get": {
+        "description": "All active restaurants. Public — no auth required.",
         "operationId": "RestaurantsController_findAll",
         "parameters": [],
         "responses": {
@@ -40,12 +42,13 @@
             "description": "Array of active restaurants"
           }
         },
-        "summary": "List all active restaurants (public)",
+        "summary": "List restaurants",
         "tags": [
           "restaurants"
         ]
       },
       "post": {
+        "description": "OWNER role required.",
         "operationId": "RestaurantsController_create",
         "parameters": [],
         "requestBody": {
@@ -74,7 +77,7 @@
             "bearer": []
           }
         ],
-        "summary": "Create a restaurant (OWNER)",
+        "summary": "Create restaurant",
         "tags": [
           "restaurants"
         ]
@@ -82,6 +85,7 @@
     },
     "/restaurants/{id}": {
       "get": {
+        "description": "Restaurant with its categories and available menu items. Public — no auth required.",
         "operationId": "RestaurantsController_findOne",
         "parameters": [
           {
@@ -102,12 +106,13 @@
             "description": "Restaurant not found"
           }
         },
-        "summary": "Restaurant detail with categories and available menu items (public)",
+        "summary": "Restaurant details (with menu)",
         "tags": [
           "restaurants"
         ]
       },
       "patch": {
+        "description": "Only the owner of this restaurant.",
         "operationId": "RestaurantsController_update",
         "parameters": [
           {
@@ -146,7 +151,7 @@
             "bearer": []
           }
         ],
-        "summary": "Update a restaurant (owner of it only)",
+        "summary": "Update restaurant",
         "tags": [
           "restaurants"
         ]
@@ -154,6 +159,7 @@
     },
     "/restaurants/{id}/categories": {
       "post": {
+        "description": "Only the owner of this restaurant.",
         "operationId": "RestaurantsController_addCategory",
         "parameters": [
           {
@@ -192,7 +198,7 @@
             "bearer": []
           }
         ],
-        "summary": "Add a category (owner of the restaurant only)",
+        "summary": "Add category",
         "tags": [
           "restaurants"
         ]
@@ -200,6 +206,7 @@
     },
     "/restaurants/{id}/menu-items": {
       "post": {
+        "description": "Only the owner of this restaurant. categoryId is optional.",
         "operationId": "RestaurantsController_addMenuItem",
         "parameters": [
           {
@@ -238,7 +245,7 @@
             "bearer": []
           }
         ],
-        "summary": "Add a menu item (owner of the restaurant only)",
+        "summary": "Add menu item",
         "tags": [
           "restaurants"
         ]
@@ -246,6 +253,7 @@
     },
     "/restaurants/{id}/menu-items/{itemId}": {
       "patch": {
+        "description": "Only the owner of this restaurant.",
         "operationId": "RestaurantsController_updateMenuItem",
         "parameters": [
           {
@@ -293,12 +301,13 @@
             "bearer": []
           }
         ],
-        "summary": "Update a menu item (owner of the restaurant only)",
+        "summary": "Update menu item",
         "tags": [
           "restaurants"
         ]
       },
       "delete": {
+        "description": "Only the owner of this restaurant. Returns 204.",
         "operationId": "RestaurantsController_removeMenuItem",
         "parameters": [
           {
@@ -336,7 +345,7 @@
             "bearer": []
           }
         ],
-        "summary": "Delete a menu item (owner of the restaurant only)",
+        "summary": "Delete menu item",
         "tags": [
           "restaurants"
         ]

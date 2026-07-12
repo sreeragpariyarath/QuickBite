@@ -52,9 +52,9 @@ export class AuthController {
   @Post('otp/request')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Send a 6-digit OTP to a phone (primary auth flow)',
+    summary: 'Request OTP',
     description:
-      'OTP expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.',
+      'Sends a 6-digit OTP to a phone (primary auth flow). Expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.',
   })
   @ApiOkResponse({
     schema: {
@@ -71,7 +71,9 @@ export class AuthController {
   @Post('otp/verify')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Verify OTP — logs in, auto-registers unknown phones',
+    summary: 'Verify OTP (login / register)',
+    description:
+      'Verifies the OTP and logs the user in. Unknown phone numbers are registered automatically (role applies only then; defaults to CUSTOMER).',
   })
   @ApiOkResponse({
     schema: {
@@ -98,9 +100,9 @@ export class AuthController {
 
   @Post('register/email')
   @ApiOperation({
-    summary: 'Register with email + password',
+    summary: 'Email register (customer / owner)',
     description:
-      'Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.',
+      'Registers with email + password. Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.',
   })
   @ApiCreatedResponse({
     schema: { example: { message: 'Verification email sent.' } },
@@ -112,9 +114,9 @@ export class AuthController {
 
   @Get('verify-email')
   @ApiOperation({
-    summary: 'Verify email from the link — redirects, auto-login for email-first users',
+    summary: 'Verify email link',
     description:
-      'Single-use token. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.',
+      'Consumes the emailed single-use token and redirects to the frontend. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.',
   })
   @ApiResponse({ status: 302, description: 'Redirect to FRONTEND_URL/auth/verified' })
   @ApiUnauthorizedResponse({ description: 'Link invalid, expired, or already used' })
@@ -141,7 +143,11 @@ export class AuthController {
 
   @Post('login/email')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Login with email + password (verified email required)' })
+  @ApiOperation({
+    summary: 'Email login',
+    description:
+      'Login with email + password. The email must be verified, otherwise 409 is returned.',
+  })
   @ApiOkResponse({
     schema: {
       example: {
@@ -158,7 +164,10 @@ export class AuthController {
 
   @Post('email/resend')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Resend the verification email' })
+  @ApiOperation({
+    summary: 'Resend verification email',
+    description: 'One resend per 60 seconds per account.',
+  })
   @ApiOkResponse({
     schema: { example: { message: 'Verification email sent.' } },
   })
@@ -173,9 +182,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Attach an email to the logged-in (phone) account',
+    summary: 'Attach email to account',
     description:
-      'Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.',
+      'Adds an email to the logged-in (phone) account. Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.',
   })
   @ApiOkResponse({
     schema: { example: { message: 'Verification email sent.' } },
@@ -194,8 +203,9 @@ export class AuthController {
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
-    summary: 'Exchange refresh token for a new access token',
-    description: 'Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.',
+    summary: 'Refresh access token',
+    description:
+      'Exchanges the refresh token for a new access token. Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.',
   })
   @ApiOkResponse({
     schema: { example: { accessToken: 'eyJhbGciOiJIUzI1NiIs…' } },
@@ -214,8 +224,9 @@ export class AuthController {
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Revoke the refresh token',
-    description: 'Accepts the token from the body or the refresh_token cookie; clears the cookie.',
+    summary: 'Logout',
+    description:
+      'Revokes the refresh token. Accepts it from the body or the refresh_token cookie; clears the cookie.',
   })
   @ApiOkResponse({
     schema: { example: { message: 'Logged out successfully' } },
