@@ -65,3 +65,12 @@ Introduce only when real usage demands it:
 - Nothing ships to a phase before the previous phase's exit criteria are met.
 - Every new endpoint lands with validation, role guards, and a Postman entry.
 - Infrastructure (queues, caches) is added in response to a real bottleneck, not upfront.
+
+---
+
+## Reference
+
+Roles are frozen at **Customer** and **Owner** through at least Phase 2 —
+see [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) for the full role/permission
+table and [DECISIONS.md](DECISIONS.md) (D-009, D-011) for the reasoning
+behind phone-primary auth and the phase-freeze discipline.

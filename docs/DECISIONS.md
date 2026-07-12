@@ -215,3 +215,54 @@ SMS goes through an `SmsProvider` interface. `Msg91SmsProvider` uses MSG91's Sen
 
 **Consequences:**
 Real SMS to the developer's own phone works before DLT. Going fully live requires business + DLT registration and setting `MSG91_TEMPLATE_ID` — zero code changes. The same interface will later serve order-status SMS notifications.
+
+---
+
+## D-011 — Roles frozen at CUSTOMER and OWNER through Phase 2
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Food delivery platforms typically add delivery-partner and admin roles. Each new role multiplies auth logic, guards, dashboards, and testing surface while the core loop is still unproven.
+
+**Decision:**
+Only `CUSTOMER` and `OWNER` exist until Phase 2 exit criteria are met (a person with a phone can order without Postman). Restaurants self-deliver at launch.
+
+**Consequences:**
+No delivery-partner onboarding, assignment, or tracking in v1. The `UserRole` enum stays two-valued; adding a role later is a single enum migration plus guards. Admin needs are handled directly in the database until an admin panel is justified.
+
+---
+
+## D-011 — Phased release discipline (feature freeze per phase)
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Solo developer, ~14 hours/week available (10pm–12am weeknights + Sundays).
+The bigger risk to shipping isn't under-building — it's scope creep from
+adding "just one more feature" before the current phase is usable and
+deployed.
+
+**Decision:**
+Each roadmap phase has a frozen feature list before coding starts on it.
+No feature is added to the active phase once work begins; new ideas are
+logged into a later phase's backlog instead.
+
+**Reasons:**
+- A shippable, demoable product at the end of each phase beats a
+  perpetually in-progress one — both for portfolio purposes and for actual
+  usability
+- Matches how real product teams scope releases (MVP → hardening →
+  expansion) rather than building the end-state architecture up front
+- Prevents a mid-build domain rewrite — e.g. introducing multi-branch
+  organizations or fine-grained RBAC before Owner→Restaurant is even
+  shipped and working
+
+**Consequences:**
+Enterprise-style features (multi-tenant organizations, branches,
+permission-based RBAC beyond the CUSTOMER/OWNER enum, inventory,
+analytics, subscriptions/billing) are deliberately out of scope until a
+future phase explicitly calls for them. See [ROADMAP.md](ROADMAP.md)
+"Standing rules" for the phase-gating rule this formalizes.
