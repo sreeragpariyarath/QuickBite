@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "53f78ec5-1404-4612-bb5d-c3dee5b2bf26",
+      "id": "2d06a127-bfee-4a3c-bc10-1829d47d004c",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "f6b4f2c4-b58f-4bf2-884d-38c00aca3601",
+          "id": "47f2e854-fc61-4025-b464-eed1f20fa3d3",
           "name": "Service + database health check",
           "request": {
             "name": "Service + database health check",
@@ -34,7 +34,7 @@
           },
           "response": [
             {
-              "id": "65be3468-6194-465a-b33b-e180cef33167",
+              "id": "2b475296-8540-4cd3-a863-be0ce229104d",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -68,7 +68,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "c7654ce6-cddf-40d7-a446-c7529ea770eb",
+              "id": "88c578ec-9622-46a2-a26f-68cf83921115",
               "name": "Database unreachable",
               "originalRequest": {
                 "url": {
@@ -106,7 +106,7 @@
       "event": []
     },
     {
-      "id": "eb917271-f07f-4d69-80fb-68f2c86a8bad",
+      "id": "1ff7a69e-f15c-4896-9b08-4a9c4213ce3a",
       "name": "restaurants",
       "description": {
         "content": "",
@@ -114,7 +114,7 @@
       },
       "item": [
         {
-          "id": "10012df8-654e-4303-a22a-8b9f1a3e08d9",
+          "id": "c737cb29-9f4a-449b-8d90-f1df2c848837",
           "name": "List all active restaurants (public)",
           "request": {
             "name": "List all active restaurants (public)",
@@ -133,7 +133,7 @@
           },
           "response": [
             {
-              "id": "8baaa320-b5dd-4dcf-a89d-bd97eb85ea04",
+              "id": "d9514b8a-b3dc-4098-adfb-76307d48b7f7",
               "name": "Array of active restaurants",
               "originalRequest": {
                 "url": {
@@ -168,7 +168,7 @@
           }
         },
         {
-          "id": "d7f4778b-b638-4f43-b109-9013ec943cd7",
+          "id": "bce693ae-ef0b-4320-9602-341e360f2c5e",
           "name": "Create a restaurant (OWNER)",
           "request": {
             "name": "Create a restaurant (OWNER)",
@@ -202,7 +202,7 @@
           },
           "response": [
             {
-              "id": "b704d924-1bf0-41b3-a7a2-1806c681db3d",
+              "id": "de92e7b1-04f2-46b5-bbdc-03c3e8b6a643",
               "name": "Restaurant created",
               "originalRequest": {
                 "url": {
@@ -249,7 +249,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "4a82a626-1998-4db2-856b-4a9daf8c4042",
+              "id": "cca69e10-465b-4b80-9d42-ed177d594dbb",
               "name": "Missing or invalid access token",
               "originalRequest": {
                 "url": {
@@ -296,7 +296,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "43a83bb9-a056-41ac-b8e1-8508d18b6ec3",
+              "id": "15844726-b1ed-492b-b321-abbd3531dd70",
               "name": "CUSTOMER role cannot create restaurants",
               "originalRequest": {
                 "url": {
@@ -349,7 +349,7 @@
           }
         },
         {
-          "id": "576dba4d-5792-4edf-97e0-584aa326069c",
+          "id": "ad5e91a0-b135-43c3-b34d-4bed62995c20",
           "name": "Restaurant detail with categories and available menu items (public)",
           "request": {
             "name": "Restaurant detail with categories and available menu items (public)",
@@ -367,7 +367,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -377,7 +377,7 @@
           },
           "response": [
             {
-              "id": "bc18fc58-a82f-4740-a74c-c38106af38f7",
+              "id": "05373adc-d111-4e25-ac90-4d6e8709a8c0",
               "name": "Restaurant with nested menu",
               "originalRequest": {
                 "url": {
@@ -393,7 +393,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -415,7 +415,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "12d28cfe-a42d-413a-aba1-d5bb43ea0402",
+              "id": "fca20057-f600-445d-87f5-dbc87f113044",
               "name": "Restaurant not found",
               "originalRequest": {
                 "url": {
@@ -431,7 +431,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -459,7 +459,7 @@
           }
         },
         {
-          "id": "cce7d614-d04a-4671-a2e8-6d2503e5fd5b",
+          "id": "b2da5eca-7343-4a5f-8cd7-b041dc659507",
           "name": "Update a restaurant (owner of it only)",
           "request": {
             "name": "Update a restaurant (owner of it only)",
@@ -477,7 +477,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -502,7 +502,7 @@
           },
           "response": [
             {
-              "id": "5fa132e3-71fa-44ac-83ab-81758ed1cb2d",
+              "id": "ec8e3ffa-e125-45ad-ac5c-3c1ed04b1090",
               "name": "Restaurant updated",
               "originalRequest": {
                 "url": {
@@ -518,7 +518,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -558,7 +558,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "95945bd2-8fce-4f5c-a0a6-74bb6739fd3f",
+              "id": "615bb3f7-a6ac-4932-b6a4-ff98311964e0",
               "name": "You do not own this restaurant",
               "originalRequest": {
                 "url": {
@@ -574,7 +574,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -614,7 +614,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "e0542bbe-24c9-4465-85f1-f191a5769d48",
+              "id": "ddebabb9-eec4-4aef-9640-70484f062fdb",
               "name": "Restaurant not found",
               "originalRequest": {
                 "url": {
@@ -630,7 +630,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -676,7 +676,7 @@
           }
         },
         {
-          "id": "8de63fea-0c9f-4bbf-89d0-07c1d9b61978",
+          "id": "f8a3e61d-e595-4e94-9270-9633acaa6de5",
           "name": "Add a category (owner of the restaurant only)",
           "request": {
             "name": "Add a category (owner of the restaurant only)",
@@ -695,7 +695,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -720,7 +720,7 @@
           },
           "response": [
             {
-              "id": "21f47311-0a63-49fa-9025-ea81d4d2a162",
+              "id": "de4ce340-6350-4613-a7f1-2390c38aa010",
               "name": "Category created",
               "originalRequest": {
                 "url": {
@@ -737,7 +737,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -777,7 +777,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "4ab7aca3-b04c-40e5-b27d-0f250fff6878",
+              "id": "c37b2b10-d616-4872-9bd0-a9c3beb80c4e",
               "name": "You do not own this restaurant",
               "originalRequest": {
                 "url": {
@@ -794,7 +794,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -834,7 +834,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "1d6e9fd4-3fb8-42de-8b6a-c05590f31e5c",
+              "id": "bbc91dea-467e-47d2-8652-3adadea8e8d1",
               "name": "Restaurant not found",
               "originalRequest": {
                 "url": {
@@ -851,7 +851,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -897,7 +897,7 @@
           }
         },
         {
-          "id": "d6696089-bb78-42d4-a258-24e3af4a13fa",
+          "id": "2e68a444-a0fc-4d54-9a87-2a6400414386",
           "name": "Add a menu item (owner of the restaurant only)",
           "request": {
             "name": "Add a menu item (owner of the restaurant only)",
@@ -916,7 +916,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -931,7 +931,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"71f2bd60-965a-b8bc-2c75-2f90605847fc\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -941,7 +941,7 @@
           },
           "response": [
             {
-              "id": "5a0724de-e764-4e49-a206-5c03ec9d37e2",
+              "id": "ce4fe2ad-37ae-4cd3-b9fa-2436242dd16c",
               "name": "Menu item created",
               "originalRequest": {
                 "url": {
@@ -958,7 +958,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -977,7 +977,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"71f2bd60-965a-b8bc-2c75-2f90605847fc\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -998,7 +998,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "3fb7615e-242d-495a-bea0-838d0efe9fb4",
+              "id": "71677a50-0fba-4bdd-9cac-fff76c966e63",
               "name": "You do not own this restaurant",
               "originalRequest": {
                 "url": {
@@ -1015,7 +1015,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -1034,7 +1034,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"71f2bd60-965a-b8bc-2c75-2f90605847fc\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1055,7 +1055,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "aefcd73f-ceff-41d0-adac-e0817ea111f6",
+              "id": "c5657112-6dbf-430b-bd5c-ff6f4fdfc5db",
               "name": "Restaurant or category not found in this restaurant",
               "originalRequest": {
                 "url": {
@@ -1072,7 +1072,7 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     }
@@ -1091,7 +1091,7 @@
                 "method": "POST",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"19ef7f0d-1238-dd0e-8827-a62dba7bbe65\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"71f2bd60-965a-b8bc-2c75-2f90605847fc\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1118,7 +1118,7 @@
           }
         },
         {
-          "id": "a0ddaf9e-fc91-4cc1-b9f8-c4f8efbdffd6",
+          "id": "c2c7431e-a5bc-413f-b315-13458e08064d",
           "name": "Update a menu item (owner of the restaurant only)",
           "request": {
             "name": "Update a menu item (owner of the restaurant only)",
@@ -1138,14 +1138,14 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "id",
                   "description": "(Required) "
                 },
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "itemId",
                   "description": "(Required) "
                 }
@@ -1160,7 +1160,7 @@
             "method": "PATCH",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"f0742c4c-ce9c-8b95-b41d-74c3dcb0879f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -1170,7 +1170,7 @@
           },
           "response": [
             {
-              "id": "a3fee7e2-0244-4991-b3f4-6823f2941f1a",
+              "id": "c64ac356-2a44-40fb-9fc6-22ed361ce2a3",
               "name": "Menu item updated",
               "originalRequest": {
                 "url": {
@@ -1188,14 +1188,14 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "itemId",
                       "description": "(Required) "
                     }
@@ -1214,7 +1214,7 @@
                 "method": "PATCH",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"f0742c4c-ce9c-8b95-b41d-74c3dcb0879f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1235,7 +1235,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "d5aa7e9b-8c32-4706-b206-d8055bbd612a",
+              "id": "882e176a-0fff-44bb-9c31-5a7832d122e1",
               "name": "You do not own this restaurant",
               "originalRequest": {
                 "url": {
@@ -1253,14 +1253,14 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "itemId",
                       "description": "(Required) "
                     }
@@ -1279,7 +1279,7 @@
                 "method": "PATCH",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"f0742c4c-ce9c-8b95-b41d-74c3dcb0879f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1300,7 +1300,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "a05a132b-df2b-4b53-af94-aa23bb8ce035",
+              "id": "04786eac-0c5e-4cc5-8b80-104383ef0c2a",
               "name": "Menu item not found in this restaurant",
               "originalRequest": {
                 "url": {
@@ -1318,14 +1318,14 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "itemId",
                       "description": "(Required) "
                     }
@@ -1344,7 +1344,7 @@
                 "method": "PATCH",
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"62a8ba68-0bcb-2799-9cdf-cb9c4cd07f7f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+                  "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"f0742c4c-ce9c-8b95-b41d-74c3dcb0879f\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
                   "options": {
                     "raw": {
                       "language": "json"
@@ -1371,7 +1371,7 @@
           }
         },
         {
-          "id": "32c4ab65-636d-4fd7-bf65-24685ebc9241",
+          "id": "66d61de5-2143-4660-b608-180feaf85f63",
           "name": "Delete a menu item (owner of the restaurant only)",
           "request": {
             "name": "Delete a menu item (owner of the restaurant only)",
@@ -1391,14 +1391,14 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "id",
                   "description": "(Required) "
                 },
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                  "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                   "key": "itemId",
                   "description": "(Required) "
                 }
@@ -1408,7 +1408,7 @@
           },
           "response": [
             {
-              "id": "092780ce-d4c8-4e8c-8610-1a17866221d2",
+              "id": "337daf9e-91d0-49f7-ab0b-b0fb39bfea73",
               "name": "Menu item deleted",
               "originalRequest": {
                 "url": {
@@ -1426,14 +1426,14 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "itemId",
                       "description": "(Required) "
                     }
@@ -1465,7 +1465,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "2436674b-846d-448c-9f70-9522e7dfc45a",
+              "id": "b1851560-c1e5-4a30-9304-70410cccfadd",
               "name": "You do not own this restaurant",
               "originalRequest": {
                 "url": {
@@ -1483,14 +1483,14 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "itemId",
                       "description": "(Required) "
                     }
@@ -1522,7 +1522,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "d19afa64-d89e-45ad-960c-7a6ffce3a49f",
+              "id": "a94f11b5-ad4b-4b6b-8f48-631c3806bec5",
               "name": "Menu item not found in this restaurant",
               "originalRequest": {
                 "url": {
@@ -1540,14 +1540,14 @@
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "id",
                       "description": "(Required) "
                     },
                     {
                       "disabled": false,
                       "type": "any",
-                      "value": "b20484a8-ebff-d134-44af-500628bf08da",
+                      "value": "07fda6de-fa2c-101f-0c55-19a93765b0ab",
                       "key": "itemId",
                       "description": "(Required) "
                     }
@@ -1618,7 +1618,7 @@
     }
   ],
   "info": {
-    "_postman_id": "78a4ddb2-c479-4609-ac12-8bd5c08d5737",
+    "_postman_id": "39c2d2d8-77ed-4ee6-b1a7-27753f7d7116",
     "name": "QuickBite — Restaurant Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

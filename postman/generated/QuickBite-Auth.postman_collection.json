@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "e2a48391-655f-44e7-b4fb-c9827d2508b6",
+      "id": "427bf0bd-b41c-4240-a090-8951413878ba",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "53691f00-0bed-49eb-ab2d-b14eef11f3ac",
+          "id": "222c478b-7ef0-4761-8c47-652d01bbbc17",
           "name": "Service + database health check",
           "request": {
             "name": "Service + database health check",
@@ -34,7 +34,7 @@
           },
           "response": [
             {
-              "id": "95583001-ca02-4181-ae05-6843080aed78",
+              "id": "0371a8c0-0097-4370-952e-c4871e147c27",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -68,7 +68,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "f329e4cd-92a9-4ea0-a56e-f5174ec538d0",
+              "id": "af56a5f6-9367-4849-9c8c-8dd52319140a",
               "name": "Database unreachable",
               "originalRequest": {
                 "url": {
@@ -106,7 +106,7 @@
       "event": []
     },
     {
-      "id": "ce534240-ab23-4da4-8f20-85c7bc5d9d64",
+      "id": "6fbf71be-e027-4af4-a918-980dd8ee4ac5",
       "name": "auth",
       "description": {
         "content": "",
@@ -114,7 +114,7 @@
       },
       "item": [
         {
-          "id": "963a8d3c-a371-4907-a448-d371adf846e2",
+          "id": "ea332206-f035-4405-83cb-275e2bd1d92a",
           "name": "Send a 6-digit OTP to a phone (primary auth flow)",
           "request": {
             "name": "Send a 6-digit OTP to a phone (primary auth flow)",
@@ -157,7 +157,7 @@
           },
           "response": [
             {
-              "id": "267af253-56b4-40ec-b06a-cbd0cc8f5cce",
+              "id": "3d2e506c-0fc6-45b9-907e-1afada1922b5",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -201,7 +201,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "454d5444-13bc-4a4c-b20f-d3383c481f6b",
+              "id": "55d01c9b-db36-40ad-9232-910a50d021da",
               "name": "More than 3 requests in 15 minutes for this phone",
               "originalRequest": {
                 "url": {
@@ -246,7 +246,7 @@
           }
         },
         {
-          "id": "55510d1c-f669-4d47-aba0-e09c653cec4f",
+          "id": "1a4360d9-9fe6-47c3-a849-00a548f6b3cf",
           "name": "Verify OTP — logs in, auto-registers unknown phones",
           "request": {
             "name": "Verify OTP — logs in, auto-registers unknown phones",
@@ -286,7 +286,7 @@
           },
           "response": [
             {
-              "id": "d7ea6b45-eb77-4ad1-890f-dbf7d0a7b25d",
+              "id": "93e003d5-d907-4e4e-854f-7dff8a2c8349",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -330,7 +330,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "7bb98296-c660-4583-95d6-457428d009ba",
+              "id": "eb54c361-d709-48aa-8148-42ed40dcf782",
               "name": "Invalid, expired, or already-used OTP; or attempt limit hit",
               "originalRequest": {
                 "url": {
@@ -375,7 +375,7 @@
           }
         },
         {
-          "id": "cc75324f-c943-47bf-b65b-cdce660a24c1",
+          "id": "131e5915-8576-40b7-805d-5802c9d1f036",
           "name": "Register with email + password",
           "request": {
             "name": "Register with email + password",
@@ -418,7 +418,7 @@
           },
           "response": [
             {
-              "id": "3ac8646b-cbff-46d4-b43e-f36f3293ad55",
+              "id": "40608d07-bbaf-4454-9267-87d3432b29c5",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -462,7 +462,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "300aa955-bdc1-4f0c-8002-ca81248f5ad1",
+              "id": "1d285283-8919-4dcd-87c8-a8f8cca6588b",
               "name": "Email already registered",
               "originalRequest": {
                 "url": {
@@ -507,7 +507,7 @@
           }
         },
         {
-          "id": "e52d6888-a00e-465e-b2d2-016038c32c3c",
+          "id": "408c793d-cc75-4fd9-bf29-c2391eedbd04",
           "name": "Verify email from the link — redirects, auto-login for email-first users",
           "request": {
             "name": "Verify email from the link — redirects, auto-login for email-first users",
@@ -537,7 +537,7 @@
           },
           "response": [
             {
-              "id": "63ee091e-4875-4ecf-bb75-37d7c0baaced",
+              "id": "aa543d98-bc2f-4805-8061-d8e4cbfa713d",
               "name": "Redirect to FRONTEND_URL/auth/verified",
               "originalRequest": {
                 "url": {
@@ -572,7 +572,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "718eea64-9a35-472e-9ec1-52c2cc4fba0f",
+              "id": "1cb958bf-135c-41cb-b1b3-7bffba2a370a",
               "name": "Link invalid, expired, or already used",
               "originalRequest": {
                 "url": {
@@ -613,7 +613,7 @@
           }
         },
         {
-          "id": "1140f4e7-a17a-40b8-88c5-65aa0e3174b2",
+          "id": "2a288645-f910-42cf-ae57-39e4963bf1c6",
           "name": "Login with email + password (verified email required)",
           "request": {
             "name": "Login with email + password (verified email required)",
@@ -653,7 +653,7 @@
           },
           "response": [
             {
-              "id": "09440005-31fe-403c-b7b9-c02555854f29",
+              "id": "e607c7db-75d5-4217-b382-df0a2ad52568",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -697,7 +697,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "168094cd-e9ec-409c-a874-708f6fd04079",
+              "id": "feff595e-a5e0-4b08-a8db-620cb8d732e5",
               "name": "Invalid email or password",
               "originalRequest": {
                 "url": {
@@ -736,7 +736,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "6450949f-e606-4679-9828-cb3f4e1dde05",
+              "id": "60ffcaea-d967-466d-b462-209d7484c187",
               "name": "Please verify your email.",
               "originalRequest": {
                 "url": {
@@ -781,7 +781,7 @@
           }
         },
         {
-          "id": "314a23a9-abc9-468d-b778-ce5a89d8578a",
+          "id": "72431a85-7ac9-49ad-ac27-23ec01f028b0",
           "name": "Resend the verification email",
           "request": {
             "name": "Resend the verification email",
@@ -821,7 +821,7 @@
           },
           "response": [
             {
-              "id": "16752c12-3763-4d5f-bf68-ec7632ecf13e",
+              "id": "5d8fd0cf-46a6-4674-92e3-7adb13a5afdc",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -865,7 +865,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "76bc2609-6ac7-46d6-91c5-6928943ef622",
+              "id": "0222e756-5cc5-4d10-8db0-de31fd01822a",
               "name": "No account with this email",
               "originalRequest": {
                 "url": {
@@ -904,7 +904,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "f38c2e19-33d1-4b0a-866a-2c61cfa25a3f",
+              "id": "a740cd22-bbc4-44e0-b089-b8ecd16217b8",
               "name": "Email is already verified",
               "originalRequest": {
                 "url": {
@@ -943,7 +943,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "f9a5eca6-53e8-4226-a9cf-122268babf63",
+              "id": "9cdac37b-54b0-47ff-9567-d994aa98836f",
               "name": "Wait 60 seconds between resends",
               "originalRequest": {
                 "url": {
@@ -988,7 +988,7 @@
           }
         },
         {
-          "id": "d3796c13-b30e-41d1-abf9-3520883790bf",
+          "id": "d6c46463-bde6-49db-86bd-2e99e7a64a40",
           "name": "Attach an email to the logged-in (phone) account",
           "request": {
             "name": "Attach an email to the logged-in (phone) account",
@@ -1031,7 +1031,7 @@
           },
           "response": [
             {
-              "id": "2b773441-b276-4052-9acf-d775b1fd52eb",
+              "id": "72442b0a-caf3-40a9-9c9d-759780998eed",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -1083,7 +1083,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "ace451c5-c24a-42a0-b1d5-79996b884f6f",
+              "id": "b863c7e3-3aa2-4844-8936-183b31e6f654",
               "name": "Missing or invalid access token",
               "originalRequest": {
                 "url": {
@@ -1132,7 +1132,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "2f27fba0-2723-4b27-baeb-2b67ef21fcc3",
+              "id": "535c64e0-cd52-4884-90a4-5f8d041951b5",
               "name": "Account already has an email, or email is taken",
               "originalRequest": {
                 "url": {
@@ -1187,7 +1187,7 @@
           }
         },
         {
-          "id": "ac11c5fa-b68e-4cb1-abc4-014e3e74d902",
+          "id": "a041aa77-66cc-410b-a53a-1d09ddf57786",
           "name": "Exchange refresh token for a new access token",
           "request": {
             "name": "Exchange refresh token for a new access token",
@@ -1229,7 +1229,7 @@
           },
           "response": [
             {
-              "id": "ee749d5f-7a63-44c5-a92f-4c0ad61712cb",
+              "id": "7ca7eb16-1b31-4044-a1fb-9defe5298bbe",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -1272,7 +1272,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "b7572d98-76f7-4ffe-b714-0ca975d5e4ce",
+              "id": "3b11f062-b9a0-4e27-9aa7-cc3618932bf2",
               "name": "Refresh token missing, invalid, or expired",
               "originalRequest": {
                 "url": {
@@ -1316,7 +1316,7 @@
           }
         },
         {
-          "id": "6a7671b4-4967-4e95-83a5-78b572b65f55",
+          "id": "57261e7b-bfb4-4a62-a7c2-e9df8b87f894",
           "name": "Revoke the refresh token",
           "request": {
             "name": "Revoke the refresh token",
@@ -1358,7 +1358,7 @@
           },
           "response": [
             {
-              "id": "1fbb6719-0098-47cb-a5c0-2af08e333139",
+              "id": "50f3684c-ff90-4405-ab6c-c29ee8a2a3f0",
               "originalRequest": {
                 "url": {
                   "path": [
@@ -1409,7 +1409,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "fa7f7b6e-cd12-4c89-bdf2-24e46ce42da8",
+              "id": "95fbff32-fd9c-43b8-a218-4d487a40e240",
               "name": "Missing or invalid access token",
               "originalRequest": {
                 "url": {
@@ -1496,7 +1496,7 @@
     }
   ],
   "info": {
-    "_postman_id": "eadf7109-057e-4f1a-be0a-16d03bae3461",
+    "_postman_id": "971252c0-59e7-42c9-acfc-d13ca7124bde",
     "name": "QuickBite — Auth Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

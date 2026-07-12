@@ -94,16 +94,13 @@ NestJS controllers → Swagger decorators → OpenAPI JSON → generated Postman
 
 Postman collections are **build artifacts** — never edit them by hand.
 
-**1. After changing endpoints, regenerate:**
+**1. After changing endpoints, regenerate everything with one command (repo root):**
 
 ```bash
-# export fresh OpenAPI specs
-cd services/auth-service && pnpm openapi
-cd services/restaurant-service && pnpm openapi
-
-# convert to Postman collections (from repo root)
-pnpm postman
+pnpm generate:api
 ```
+
+(This runs `pnpm openapi` in every service, then converts the specs to Postman collections.)
 
 **2. Import into Postman:** `File → Import` → pick both files from `postman/generated/` → choose **Replace** when prompted.
 
