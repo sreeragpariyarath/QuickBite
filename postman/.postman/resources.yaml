@@ -1,9 +1,0 @@
-# Use this workspace to collaborate
-workspace:
-  id: f758ec7a-b379-4a75-ae19-24885afd2500
-
-localResources:
-  collections:
-    - ../QuickBite.postman_collection.json
-  environments:
-    - ../QuickBite.postman_environment.json

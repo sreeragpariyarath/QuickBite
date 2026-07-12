@@ -158,7 +158,9 @@ ACCEPTED → CANCELLED  (by customer)
 
 ### Notification Service — no database
 
-Stateless. Consumes RabbitMQ events and sends emails via Cloudinary. No persistence needed.
+Stateless. Consumes RabbitMQ events and sends emails via Resend (the same
+transactional email provider already proven on Faradex — no new email
+infrastructure needed). No persistence needed.
 
 Events consumed:
 
@@ -276,7 +278,7 @@ Endpoints:
 
 Responsibilities:
 - Consume RabbitMQ events
-- Send emails via a free provider (e.g. Resend or Nodemailer)
+- Send emails via Resend (reusing the Faradex integration)
 
 ---
 
