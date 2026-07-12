@@ -1,6 +1,7 @@
 import {
   ConflictException,
   Injectable,
+  NotFoundException,
   UnauthorizedException,
 } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
@@ -8,9 +9,11 @@ import * as bcrypt from 'bcryptjs';
 import { createHash, randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
 import { OtpService } from './otp.service';
-import { RegisterDto } from './dto/register.dto';
+import { EmailVerificationService } from './email-verification.service';
+import { RegisterEmailDto } from './dto/register-email.dto';
 import { LoginDto } from './dto/login.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { AttachEmailDto } from './dto/attach-email.dto';
 
 const SALT_ROUNDS = 10;
 
@@ -20,7 +23,10 @@ export class AuthService {
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
     private readonly otpService: OtpService,
+    private readonly emailVerification: EmailVerificationService,
   ) {}
+
+  // ---------- Phone OTP (primary) ----------
 
   async verifyOtp(dto: VerifyOtpDto) {
     await this.otpService.assertValid(dto.phone, dto.otp);
@@ -47,7 +53,9 @@ export class AuthService {
     };
   }
 
-  async register(dto: RegisterDto) {
+  // ---------- Email + password (secondary) ----------
+
+  async registerEmail(dto: RegisterEmailDto) {
     const existing = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -55,21 +63,22 @@ export class AuthService {
       throw new ConflictException('Email already registered');
     }
 
-    const hashedPassword = await bcrypt.hash(dto.password, SALT_ROUNDS);
-
     const user = await this.prisma.user.create({
       data: {
+        name: dto.name,
         email: dto.email,
-        password: hashedPassword,
+        password: await bcrypt.hash(dto.password, SALT_ROUNDS),
         role: dto.role ?? 'CUSTOMER',
+        isEmailVerified: false,
       },
-      select: { id: true, email: true, role: true, createdAt: true },
     });
 
-    return user;
+    const dev = await this.emailVerification.issue(user.id, dto.email);
+
+    return { message: 'Verification email sent.', ...dev };
   }
 
-  async login(dto: LoginDto) {
+  async loginEmail(dto: LoginDto) {
     const user = await this.prisma.user.findUnique({
       where: { email: dto.email },
     });
@@ -82,11 +91,82 @@ export class AuthService {
       throw new UnauthorizedException('Invalid email or password');
     }
 
+    if (!user.isEmailVerified) {
+      throw new ConflictException('Please verify your email.');
+    }
+
     const accessToken = await this.signAccessToken(user.id, user.role);
     const refreshToken = await this.issueRefreshToken(user.id);
 
     return { accessToken, refreshToken };
   }
+
+  /**
+   * Consumes a verification token. For email-first users (no phone) a login
+   * session is created (Case 1); phone users already have a session (Case 2).
+   */
+  async verifyEmail(token: string) {
+    const user = await this.emailVerification.consume(token);
+
+    if (user.phone) {
+      return { autoLogin: false as const };
+    }
+
+    return {
+      autoLogin: true as const,
+      accessToken: await this.signAccessToken(user.id, user.role),
+      refreshToken: await this.issueRefreshToken(user.id),
+    };
+  }
+
+  async resendVerification(email: string) {
+    const user = await this.prisma.user.findUnique({ where: { email } });
+    if (!user) {
+      throw new NotFoundException('No account with this email');
+    }
+    if (user.isEmailVerified) {
+      throw new ConflictException('Email is already verified');
+    }
+
+    const dev = await this.emailVerification.issue(user.id, email);
+
+    return { message: 'Verification email sent.', ...dev };
+  }
+
+  async attachEmail(userId: string, dto: AttachEmailDto) {
+    const user = await this.prisma.user.findUnique({ where: { id: userId } });
+    if (!user) {
+      throw new UnauthorizedException('User no longer exists');
+    }
+    if (user.email) {
+      throw new ConflictException('This account already has an email');
+    }
+
+    const emailTaken = await this.prisma.user.findUnique({
+      where: { email: dto.email },
+    });
+    if (emailTaken) {
+      throw new ConflictException('Email already registered');
+    }
+
+    await this.prisma.user.update({
+      where: { id: userId },
+      data: {
+        email: dto.email,
+        isEmailVerified: false,
+        // Never overwrite an existing password via this endpoint
+        ...(user.password
+          ? {}
+          : { password: await bcrypt.hash(dto.password, SALT_ROUNDS) }),
+      },
+    });
+
+    const dev = await this.emailVerification.issue(userId, dto.email);
+
+    return { message: 'Verification email sent.', ...dev };
+  }
+
+  // ---------- Tokens ----------
 
   async refresh(refreshToken: string) {
     const record = await this.prisma.refreshToken.findUnique({

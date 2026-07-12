@@ -219,12 +219,28 @@ Endpoints:
 |---|---|---|
 | `POST` | `/auth/otp/request` | Send OTP to phone (primary flow) |
 | `POST` | `/auth/otp/verify` | Verify OTP → tokens; auto-registers new phones |
-| `POST` | `/auth/register` | Register with email+password (secondary) |
-| `POST` | `/auth/login` | Login with email+password (secondary) |
-| `POST` | `/auth/refresh` | Exchange refresh token for new access token |
-| `POST` | `/auth/logout` | Revoke refresh token |
+| `POST` | `/auth/register/email` | Register with email+password; sends verification link, no login |
+| `GET` | `/auth/verify-email` | Consume link → 302 redirect; auto-login cookie for email-first users |
+| `POST` | `/auth/login/email` | Login with email+password (requires verified email, else 409) |
+| `POST` | `/auth/email/resend` | Resend verification link (60s cooldown) |
+| `PATCH` | `/auth/me/email` | Attach email to a phone account (authenticated) |
+| `POST` | `/auth/refresh` | New access token — refresh token from body or HttpOnly cookie |
+| `POST` | `/auth/logout` | Revoke refresh token (body or cookie), clears cookie |
 
-SMS delivery: `SmsProvider` interface → MSG91 in production, console logger in dev (see D-010).
+Delivery providers: `SmsProvider` → MSG91 / console (D-010); `EmailProvider` → Resend / console (D-012).
+Note for the future web frontend: cookie-based refresh requires CORS with `credentials: true` and an allowlisted origin.
+
+```
+User (additions)
+  isEmailVerified  Boolean   default false
+
+EmailVerificationToken
+  id          UUID        PK
+  userId      UUID        → User (cascades on delete)
+  tokenHash   String      UNIQUE, sha256 of raw token
+  expiresAt   DateTime    24-hour TTL, single-use
+  createdAt   DateTime
+```
 
 ---
 

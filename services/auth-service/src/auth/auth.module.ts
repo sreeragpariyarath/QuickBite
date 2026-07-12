@@ -3,11 +3,14 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { OtpService } from './otp.service';
+import { EmailVerificationService } from './email-verification.service';
 import { SmsModule } from '../sms/sms.module';
+import { EmailModule } from '../email/email.module';
 
 @Module({
   imports: [
     SmsModule,
+    EmailModule,
     JwtModule.register({
       global: true,
       secret: process.env.JWT_SECRET,
@@ -17,6 +20,6 @@ import { SmsModule } from '../sms/sms.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, OtpService],
+  providers: [AuthService, OtpService, EmailVerificationService],
 })
 export class AuthModule {}

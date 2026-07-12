@@ -38,6 +38,10 @@ PostgreSQL — `auth_db`
 | `REFRESH_EXPIRES_IN_DAYS` | Refresh token expiry in days | `7` |
 | `MSG91_AUTH_KEY` | MSG91 auth key (empty → console SMS provider) | `""` |
 | `MSG91_TEMPLATE_ID` | DLT-approved MSG91 template with `##otp##` var | `""` |
+| `RESEND_API_KEY` | Resend API key (empty → console email provider) | `""` |
+| `EMAIL_FROM` | Sender identity for verification emails | `QuickBite <onboarding@resend.dev>` |
+| `APP_URL` | Public base URL of this service (used in email links) | `http://localhost:3000` |
+| `FRONTEND_URL` | Redirect target after email verification | `http://localhost:3100` |
 
 ---
 
@@ -67,13 +71,17 @@ Service is available at `http://localhost:3000`.
 | `GET` | `/health` | Service + database health check | Live |
 | `POST` | `/auth/otp/request` | Send a 6-digit OTP to a phone (`+91XXXXXXXXXX`) | Live |
 | `POST` | `/auth/otp/verify` | Verify OTP → tokens; auto-registers new phones | Live |
-| `POST` | `/auth/register` | Register with email + password (secondary flow) | Live |
-| `POST` | `/auth/login` | Login with email + password (secondary flow) | Live |
-| `POST` | `/auth/refresh` | Exchange refresh token for a new access token | Live |
-| `POST` | `/auth/logout` | Revoke the refresh token (requires Bearer token) | Live |
+| `POST` | `/auth/register/email` | Register with email + password; sends verification link | Live |
+| `GET` | `/auth/verify-email` | Verify from email link → redirect (+auto-login cookie for email-first users) | Live |
+| `POST` | `/auth/login/email` | Login with email + password (verified email required) | Live |
+| `POST` | `/auth/email/resend` | Resend the verification email (60s cooldown) | Live |
+| `PATCH` | `/auth/me/email` | Attach email to a phone account (Bearer token) | Live |
+| `POST` | `/auth/refresh` | New access token — token from body or HttpOnly cookie | Live |
+| `POST` | `/auth/logout` | Revoke the refresh token (body or cookie) | Live |
 
 OTP limits: 5-minute expiry, single-use, 3 requests per phone per 15 minutes, 5 verify attempts.
-Without MSG91 credentials the response includes `devOtp` (console provider) for testing.
+Email verification: 24-hour single-use links, sha256-hashed at rest, one resend per 60 seconds.
+Dev mode: without MSG91/Resend credentials, responses include `devOtp` / `devVerificationUrl`.
 
 ---
 

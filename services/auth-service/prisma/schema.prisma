@@ -13,19 +13,33 @@ enum UserRole {
 }
 
 model User {
-  id       String   @id @default(uuid()) @db.Uuid
-  phone    String?  @unique
-  email    String?  @unique
-  password String?
-  name     String?
-  role     UserRole @default(CUSTOMER)
+  id              String   @id @default(uuid()) @db.Uuid
+  phone           String?  @unique
+  email           String?  @unique
+  isEmailVerified Boolean  @default(false)
+  password        String?
+  name            String?
+  role            UserRole @default(CUSTOMER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  refreshTokens RefreshToken[]
+  refreshTokens           RefreshToken[]
+  emailVerificationTokens EmailVerificationToken[]
 
   @@map("users")
+}
+
+model EmailVerificationToken {
+  id        String   @id @default(uuid()) @db.Uuid
+  userId    String   @db.Uuid
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash String   @unique
+  expiresAt DateTime
+  createdAt DateTime @default(now())
+
+  @@index([userId])
+  @@map("email_verification_tokens")
 }
 
 model Otp {

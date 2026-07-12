@@ -1,29 +1,43 @@
 import {
   Body,
   Controller,
+  Get,
   HttpCode,
   HttpStatus,
+  Patch,
   Post,
+  Query,
+  Req,
+  Res,
+  UnauthorizedException,
   UseGuards,
 } from '@nestjs/common';
+import { Request, Response } from 'express';
 import {
   ApiBearerAuth,
   ApiConflictResponse,
   ApiCreatedResponse,
+  ApiNotFoundResponse,
   ApiOkResponse,
   ApiOperation,
+  ApiResponse,
   ApiTags,
   ApiTooManyRequestsResponse,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
 import { OtpService } from './otp.service';
-import { RegisterDto } from './dto/register.dto';
 import { LoginDto } from './dto/login.dto';
 import { RefreshDto } from './dto/refresh.dto';
 import { RequestOtpDto } from './dto/request-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
+import { RegisterEmailDto } from './dto/register-email.dto';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { AttachEmailDto } from './dto/attach-email.dto';
+import { VerifyEmailQueryDto } from './dto/verify-email-query.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+
+const REFRESH_COOKIE = 'refresh_token';
 
 @ApiTags('auth')
 @Controller('auth')
@@ -33,6 +47,8 @@ export class AuthController {
     private readonly otpService: OtpService,
   ) {}
 
+  // ---------- Phone OTP (primary) ----------
+
   @Post('otp/request')
   @HttpCode(HttpStatus.OK)
   @ApiOperation({
@@ -41,7 +57,6 @@ export class AuthController {
       'OTP expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.',
   })
   @ApiOkResponse({
-    description: 'OTP sent',
     schema: {
       example: { message: 'OTP sent', expiresInSeconds: 300, devOtp: '123456' },
     },
@@ -59,7 +74,6 @@ export class AuthController {
     summary: 'Verify OTP — logs in, auto-registers unknown phones',
   })
   @ApiOkResponse({
-    description: 'Authenticated',
     schema: {
       example: {
         accessToken: 'eyJhbGciOiJIUzI1NiIs…',
@@ -80,29 +94,55 @@ export class AuthController {
     return this.authService.verifyOtp(dto);
   }
 
-  @Post('register')
-  @ApiOperation({ summary: 'Register with email + password (secondary flow)' })
+  // ---------- Email + password (secondary) ----------
+
+  @Post('register/email')
+  @ApiOperation({
+    summary: 'Register with email + password',
+    description:
+      'Creates an unverified account and emails a verification link (24h expiry). Does NOT log the user in. Without RESEND_API_KEY the response includes devVerificationUrl for testing.',
+  })
   @ApiCreatedResponse({
-    description: 'User created',
-    schema: {
-      example: {
-        id: '329be544-a3ee-48dd-896d-3457b2cfb0dd',
-        email: 'customer@example.com',
-        role: 'CUSTOMER',
-        createdAt: '2026-07-09T17:26:21.474Z',
-      },
-    },
+    schema: { example: { message: 'Verification email sent.' } },
   })
   @ApiConflictResponse({ description: 'Email already registered' })
-  register(@Body() dto: RegisterDto) {
-    return this.authService.register(dto);
+  registerEmail(@Body() dto: RegisterEmailDto) {
+    return this.authService.registerEmail(dto);
   }
 
-  @Post('login')
+  @Get('verify-email')
+  @ApiOperation({
+    summary: 'Verify email from the link — redirects, auto-login for email-first users',
+    description:
+      'Single-use token. Email-first users get a refresh_token HttpOnly cookie (auto-login). Phone users who attached an email keep their existing session — no new tokens.',
+  })
+  @ApiResponse({ status: 302, description: 'Redirect to FRONTEND_URL/auth/verified' })
+  @ApiUnauthorizedResponse({ description: 'Link invalid, expired, or already used' })
+  async verifyEmail(
+    @Query() query: VerifyEmailQueryDto,
+    @Res() res: Response,
+  ) {
+    const result = await this.authService.verifyEmail(query.token);
+
+    if (result.autoLogin) {
+      const days = Number(process.env.REFRESH_EXPIRES_IN_DAYS ?? 7);
+      res.cookie(REFRESH_COOKIE, result.refreshToken, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'lax',
+        maxAge: days * 24 * 60 * 60 * 1000,
+        path: '/auth',
+      });
+    }
+
+    const frontend = process.env.FRONTEND_URL ?? 'http://localhost:3100';
+    return res.redirect(HttpStatus.FOUND, `${frontend}/auth/verified`);
+  }
+
+  @Post('login/email')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Login with email + password (secondary flow)' })
+  @ApiOperation({ summary: 'Login with email + password (verified email required)' })
   @ApiOkResponse({
-    description: 'Authenticated',
     schema: {
       example: {
         accessToken: 'eyJhbGciOiJIUzI1NiIs…',
@@ -111,31 +151,86 @@ export class AuthController {
     },
   })
   @ApiUnauthorizedResponse({ description: 'Invalid email or password' })
-  login(@Body() dto: LoginDto) {
-    return this.authService.login(dto);
+  @ApiConflictResponse({ description: 'Please verify your email.' })
+  loginEmail(@Body() dto: LoginDto) {
+    return this.authService.loginEmail(dto);
   }
+
+  @Post('email/resend')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({ summary: 'Resend the verification email' })
+  @ApiOkResponse({
+    schema: { example: { message: 'Verification email sent.' } },
+  })
+  @ApiNotFoundResponse({ description: 'No account with this email' })
+  @ApiConflictResponse({ description: 'Email is already verified' })
+  @ApiTooManyRequestsResponse({ description: 'Wait 60 seconds between resends' })
+  resendVerification(@Body() dto: ResendVerificationDto) {
+    return this.authService.resendVerification(dto.email);
+  }
+
+  @Patch('me/email')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Attach an email to the logged-in (phone) account',
+    description:
+      'Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.',
+  })
+  @ApiOkResponse({
+    schema: { example: { message: 'Verification email sent.' } },
+  })
+  @ApiConflictResponse({
+    description: 'Account already has an email, or email is taken',
+  })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
+  attachEmail(@Req() req: Request, @Body() dto: AttachEmailDto) {
+    const user = req['user'] as { sub: string };
+    return this.authService.attachEmail(user.sub, dto);
+  }
+
+  // ---------- Tokens ----------
 
   @Post('refresh')
   @HttpCode(HttpStatus.OK)
-  @ApiOperation({ summary: 'Exchange refresh token for a new access token' })
+  @ApiOperation({
+    summary: 'Exchange refresh token for a new access token',
+    description: 'Reads the token from the body, or from the refresh_token HttpOnly cookie when the body is empty.',
+  })
   @ApiOkResponse({
     schema: { example: { accessToken: 'eyJhbGciOiJIUzI1NiIs…' } },
   })
-  @ApiUnauthorizedResponse({ description: 'Refresh token invalid or expired' })
-  refresh(@Body() dto: RefreshDto) {
-    return this.authService.refresh(dto.refreshToken);
+  @ApiUnauthorizedResponse({ description: 'Refresh token missing, invalid, or expired' })
+  refresh(@Body() dto: RefreshDto, @Req() req: Request) {
+    const token = dto.refreshToken ?? req.cookies?.[REFRESH_COOKIE];
+    if (!token) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
+    return this.authService.refresh(token);
   }
 
   @Post('logout')
   @HttpCode(HttpStatus.OK)
   @UseGuards(JwtAuthGuard)
   @ApiBearerAuth()
-  @ApiOperation({ summary: 'Revoke the refresh token' })
+  @ApiOperation({
+    summary: 'Revoke the refresh token',
+    description: 'Accepts the token from the body or the refresh_token cookie; clears the cookie.',
+  })
   @ApiOkResponse({
     schema: { example: { message: 'Logged out successfully' } },
   })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
-  logout(@Body() dto: RefreshDto) {
-    return this.authService.logout(dto.refreshToken);
+  async logout(
+    @Body() dto: RefreshDto,
+    @Req() req: Request,
+    @Res({ passthrough: true }) res: Response,
+  ) {
+    const token = dto.refreshToken ?? req.cookies?.[REFRESH_COOKIE];
+    if (!token) {
+      throw new UnauthorizedException('Missing refresh token');
+    }
+    res.clearCookie(REFRESH_COOKIE, { path: '/auth' });
+    return this.authService.logout(token);
   }
 }

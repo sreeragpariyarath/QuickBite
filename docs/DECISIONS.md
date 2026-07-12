@@ -234,6 +234,26 @@ No delivery-partner onboarding, assignment, or tracking in v1. The `UserRole` en
 
 ---
 
+## D-012 — Verified email auth alongside phone OTP
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Email + password existed as unverified endpoints. Making email a trustworthy secondary auth method requires verification; sending email requires a provider with zero-cost dev workflow.
+
+**Decision:**
+- `POST /auth/register/email` creates an unverified user and emails a 24h single-use verification link; login is blocked (`409`) until verified. The old unverified `/auth/register` and `/auth/login` endpoints were **replaced** (existing users backfilled as verified).
+- Verification tokens are random 32-byte values stored sha256-hashed, single-use, deleted on use/resend; resends are rate-limited to one per 60s.
+- `GET /auth/verify-email` redirects to `FRONTEND_URL/auth/verified`. Email-first users are auto-logged-in via a `refresh_token` HttpOnly cookie; phone users attaching an email (`PATCH /auth/me/email`) keep their existing session — no new tokens.
+- **Hybrid refresh transport:** `/auth/refresh` and `/auth/logout` accept the refresh token from the body (Postman/mobile) or the cookie (future web frontend).
+- Email delivery goes through an `EmailProvider` interface: Resend (free tier) when `RESEND_API_KEY` is set, console provider logging the link (and returning `devVerificationUrl`) otherwise — mirrors D-010.
+
+**Consequences:**
+One auth surface with no unverified back door. A future web frontend needs CORS with `credentials: true`. Email sending can move behind RabbitMQ into notification-service in Phase 4 without changing the interface.
+
+---
+
 ## D-011 — Phased release discipline (feature freeze per phase)
 
 **Date:** 2026-07
