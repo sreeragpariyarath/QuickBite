@@ -1,0 +1,497 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "AppController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "status": "ok",
+                    "service": "restaurant-service",
+                    "database": "up",
+                    "timestamp": "2026-07-12T10:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Database unreachable"
+          }
+        },
+        "summary": "Service + database health check",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/restaurants": {
+      "get": {
+        "operationId": "RestaurantsController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of active restaurants"
+          }
+        },
+        "summary": "List all active restaurants (public)",
+        "tags": [
+          "restaurants"
+        ]
+      },
+      "post": {
+        "operationId": "RestaurantsController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRestaurantDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Restaurant created"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "CUSTOMER role cannot create restaurants"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Create a restaurant (OWNER)",
+        "tags": [
+          "restaurants"
+        ]
+      }
+    },
+    "/restaurants/{id}": {
+      "get": {
+        "operationId": "RestaurantsController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Restaurant with nested menu"
+          },
+          "404": {
+            "description": "Restaurant not found"
+          }
+        },
+        "summary": "Restaurant detail with categories and available menu items (public)",
+        "tags": [
+          "restaurants"
+        ]
+      },
+      "patch": {
+        "operationId": "RestaurantsController_update",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRestaurantDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Restaurant updated"
+          },
+          "403": {
+            "description": "You do not own this restaurant"
+          },
+          "404": {
+            "description": "Restaurant not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a restaurant (owner of it only)",
+        "tags": [
+          "restaurants"
+        ]
+      }
+    },
+    "/restaurants/{id}/categories": {
+      "post": {
+        "operationId": "RestaurantsController_addCategory",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateCategoryDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Category created"
+          },
+          "403": {
+            "description": "You do not own this restaurant"
+          },
+          "404": {
+            "description": "Restaurant not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add a category (owner of the restaurant only)",
+        "tags": [
+          "restaurants"
+        ]
+      }
+    },
+    "/restaurants/{id}/menu-items": {
+      "post": {
+        "operationId": "RestaurantsController_addMenuItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateMenuItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Menu item created"
+          },
+          "403": {
+            "description": "You do not own this restaurant"
+          },
+          "404": {
+            "description": "Restaurant or category not found in this restaurant"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Add a menu item (owner of the restaurant only)",
+        "tags": [
+          "restaurants"
+        ]
+      }
+    },
+    "/restaurants/{id}/menu-items/{itemId}": {
+      "patch": {
+        "operationId": "RestaurantsController_updateMenuItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMenuItemDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Menu item updated"
+          },
+          "403": {
+            "description": "You do not own this restaurant"
+          },
+          "404": {
+            "description": "Menu item not found in this restaurant"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update a menu item (owner of the restaurant only)",
+        "tags": [
+          "restaurants"
+        ]
+      },
+      "delete": {
+        "operationId": "RestaurantsController_removeMenuItem",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          },
+          {
+            "name": "itemId",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "204": {
+            "description": "Menu item deleted"
+          },
+          "403": {
+            "description": "You do not own this restaurant"
+          },
+          "404": {
+            "description": "Menu item not found in this restaurant"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Delete a menu item (owner of the restaurant only)",
+        "tags": [
+          "restaurants"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "QuickBite API — Restaurant Service",
+    "description": "QuickBite Backend Documentation. Restaurants, categories, and menu items. Write endpoints require an OWNER JWT issued by the auth service.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "CreateRestaurantDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Spice Garden",
+            "minLength": 2
+          },
+          "description": {
+            "type": "string",
+            "example": "Authentic Indian cuisine"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Main Street, Kochi",
+            "minLength": 5
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/demo/image/upload/restaurant.jpg"
+          }
+        },
+        "required": [
+          "name",
+          "address"
+        ]
+      },
+      "UpdateRestaurantDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Spice Garden",
+            "minLength": 2
+          },
+          "description": {
+            "type": "string",
+            "example": "Now with tandoor specials"
+          },
+          "address": {
+            "type": "string",
+            "example": "123 Main Street, Kochi",
+            "minLength": 5
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/demo/image/upload/restaurant.jpg"
+          },
+          "isActive": {
+            "type": "boolean",
+            "example": true,
+            "description": "Hide/show in listings"
+          }
+        }
+      },
+      "CreateCategoryDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Main Course",
+            "minLength": 2
+          }
+        },
+        "required": [
+          "name"
+        ]
+      },
+      "CreateMenuItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Butter Chicken",
+            "minLength": 2
+          },
+          "description": {
+            "type": "string",
+            "example": "Creamy tomato-based curry"
+          },
+          "price": {
+            "type": "number",
+            "example": 250,
+            "description": "Price in INR, max 2 decimals"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Category to place the item under"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg"
+          }
+        },
+        "required": [
+          "name",
+          "price"
+        ]
+      },
+      "UpdateMenuItemDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Butter Chicken",
+            "minLength": 2
+          },
+          "description": {
+            "type": "string",
+            "example": "Creamy tomato-based curry"
+          },
+          "price": {
+            "type": "number",
+            "example": 275.5,
+            "description": "Price in INR"
+          },
+          "categoryId": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "imageUrl": {
+            "type": "string",
+            "example": "https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg"
+          },
+          "isAvailable": {
+            "type": "boolean",
+            "example": true,
+            "description": "Sold-out items stay on the menu but hidden from customers"
+          }
+        }
+      }
+    }
+  }
+}

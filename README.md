@@ -75,6 +75,39 @@ Customers browse restaurants and place orders. Restaurant owners manage menus an
 
 ---
 
+## API Documentation
+
+The backend is the single source of truth — Swagger docs are generated from controller/DTO decorators.
+
+| Service | Swagger UI | OpenAPI JSON |
+|---|---|---|
+| auth-service | http://localhost:3000/docs | http://localhost:3000/docs-json |
+| restaurant-service | http://localhost:3001/docs | http://localhost:3001/docs-json |
+
+**Authorize in Swagger:** click **Authorize**, paste the JWT from login/OTP verify (without the `Bearer ` prefix) — all protected endpoints then send it automatically.
+
+**Export OpenAPI specs** (writes to `docs/openapi/*.openapi.json`):
+
+```bash
+cd services/auth-service && pnpm openapi
+cd services/restaurant-service && pnpm openapi
+```
+
+**Import into Postman:** `File → Import` → pick `docs/openapi/<service>.openapi.json` (or paste the live `/docs-json` URL). Re-import after adding endpoints — no manual collection maintenance.
+
+**Token auto-save in Postman (optional, one-time):** after importing, open the collection → Scripts → Post-response and paste:
+
+```js
+try {
+  const b = pm.response.json();
+  if (b.accessToken) pm.environment.set('access_token', b.accessToken);
+  if (b.refreshToken) pm.environment.set('refresh_token', b.refreshToken);
+  if (b.devOtp) pm.environment.set('dev_otp', b.devOtp);
+} catch (e) {}
+```
+
+Set the collection's auth to Bearer `{{access_token}}` and every login/OTP response feeds the next request.
+
 ## Getting Started
 
 **Prerequisites:** Docker, Node.js, pnpm

@@ -63,7 +63,7 @@ Introduce only when real usage demands it:
 ## Standing rules
 
 - Nothing ships to a phase before the previous phase's exit criteria are met.
-- Every new endpoint lands with validation, role guards, and a Postman entry.
+- Every new endpoint lands with validation, role guards, and Swagger decorators; `pnpm openapi` regenerates the specs Postman imports.
 - Infrastructure (queues, caches) is added in response to a real bottleneck, not upfront.
 
 ---

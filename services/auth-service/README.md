@@ -2,6 +2,8 @@
 
 Handles all authentication and identity concerns for QuickBite.
 
+**API docs:** http://localhost:3000/docs (Swagger UI) · http://localhost:3000/docs-json (OpenAPI) · `pnpm openapi` exports to `docs/openapi/auth-service.openapi.json`
+
 ---
 
 ## Responsibilities

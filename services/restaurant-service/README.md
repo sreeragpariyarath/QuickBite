@@ -2,6 +2,8 @@
 
 Manages restaurants, categories, and menu items for QuickBite.
 
+**API docs:** http://localhost:3001/docs (Swagger UI) · http://localhost:3001/docs-json (OpenAPI) · `pnpm openapi` exports to `docs/openapi/restaurant-service.openapi.json`
+
 ---
 
 ## Responsibilities

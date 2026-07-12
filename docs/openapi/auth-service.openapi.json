@@ -1,0 +1,392 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "operationId": "AppController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "status": "ok",
+                    "service": "auth-service",
+                    "database": "up",
+                    "timestamp": "2026-07-12T10:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Database unreachable"
+          }
+        },
+        "summary": "Service + database health check",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/auth/otp/request": {
+      "post": {
+        "description": "OTP expires in 5 minutes, single-use. Without MSG91 credentials the response includes devOtp for testing. Limit: 3 requests per phone per 15 minutes.",
+        "operationId": "AuthController_requestOtp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RequestOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OTP sent",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "OTP sent",
+                    "expiresInSeconds": 300,
+                    "devOtp": "123456"
+                  }
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "More than 3 requests in 15 minutes for this phone"
+          }
+        },
+        "summary": "Send a 6-digit OTP to a phone (primary auth flow)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/otp/verify": {
+      "post": {
+        "operationId": "AuthController_verifyOtp",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/VerifyOtpDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "accessToken": "eyJhbGciOiJIUzI1NiIs…",
+                    "refreshToken": "1961487d8735bfc1718…",
+                    "isNewUser": true,
+                    "user": {
+                      "id": "8f8ca54f-ed93-46b9-837d-8c158588303a",
+                      "phone": "+919876543210",
+                      "role": "CUSTOMER"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid, expired, or already-used OTP; or attempt limit hit"
+          }
+        },
+        "summary": "Verify OTP — logs in, auto-registers unknown phones",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/register": {
+      "post": {
+        "operationId": "AuthController_register",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "User created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "id": "329be544-a3ee-48dd-896d-3457b2cfb0dd",
+                    "email": "customer@example.com",
+                    "role": "CUSTOMER",
+                    "createdAt": "2026-07-09T17:26:21.474Z"
+                  }
+                }
+              }
+            }
+          },
+          "409": {
+            "description": "Email already registered"
+          }
+        },
+        "summary": "Register with email + password (secondary flow)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/login": {
+      "post": {
+        "operationId": "AuthController_login",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Authenticated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "accessToken": "eyJhbGciOiJIUzI1NiIs…",
+                    "refreshToken": "1961487d8735bfc1718…"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Invalid email or password"
+          }
+        },
+        "summary": "Login with email + password (secondary flow)",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "operationId": "AuthController_refresh",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "accessToken": "eyJhbGciOiJIUzI1NiIs…"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Refresh token invalid or expired"
+          }
+        },
+        "summary": "Exchange refresh token for a new access token",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
+    "/auth/logout": {
+      "post": {
+        "operationId": "AuthController_logout",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RefreshDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "message": "Logged out successfully"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Revoke the refresh token",
+        "tags": [
+          "auth"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "QuickBite API — Auth Service",
+    "description": "QuickBite Backend Documentation. Phone OTP is the primary authentication flow; email + password is secondary.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "RequestOtpDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "example": "+919876543210",
+            "description": "Indian mobile number in +91XXXXXXXXXX format"
+          }
+        },
+        "required": [
+          "phone"
+        ]
+      },
+      "VerifyOtpDto": {
+        "type": "object",
+        "properties": {
+          "phone": {
+            "type": "string",
+            "example": "+919876543210",
+            "description": "Indian mobile number in +91XXXXXXXXXX format"
+          },
+          "otp": {
+            "type": "string",
+            "example": "123456",
+            "description": "6-digit code from SMS"
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "OWNER"
+            ],
+            "default": "CUSTOMER",
+            "description": "Applied only when the phone is not registered yet"
+          }
+        },
+        "required": [
+          "phone",
+          "otp"
+        ]
+      },
+      "RegisterDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "customer@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!",
+            "minLength": 8
+          },
+          "role": {
+            "type": "string",
+            "enum": [
+              "CUSTOMER",
+              "OWNER"
+            ],
+            "default": "CUSTOMER"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "LoginDto": {
+        "type": "object",
+        "properties": {
+          "email": {
+            "type": "string",
+            "example": "customer@example.com"
+          },
+          "password": {
+            "type": "string",
+            "example": "Password123!"
+          }
+        },
+        "required": [
+          "email",
+          "password"
+        ]
+      },
+      "RefreshDto": {
+        "type": "object",
+        "properties": {
+          "refreshToken": {
+            "type": "string",
+            "example": "1961487d8735bfc171879d604d7cae57ab6b8c25c246c5d5…",
+            "description": "Opaque refresh token returned by login or OTP verify"
+          }
+        },
+        "required": [
+          "refreshToken"
+        ]
+      }
+    }
+  }
+}
