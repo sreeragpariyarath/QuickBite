@@ -45,14 +45,14 @@ export class OtpService {
       data: { phone, codeHash: this.hash(code), expiresAt },
     });
 
-    await this.sms.sendOtp(phone, code);
+    const { realSms } = await this.sms.sendOtp(phone, code);
 
     return {
       message: 'OTP sent',
       expiresInSeconds: OTP_TTL_MINUTES * 60,
-      // Exposed only while running with the console provider so the flow
-      // is testable before MSG91 credentials are configured.
-      ...(this.sms.deliversRealSms ? {} : { devOtp: code }),
+      // Exposed only when no real SMS was dispatched (dev fallback), so the
+      // flow stays testable for numbers MSG91 cannot deliver to yet.
+      ...(realSms ? {} : { devOtp: code }),
     };
   }
 

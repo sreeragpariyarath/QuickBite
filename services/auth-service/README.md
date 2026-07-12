@@ -38,6 +38,7 @@ PostgreSQL — `auth_db`
 | `REFRESH_EXPIRES_IN_DAYS` | Refresh token expiry in days | `7` |
 | `MSG91_AUTH_KEY` | MSG91 auth key (empty → console SMS provider) | `""` |
 | `MSG91_TEMPLATE_ID` | DLT-approved MSG91 template with `##otp##` var | `""` |
+| `SMS_LIVE_NUMBERS` | Comma-separated numbers that get real SMS; all others get `devOtp` (empty = real SMS for all) | `"+917306259602"` |
 | `RESEND_API_KEY` | Resend API key (empty → console email provider) | `""` |
 | `EMAIL_FROM` | Sender identity for verification emails | `QuickBite <onboarding@resend.dev>` |
 | `APP_URL` | Public base URL of this service (used in email links) | `http://localhost:3000` |

@@ -3,7 +3,7 @@ import {
   Logger,
   ServiceUnavailableException,
 } from '@nestjs/common';
-import { SmsProvider } from './sms.provider';
+import { SmsDispatchResult, SmsProvider } from './sms.provider';
 
 /**
  * Sends OTP SMS through MSG91's SendOTP API (/api/v5/otp).
@@ -22,9 +22,8 @@ import { SmsProvider } from './sms.provider';
 @Injectable()
 export class Msg91SmsProvider implements SmsProvider {
   private readonly logger = new Logger(Msg91SmsProvider.name);
-  readonly deliversRealSms = true;
 
-  async sendOtp(phone: string, otp: string): Promise<void> {
+  async sendOtp(phone: string, otp: string): Promise<SmsDispatchResult> {
     const params = new URLSearchParams({
       mobile: phone.replace('+', ''),
       otp,
@@ -63,5 +62,6 @@ export class Msg91SmsProvider implements SmsProvider {
     }
 
     this.logger.log(`OTP SMS dispatched to ${phone} via MSG91`);
+    return { realSms: true };
   }
 }

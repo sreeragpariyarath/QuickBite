@@ -1,5 +1,5 @@
 import { Injectable, Logger } from '@nestjs/common';
-import { SmsProvider } from './sms.provider';
+import { SmsDispatchResult, SmsProvider } from './sms.provider';
 
 /**
  * Development fallback used when MSG91 credentials are not configured.
@@ -8,9 +8,9 @@ import { SmsProvider } from './sms.provider';
 @Injectable()
 export class ConsoleSmsProvider implements SmsProvider {
   private readonly logger = new Logger(ConsoleSmsProvider.name);
-  readonly deliversRealSms = false;
 
-  async sendOtp(phone: string, otp: string): Promise<void> {
+  async sendOtp(phone: string, otp: string): Promise<SmsDispatchResult> {
     this.logger.warn(`[DEV SMS] OTP for ${phone}: ${otp}`);
+    return { realSms: false };
   }
 }
