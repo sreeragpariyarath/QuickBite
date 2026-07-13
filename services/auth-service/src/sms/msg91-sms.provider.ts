@@ -5,19 +5,26 @@ import {
 } from '@nestjs/common';
 import { SmsDispatchResult, SmsProvider } from './sms.provider';
 
+const REQUEST_TIMEOUT_MS = 10_000;
+
 /**
  * Sends OTP SMS through MSG91's SendOTP API (/api/v5/otp).
  *
  * We pass our own generated OTP, so verification stays in our OtpService
  * (hash compare) — MSG91 is delivery only.
  *
+ * IMPORTANT (audit 2026-07-13): the API returns {type:"success"} synchronously
+ * even when the message can never be dispatched. Per MSG91 docs, template_id
+ * is REQUIRED for actual SMS delivery, and creating a template requires a
+ * Sender ID, which requires DLT registration (business KYC). Without those,
+ * requests are accepted and the OTP is stored on MSG91's side, but no SMS
+ * leaves their platform. Delivery failures are visible only in the dashboard
+ * (SendOTP → Logs → Failed/All) or via webhooks.
+ *
  * Required env:
- *   MSG91_AUTH_KEY    — account auth key (MSG91 dashboard → Authkey)
- * Optional env:
- *   MSG91_TEMPLATE_ID — your DLT-approved OTP template id. When empty,
- *                       MSG91's default OTP template is used, which works
- *                       for trial accounts sending to the account's own
- *                       verified number before DLT registration is done.
+ *   MSG91_AUTH_KEY    — account Authkey (dashboard top-right → AuthKey; NOT an
+ *                       OTP Widget token)
+ *   MSG91_TEMPLATE_ID — DLT-approved OTP template id (required for delivery)
  */
 @Injectable()
 export class Msg91SmsProvider implements SmsProvider {
@@ -38,9 +45,9 @@ export class Msg91SmsProvider implements SmsProvider {
       {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
           authkey: process.env.MSG91_AUTH_KEY as string,
         },
+        signal: AbortSignal.timeout(REQUEST_TIMEOUT_MS),
       },
     );
 
@@ -50,9 +57,13 @@ export class Msg91SmsProvider implements SmsProvider {
       throw new ServiceUnavailableException('Could not send OTP, try again');
     }
 
-    let result: { type?: string; message?: string };
+    let result: { type?: string; request_id?: string; message?: string };
     try {
-      result = JSON.parse(body) as { type?: string; message?: string };
+      result = JSON.parse(body) as {
+        type?: string;
+        request_id?: string;
+        message?: string;
+      };
     } catch {
       result = {};
     }
@@ -61,7 +72,9 @@ export class Msg91SmsProvider implements SmsProvider {
       throw new ServiceUnavailableException('Could not send OTP, try again');
     }
 
-    this.logger.log(`OTP SMS dispatched to ${phone} via MSG91`);
+    this.logger.log(
+      `OTP SMS accepted by MSG91 for ${phone} (request_id: ${result.request_id ?? 'n/a'}) — delivery depends on account DLT/template status`,
+    );
     return { realSms: true };
   }
 }
