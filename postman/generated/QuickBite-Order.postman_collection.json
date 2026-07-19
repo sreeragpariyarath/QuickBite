@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "753dc06d-a78e-4837-ac03-15f85d2af7d1",
+      "id": "cfa9c0ac-cd26-4654-9aba-86932e7294b1",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "2e92ccf5-05a3-403e-843f-fff045f3aa0c",
+          "id": "bbd0425f-8d47-4b6c-892a-abfca3fbc853",
           "name": "Health check",
           "request": {
             "name": "Health check",
@@ -45,7 +45,7 @@
       "event": []
     },
     {
-      "id": "2ec68fee-cf1a-4b3d-ba2e-e5799045c075",
+      "id": "e70f2458-4921-4781-9317-4ef88f18ca91",
       "name": "orders",
       "description": {
         "content": "",
@@ -53,7 +53,7 @@
       },
       "item": [
         {
-          "id": "d7e60ff7-4f76-4f44-b921-0d90071cae80",
+          "id": "438654d9-9e26-4d5c-a535-8df97e40312a",
           "name": "Place order",
           "request": {
             "name": "Place order",
@@ -80,7 +80,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"restaurantId\": \"8bd407da-d9f4-4b8a-283d-37accb9e1d59\",\n  \"items\": [\n    {\n      \"menuItemId\": \"4554a787-6568-d655-aaee-9a78cf777c80\",\n      \"quantity\": 2\n    }\n  ]\n}",
+              "raw": "{\n  \"restaurantId\": \"f467ee3b-baf0-47bd-2c27-0b60126b68ee\",\n  \"items\": [\n    {\n      \"menuItemId\": \"c313cb81-ad29-d1f2-8835-7904112a4cf1\",\n      \"quantity\": 2\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -95,7 +95,7 @@
           }
         },
         {
-          "id": "29ac40cd-8228-49ef-a132-648944402d96",
+          "id": "8fa5c10e-6b1b-4f06-8be9-f0db32fcaa8c",
           "name": "List my orders",
           "request": {
             "name": "List my orders",
@@ -122,7 +122,7 @@
           }
         },
         {
-          "id": "73b6139e-47c5-476e-9fa6-052feee881cc",
+          "id": "06b18154-f8e3-4b18-9833-3644c449b610",
           "name": "Order details",
           "request": {
             "name": "Order details",
@@ -143,7 +143,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "670a8a97-9cfe-9858-d419-c1eef6a799c7",
+                  "value": "515c01f3-7796-2726-7254-74ae3024eb6c",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -158,7 +158,7 @@
           }
         },
         {
-          "id": "6e8c36a2-a4b7-4503-8219-5d3352d10531",
+          "id": "e2fe2bca-4f9d-42f4-873a-2c2e08ce5ad5",
           "name": "Accept order",
           "request": {
             "name": "Accept order",
@@ -180,7 +180,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "670a8a97-9cfe-9858-d419-c1eef6a799c7",
+                  "value": "515c01f3-7796-2726-7254-74ae3024eb6c",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -195,7 +195,7 @@
           }
         },
         {
-          "id": "a2980e4d-166d-41bf-939a-c45d6fe919b0",
+          "id": "38ddb31d-e639-4026-8853-ccf17e0886f1",
           "name": "Reject order",
           "request": {
             "name": "Reject order",
@@ -217,7 +217,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "670a8a97-9cfe-9858-d419-c1eef6a799c7",
+                  "value": "515c01f3-7796-2726-7254-74ae3024eb6c",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -232,7 +232,7 @@
           }
         },
         {
-          "id": "84f57c9b-5e93-4831-9810-eeec20410fcf",
+          "id": "3873e769-d3bb-4e3a-a662-72b5fd92fe67",
           "name": "Start preparing",
           "request": {
             "name": "Start preparing",
@@ -254,7 +254,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "670a8a97-9cfe-9858-d419-c1eef6a799c7",
+                  "value": "515c01f3-7796-2726-7254-74ae3024eb6c",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -269,7 +269,7 @@
           }
         },
         {
-          "id": "c11c1dbb-2865-43da-aae6-8e75f24d1cbf",
+          "id": "1c4ae50d-f577-420e-a3fe-e874129093d4",
           "name": "Mark delivered",
           "request": {
             "name": "Mark delivered",
@@ -291,7 +291,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "670a8a97-9cfe-9858-d419-c1eef6a799c7",
+                  "value": "515c01f3-7796-2726-7254-74ae3024eb6c",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -306,7 +306,7 @@
           }
         },
         {
-          "id": "c893ec8b-9ab4-43ac-9ae3-7dc9972b69c6",
+          "id": "86936983-7baa-428b-8822-516b436048e2",
           "name": "Cancel order",
           "request": {
             "name": "Cancel order",
@@ -328,7 +328,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "670a8a97-9cfe-9858-d419-c1eef6a799c7",
+                  "value": "515c01f3-7796-2726-7254-74ae3024eb6c",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -376,7 +376,7 @@
     }
   ],
   "info": {
-    "_postman_id": "3d829fc2-6ba8-42cb-8b11-50d9508bd914",
+    "_postman_id": "1acfab9e-9c36-4504-9267-312c23f4cfdf",
     "name": "QuickBite — Order Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

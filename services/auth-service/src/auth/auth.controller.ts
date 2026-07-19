@@ -32,6 +32,7 @@ import { RefreshDto } from './dto/refresh.dto';
 import { RequestOtpDto } from './dto/request-otp.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { RegisterEmailDto } from './dto/register-email.dto';
+import { UpdateMeDto } from './dto/update-me.dto';
 import { ResendVerificationDto } from './dto/resend-verification.dto';
 import { AttachEmailDto } from './dto/attach-email.dto';
 import { VerifyEmailQueryDto } from './dto/verify-email-query.dto';
@@ -176,6 +177,47 @@ export class AuthController {
   @ApiTooManyRequestsResponse({ description: 'Wait 60 seconds between resends' })
   resendVerification(@Body() dto: ResendVerificationDto) {
     return this.authService.resendVerification(dto.email);
+  }
+
+  @Get('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'My profile',
+    description: 'Profile of the logged-in user.',
+  })
+  @ApiOkResponse({
+    schema: {
+      example: {
+        id: '7944e9b6-86eb-41d0-9c64-3a41df586e6a',
+        phone: '+919876543210',
+        email: null,
+        isEmailVerified: false,
+        name: 'Sreerag P',
+        role: 'CUSTOMER',
+        createdAt: '2026-07-14T10:00:00.000Z',
+      },
+    },
+  })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
+  getMe(@Req() req: Request) {
+    const user = req['user'] as { sub: string };
+    return this.authService.getMe(user.sub);
+  }
+
+  @Patch('me')
+  @UseGuards(JwtAuthGuard)
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Update my profile',
+    description:
+      'Sets the display name — typically right after first OTP login (isNewUser: true).',
+  })
+  @ApiOkResponse({ description: 'Updated profile' })
+  @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
+  updateMe(@Req() req: Request, @Body() dto: UpdateMeDto) {
+    const user = req['user'] as { sub: string };
+    return this.authService.updateMe(user.sub, dto);
   }
 
   @Patch('me/email')

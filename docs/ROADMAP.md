@@ -15,9 +15,9 @@ QuickBite is being built as a real product, not a learning exercise. The roadmap
       role guards, public browse endpoints
 - [x] Postman collection with automated token/ID handling
 
-## Phase 1 — Complete the core loop (current)
+## Phase 1 — Complete the core loop ✅ (done 2026-07-19)
 
-**Exit criteria: a customer can order food and the owner can fulfil it, end to end.**
+**Exit criteria: a customer can order food and the owner can fulfil it, end to end. — MET**
 
 - [x] order-service (port 3002, `order_db`)
   - [x] Place order with menu snapshot (name + price copied at order time)
@@ -25,9 +25,9 @@ QuickBite is being built as a real product, not a learning exercise. The roadmap
   - [x] Customer order history; owner incoming-order list
   - [x] Payment fields on order: `paymentMethod` (COD at launch), `paymentStatus` (PAID on delivery)
 - [x] Restaurant discovery basics: required `city` field + `GET /restaurants?city=` filter (case-insensitive); duplicate protection via `(ownerId, name, address)` unique (D-014)
-- [ ] User profile: name capture after first OTP login (`PATCH /auth/me`)
+- [x] User profile: `GET /auth/me` + `PATCH /auth/me` (name capture after first OTP login)
 
-## Phase 2 — A product people can use
+## Phase 2 — A product people can use (current)
 
 **Exit criteria: a person with a phone can order without Postman.**
 

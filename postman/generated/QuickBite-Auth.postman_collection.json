@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "395e2a0e-4064-4f8e-8bd4-f3499cf12b7c",
+      "id": "0b35be9b-57ee-4e55-b4fa-2ae49f3d9207",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "3417e917-4ba4-48f1-8b0e-723302a86a4f",
+          "id": "0d9ca8e6-f58d-45c8-bd27-e9f899f17c31",
           "name": "Health check",
           "request": {
             "name": "Health check",
@@ -45,7 +45,7 @@
       "event": []
     },
     {
-      "id": "2fd30737-61f4-436c-815a-4110f6930f69",
+      "id": "aa080d34-ccce-418e-952e-49f8a7c18c91",
       "name": "auth",
       "description": {
         "content": "",
@@ -53,7 +53,7 @@
       },
       "item": [
         {
-          "id": "4c619a4a-3ccd-498f-8eec-bb0f1d10b98f",
+          "id": "b8a81616-5fb8-4805-b009-9dcb0c51aed4",
           "name": "Request OTP",
           "request": {
             "name": "Request OTP",
@@ -101,7 +101,7 @@
           }
         },
         {
-          "id": "f45ef59f-cb3c-429e-97ce-471ec65a00f1",
+          "id": "22f47e22-9e02-4e51-a47e-1f0e74c88bf3",
           "name": "Verify OTP (login / register)",
           "request": {
             "name": "Verify OTP (login / register)",
@@ -149,7 +149,7 @@
           }
         },
         {
-          "id": "973fcb83-59ad-49b0-9c05-349f21b364e2",
+          "id": "5e3aa6fa-8c60-47ac-8467-c3ba8e7120bf",
           "name": "Email register (customer / owner)",
           "request": {
             "name": "Email register (customer / owner)",
@@ -197,7 +197,7 @@
           }
         },
         {
-          "id": "e6adc1c0-7398-4993-86c1-2bfd63bc881f",
+          "id": "856727cc-8a4b-4f5d-a07c-4bf79bdb8673",
           "name": "Verify email link",
           "request": {
             "name": "Verify email link",
@@ -232,7 +232,7 @@
           }
         },
         {
-          "id": "27edcbcf-90b7-4d29-ae99-929a1c2865c4",
+          "id": "d649af51-239d-42b3-82aa-7cf70fd9ee0e",
           "name": "Email login",
           "request": {
             "name": "Email login",
@@ -280,7 +280,7 @@
           }
         },
         {
-          "id": "9b14aecf-da34-4662-9e53-505e38219016",
+          "id": "01e5c994-afd2-4292-aec3-250be7529e8b",
           "name": "Resend verification email",
           "request": {
             "name": "Resend verification email",
@@ -328,7 +328,84 @@
           }
         },
         {
-          "id": "1dd6ec75-7e78-4298-bd33-bb1be770b6a4",
+          "id": "08fad1bd-950f-4900-abc6-8e29bb6fa924",
+          "name": "My profile",
+          "request": {
+            "name": "My profile",
+            "description": {
+              "content": "Profile of the logged-in user.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "me"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET"
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c4d6883b-78e9-4ac9-8877-ac313a026fbd",
+          "name": "Update my profile",
+          "request": {
+            "name": "Update my profile",
+            "description": {
+              "content": "Sets the display name — typically right after first OTP login (isNewUser: true).",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "auth",
+                "me"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Sreerag P\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "18022b67-1d47-4ebb-ace1-44ad0886b954",
           "name": "Attach email to account",
           "request": {
             "name": "Attach email to account",
@@ -376,7 +453,7 @@
           }
         },
         {
-          "id": "8b76fd46-906b-4082-84b6-73fc4ed7f9c4",
+          "id": "7e0fe26c-8ec4-467e-bb17-4bfcdc592bad",
           "name": "Refresh access token",
           "request": {
             "name": "Refresh access token",
@@ -423,7 +500,7 @@
           }
         },
         {
-          "id": "17df3ca9-2f54-44cd-b83d-034a3a2df348",
+          "id": "7e0621d5-609b-46f6-9878-2fee5ebb41d3",
           "name": "Logout",
           "request": {
             "name": "Logout",
@@ -503,7 +580,7 @@
     }
   ],
   "info": {
-    "_postman_id": "26f720d0-8090-46da-9cfa-b7e0a9b46183",
+    "_postman_id": "f6142ff5-ee02-497c-ac9e-9a23ced1fd3a",
     "name": "QuickBite — Auth Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

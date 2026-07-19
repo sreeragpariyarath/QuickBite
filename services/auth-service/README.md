@@ -76,6 +76,8 @@ Service is available at `http://localhost:3000`.
 | `GET` | `/auth/verify-email` | Verify from email link → redirect (+auto-login cookie for email-first users) | Live |
 | `POST` | `/auth/login/email` | Login with email + password (verified email required) | Live |
 | `POST` | `/auth/email/resend` | Resend the verification email (60s cooldown) | Live |
+| `GET` | `/auth/me` | My profile (Bearer token) | Live |
+| `PATCH` | `/auth/me` | Update display name (Bearer token) | Live |
 | `PATCH` | `/auth/me/email` | Attach email to a phone account (Bearer token) | Live |
 | `POST` | `/auth/refresh` | New access token — token from body or HttpOnly cookie | Live |
 | `POST` | `/auth/logout` | Revoke the refresh token (body or cookie) | Live |

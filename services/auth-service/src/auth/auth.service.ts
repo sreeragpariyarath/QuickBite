@@ -166,6 +166,37 @@ export class AuthService {
     return { message: 'Verification email sent.', ...dev };
   }
 
+  // ---------- Profile ----------
+
+  private readonly profileSelect = {
+    id: true,
+    phone: true,
+    email: true,
+    isEmailVerified: true,
+    name: true,
+    role: true,
+    createdAt: true,
+  } as const;
+
+  async getMe(userId: string) {
+    const user = await this.prisma.user.findUnique({
+      where: { id: userId },
+      select: this.profileSelect,
+    });
+    if (!user) {
+      throw new UnauthorizedException('User no longer exists');
+    }
+    return user;
+  }
+
+  updateMe(userId: string, data: { name: string }) {
+    return this.prisma.user.update({
+      where: { id: userId },
+      data,
+      select: this.profileSelect,
+    });
+  }
+
   // ---------- Tokens ----------
 
   async refresh(refreshToken: string) {

@@ -178,8 +178,9 @@ Organizations/Branches · Fine-grained permissions/RBAC · Inventory · Coupons
 
 ## Current Phase
 
-**Sprint 1 — Foundation.** Finishing Authentication (phone OTP + optional
-email verification) before moving to Customer Profile.
+**Phase 2 — A product people can use.** The backend core loop (Phase 1:
+auth, restaurants/menus, orders end-to-end) is complete as of 2026-07-19.
+Next: Next.js customer app + owner dashboard, API gateway, deployment.
 
 See [PROJECT_CONTEXT.md](PROJECT_CONTEXT.md) for vision and role
 definitions, [ARCHITECTURE.md](ARCHITECTURE.md) for service boundaries.

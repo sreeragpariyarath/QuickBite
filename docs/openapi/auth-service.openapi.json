@@ -270,6 +270,77 @@
         ]
       }
     },
+    "/auth/me": {
+      "get": {
+        "description": "Profile of the logged-in user.",
+        "operationId": "AuthController_getMe",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "id": "7944e9b6-86eb-41d0-9c64-3a41df586e6a",
+                    "phone": "+919876543210",
+                    "email": null,
+                    "isEmailVerified": false,
+                    "name": "Sreerag P",
+                    "role": "CUSTOMER",
+                    "createdAt": "2026-07-14T10:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "My profile",
+        "tags": [
+          "auth"
+        ]
+      },
+      "patch": {
+        "description": "Sets the display name — typically right after first OTP login (isNewUser: true).",
+        "operationId": "AuthController_updateMe",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateMeDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Updated profile"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Update my profile",
+        "tags": [
+          "auth"
+        ]
+      }
+    },
     "/auth/me/email": {
       "patch": {
         "description": "Adds an email to the logged-in (phone) account. Sets email + password (password only if none exists) and sends a verification link. The current session stays valid — no new tokens are issued.",
@@ -514,6 +585,19 @@
         },
         "required": [
           "email"
+        ]
+      },
+      "UpdateMeDto": {
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "example": "Sreerag P",
+            "minLength": 2
+          }
+        },
+        "required": [
+          "name"
         ]
       },
       "AttachEmailDto": {
