@@ -151,7 +151,225 @@ function convert(service) {
   });
 }
 
-Promise.all(SERVICES.map(convert)).catch((err) => {
-  console.error(err);
-  process.exit(1);
-});
+// ---------------------------------------------------------------------------
+// E2E Flows collection — a connected, run-top-to-bottom test script split by
+// role. Customer and owner keep separate tokens so both stay logged in.
+// ---------------------------------------------------------------------------
+
+const FLOW_SAVER_SCRIPT = [
+  "let body; try { body = pm.response.json(); } catch (e) { body = null; }",
+  'if (!body || pm.response.code >= 400) { return; }',
+  "if (body.devOtp) pm.environment.set('devOtp', String(body.devOtp));",
+  'if (body.id) {',
+  "  if (body.ownerId) { pm.environment.set('restaurantId', body.id); }",
+  "  else if (body.price !== undefined) { pm.environment.set('menuItemId', body.id); }",
+  "  else if (body.customerId || body.total !== undefined) { pm.environment.set('orderId', body.id); }",
+  "  else if (body.restaurantId) { pm.environment.set('categoryId', body.id); }",
+  '}',
+];
+
+function flowReq(name, method, url, { body, description, noauth, test } = {}) {
+  const item = {
+    name,
+    request: {
+      method,
+      header: body ? [{ key: 'Content-Type', value: 'application/json' }] : [],
+      url,
+      description,
+    },
+    response: [],
+  };
+  if (body) {
+    item.request.body = {
+      mode: 'raw',
+      raw: JSON.stringify(body, null, 2),
+      options: { raw: { language: 'json' } },
+    };
+  }
+  if (noauth) item.request.auth = { type: 'noauth' };
+  if (test) {
+    item.event = [
+      { listen: 'test', script: { type: 'text/javascript', exec: test } },
+    ];
+  }
+  return item;
+}
+
+function folder(name, tokenVar, items, description) {
+  return {
+    name,
+    description,
+    auth: {
+      type: 'bearer',
+      bearer: [{ key: 'token', value: `{{${tokenVar}}}`, type: 'string' }],
+    },
+    item: items,
+  };
+}
+
+function buildFlowsCollection() {
+  const saveToken = (prefix) => [
+    'const b = pm.response.json();',
+    `if (b.accessToken) pm.environment.set('${prefix}AccessToken', b.accessToken);`,
+    `if (b.refreshToken) pm.environment.set('${prefix}RefreshToken', b.refreshToken);`,
+  ];
+
+  const ownerSetup = folder(
+    '1 · Owner — login & setup',
+    'ownerAccessToken',
+    [
+      flowReq('Request OTP (owner)', 'POST', '{{authBaseUrl}}/auth/otp/request', {
+        body: { phone: '{{ownerPhone}}' },
+        noauth: true,
+        description: 'devOtp is auto-saved for the next step.',
+      }),
+      flowReq('Verify OTP → owner login', 'POST', '{{authBaseUrl}}/auth/otp/verify', {
+        body: { phone: '{{ownerPhone}}', otp: '{{devOtp}}', role: 'OWNER' },
+        noauth: true,
+        test: saveToken('owner'),
+        description: 'Saves ownerAccessToken — owner requests use it automatically.',
+      }),
+      flowReq('Create restaurant', 'POST', '{{restaurantBaseUrl}}/restaurants', {
+        body: {
+          name: 'Spice Garden {{$timestamp}}',
+          description: 'Authentic Indian cuisine',
+          address: '123 Main Street, Kochi',
+          city: 'Kochi',
+        },
+        description:
+          'restaurantId auto-saves. Name includes a timestamp so re-running the flow never hits the duplicate 409.',
+      }),
+      flowReq('Add category', 'POST', '{{restaurantBaseUrl}}/restaurants/{{restaurantId}}/categories', {
+        body: { name: 'Main Course' },
+        description: 'categoryId auto-saves.',
+      }),
+      flowReq('Add menu item', 'POST', '{{restaurantBaseUrl}}/restaurants/{{restaurantId}}/menu-items', {
+        body: {
+          name: 'Butter Chicken',
+          description: 'Creamy tomato-based curry',
+          price: 250.0,
+          categoryId: '{{categoryId}}',
+        },
+        description: 'menuItemId auto-saves.',
+      }),
+    ],
+    'Run top to bottom. Logs in as OWNER and creates a restaurant with one menu item.',
+  );
+
+  const customerOrder = folder(
+    '2 · Customer — browse & order',
+    'customerAccessToken',
+    [
+      flowReq('Request OTP (customer)', 'POST', '{{authBaseUrl}}/auth/otp/request', {
+        body: { phone: '{{customerPhone}}' },
+        noauth: true,
+      }),
+      flowReq('Verify OTP → customer login', 'POST', '{{authBaseUrl}}/auth/otp/verify', {
+        body: { phone: '{{customerPhone}}', otp: '{{devOtp}}', role: 'CUSTOMER' },
+        noauth: true,
+        test: saveToken('customer'),
+        description: 'Saves customerAccessToken — customer requests use it automatically.',
+      }),
+      flowReq('Set my name', 'PATCH', '{{authBaseUrl}}/auth/me', {
+        body: { name: 'Test Customer' },
+      }),
+      flowReq('Browse restaurants', 'GET', '{{restaurantBaseUrl}}/restaurants', {
+        noauth: true,
+        test: [
+          'const arr = pm.response.json();',
+          'if (Array.isArray(arr) && arr.length) {',
+          "  pm.environment.set('restaurantId', arr[0].id);",
+          '}',
+        ],
+        description:
+          'Public. Saves the newest restaurant (the one owner just created) as restaurantId.',
+      }),
+      flowReq('Restaurant menu', 'GET', '{{restaurantBaseUrl}}/restaurants/{{restaurantId}}', {
+        noauth: true,
+        test: [
+          'const r = pm.response.json();',
+          'const items = [...(r.menuItems || []), ...((r.categories || []).flatMap(c => c.menuItems || []))];',
+          "if (items.length) pm.environment.set('menuItemId', items[0].id);",
+        ],
+        description: 'Public. Saves the first available menu item as menuItemId.',
+      }),
+      flowReq('Place order', 'POST', '{{orderBaseUrl}}/orders', {
+        body: {
+          restaurantId: '{{restaurantId}}',
+          items: [{ menuItemId: '{{menuItemId}}', quantity: 2 }],
+        },
+        description:
+          'Prices are snapshotted server-side; total computed by the backend. orderId auto-saves.',
+      }),
+      flowReq('My orders', 'GET', '{{orderBaseUrl}}/orders'),
+    ],
+    'Logs in as CUSTOMER, browses the menu, places an order (status: PENDING).',
+  );
+
+  const ownerFulfil = folder(
+    '3 · Owner — fulfil the order',
+    'ownerAccessToken',
+    [
+      flowReq('Incoming orders', 'GET', '{{orderBaseUrl}}/orders', {
+        description: 'Owner view — orders for their restaurants.',
+      }),
+      flowReq('Accept order', 'PATCH', '{{orderBaseUrl}}/orders/{{orderId}}/accept'),
+      flowReq('Start preparing', 'PATCH', '{{orderBaseUrl}}/orders/{{orderId}}/prepare'),
+      flowReq('Mark delivered', 'PATCH', '{{orderBaseUrl}}/orders/{{orderId}}/deliver', {
+        description: 'PREPARING → DELIVERED; COD payment flips to PAID.',
+      }),
+      flowReq('(alt) Reject order', 'PATCH', '{{orderBaseUrl}}/orders/{{orderId}}/reject', {
+        description:
+          'Alternative to Accept — only valid while the order is PENDING. Expect 400 after the happy path above.',
+      }),
+    ],
+    'Uses ownerAccessToken. Takes the customer order through the full status flow.',
+  );
+
+  const customerTrack = folder(
+    '4 · Customer — track & cancel',
+    'customerAccessToken',
+    [
+      flowReq('Order details', 'GET', '{{orderBaseUrl}}/orders/{{orderId}}'),
+      flowReq('(alt) Cancel order', 'PATCH', '{{orderBaseUrl}}/orders/{{orderId}}/cancel', {
+        description:
+          'Only valid while PENDING or ACCEPTED. Expect 400 after delivery — place a fresh order in folder 2 to test cancelling.',
+      }),
+    ],
+    'Uses customerAccessToken.',
+  );
+
+  const collection = {
+    info: {
+      name: 'QuickBite — E2E Flows',
+      description: {
+        content:
+          'GENERATED FILE — do not edit; regenerate with `pnpm postman`.\n\nConnected end-to-end script, split by role. Run folders 1 → 4 top to bottom. Owner and customer keep separate tokens (ownerAccessToken / customerAccessToken) so both stay logged in. All ids (restaurantId, categoryId, menuItemId, orderId) chain automatically via response scripts.\n\nRequires services on authBaseUrl/restaurantBaseUrl/orderBaseUrl and dev-mode OTP (devOtp in responses).',
+      },
+      schema: 'https://schema.getpostman.com/json/collection/v2.1.0/collection.json',
+    },
+    item: [ownerSetup, customerOrder, ownerFulfil, customerTrack],
+    event: [
+      {
+        listen: 'test',
+        script: { type: 'text/javascript', exec: FLOW_SAVER_SCRIPT },
+      },
+    ],
+    variable: [
+      { key: 'customerPhone', value: '+919876500001' },
+      { key: 'ownerPhone', value: '+919876500002' },
+    ],
+  };
+
+  fs.mkdirSync(OUT_DIR, { recursive: true });
+  const outPath = path.join(OUT_DIR, 'QuickBite-Flows.postman_collection.json');
+  fs.writeFileSync(outPath, JSON.stringify(collection, null, 2));
+  console.log(`✔ QuickBite — E2E Flows → ${path.relative(process.cwd(), outPath)}`);
+}
+
+Promise.all(SERVICES.map(convert))
+  .then(buildFlowsCollection)
+  .catch((err) => {
+    console.error(err);
+    process.exit(1);
+  });

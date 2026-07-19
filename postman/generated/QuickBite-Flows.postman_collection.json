@@ -1,0 +1,485 @@
+{
+  "info": {
+    "name": "QuickBite — E2E Flows",
+    "description": {
+      "content": "GENERATED FILE — do not edit; regenerate with `pnpm postman`.\n\nConnected end-to-end script, split by role. Run folders 1 → 4 top to bottom. Owner and customer keep separate tokens (ownerAccessToken / customerAccessToken) so both stay logged in. All ids (restaurantId, categoryId, menuItemId, orderId) chain automatically via response scripts.\n\nRequires services on authBaseUrl/restaurantBaseUrl/orderBaseUrl and dev-mode OTP (devOtp in responses)."
+    },
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "1 · Owner — login & setup",
+      "description": "Run top to bottom. Logs in as OWNER and creates a restaurant with one menu item.",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{ownerAccessToken}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Request OTP (owner)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authBaseUrl}}/auth/otp/request",
+            "description": "devOtp is auto-saved for the next step.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"{{ownerPhone}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP → owner login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authBaseUrl}}/auth/otp/verify",
+            "description": "Saves ownerAccessToken — owner requests use it automatically.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"{{ownerPhone}}\",\n  \"otp\": \"{{devOtp}}\",\n  \"role\": \"OWNER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const b = pm.response.json();",
+                  "if (b.accessToken) pm.environment.set('ownerAccessToken', b.accessToken);",
+                  "if (b.refreshToken) pm.environment.set('ownerRefreshToken', b.refreshToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Create restaurant",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{restaurantBaseUrl}}/restaurants",
+            "description": "restaurantId auto-saves. Name includes a timestamp so re-running the flow never hits the duplicate 409.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Spice Garden {{$timestamp}}\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"city\": \"Kochi\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add category",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{restaurantBaseUrl}}/restaurants/{{restaurantId}}/categories",
+            "description": "categoryId auto-saves.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Main Course\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Add menu item",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{restaurantBaseUrl}}/restaurants/{{restaurantId}}/menu-items",
+            "description": "menuItemId auto-saves.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 250,\n  \"categoryId\": \"{{categoryId}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "2 · Customer — browse & order",
+      "description": "Logs in as CUSTOMER, browses the menu, places an order (status: PENDING).",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{customerAccessToken}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Request OTP (customer)",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authBaseUrl}}/auth/otp/request",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"{{customerPhone}}\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Verify OTP → customer login",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authBaseUrl}}/auth/otp/verify",
+            "description": "Saves customerAccessToken — customer requests use it automatically.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"phone\": \"{{customerPhone}}\",\n  \"otp\": \"{{devOtp}}\",\n  \"role\": \"CUSTOMER\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const b = pm.response.json();",
+                  "if (b.accessToken) pm.environment.set('customerAccessToken', b.accessToken);",
+                  "if (b.refreshToken) pm.environment.set('customerRefreshToken', b.refreshToken);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Set my name",
+          "request": {
+            "method": "PATCH",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{authBaseUrl}}/auth/me",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"name\": \"Test Customer\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Browse restaurants",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{restaurantBaseUrl}}/restaurants",
+            "description": "Public. Saves the newest restaurant (the one owner just created) as restaurantId.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const arr = pm.response.json();",
+                  "if (Array.isArray(arr) && arr.length) {",
+                  "  pm.environment.set('restaurantId', arr[0].id);",
+                  "}"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Restaurant menu",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{restaurantBaseUrl}}/restaurants/{{restaurantId}}",
+            "description": "Public. Saves the first available menu item as menuItemId.",
+            "auth": {
+              "type": "noauth"
+            }
+          },
+          "response": [],
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "type": "text/javascript",
+                "exec": [
+                  "const r = pm.response.json();",
+                  "const items = [...(r.menuItems || []), ...((r.categories || []).flatMap(c => c.menuItems || []))];",
+                  "if (items.length) pm.environment.set('menuItemId', items[0].id);"
+                ]
+              }
+            }
+          ]
+        },
+        {
+          "name": "Place order",
+          "request": {
+            "method": "POST",
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "url": "{{orderBaseUrl}}/orders",
+            "description": "Prices are snapshotted server-side; total computed by the backend. orderId auto-saves.",
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"restaurantId\": \"{{restaurantId}}\",\n  \"items\": [\n    {\n      \"menuItemId\": \"{{menuItemId}}\",\n      \"quantity\": 2\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "My orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders"
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "3 · Owner — fulfil the order",
+      "description": "Uses ownerAccessToken. Takes the customer order through the full status flow.",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{ownerAccessToken}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Incoming orders",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders",
+            "description": "Owner view — orders for their restaurants."
+          },
+          "response": []
+        },
+        {
+          "name": "Accept order",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders/{{orderId}}/accept"
+          },
+          "response": []
+        },
+        {
+          "name": "Start preparing",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders/{{orderId}}/prepare"
+          },
+          "response": []
+        },
+        {
+          "name": "Mark delivered",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders/{{orderId}}/deliver",
+            "description": "PREPARING → DELIVERED; COD payment flips to PAID."
+          },
+          "response": []
+        },
+        {
+          "name": "(alt) Reject order",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders/{{orderId}}/reject",
+            "description": "Alternative to Accept — only valid while the order is PENDING. Expect 400 after the happy path above."
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "4 · Customer — track & cancel",
+      "description": "Uses customerAccessToken.",
+      "auth": {
+        "type": "bearer",
+        "bearer": [
+          {
+            "key": "token",
+            "value": "{{customerAccessToken}}",
+            "type": "string"
+          }
+        ]
+      },
+      "item": [
+        {
+          "name": "Order details",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders/{{orderId}}"
+          },
+          "response": []
+        },
+        {
+          "name": "(alt) Cancel order",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "url": "{{orderBaseUrl}}/orders/{{orderId}}/cancel",
+            "description": "Only valid while PENDING or ACCEPTED. Expect 400 after delivery — place a fresh order in folder 2 to test cancelling."
+          },
+          "response": []
+        }
+      ]
+    }
+  ],
+  "event": [
+    {
+      "listen": "test",
+      "script": {
+        "type": "text/javascript",
+        "exec": [
+          "let body; try { body = pm.response.json(); } catch (e) { body = null; }",
+          "if (!body || pm.response.code >= 400) { return; }",
+          "if (body.devOtp) pm.environment.set('devOtp', String(body.devOtp));",
+          "if (body.id) {",
+          "  if (body.ownerId) { pm.environment.set('restaurantId', body.id); }",
+          "  else if (body.price !== undefined) { pm.environment.set('menuItemId', body.id); }",
+          "  else if (body.customerId || body.total !== undefined) { pm.environment.set('orderId', body.id); }",
+          "  else if (body.restaurantId) { pm.environment.set('categoryId', body.id); }",
+          "}"
+        ]
+      }
+    }
+  ],
+  "variable": [
+    {
+      "key": "customerPhone",
+      "value": "+919876500001"
+    },
+    {
+      "key": "ownerPhone",
+      "value": "+919876500002"
+    }
+  ]
+}

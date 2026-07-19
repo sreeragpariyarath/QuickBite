@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "43e0703c-bf90-492a-aeee-461d4ef87927",
+      "id": "46214042-bceb-4b9f-908a-0448c00b5361",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "9745ef43-1a15-4e4c-865b-5b7439038dab",
+          "id": "bab1086f-822a-4b0c-a267-2d3f75630003",
           "name": "Health check",
           "request": {
             "name": "Health check",
@@ -45,7 +45,7 @@
       "event": []
     },
     {
-      "id": "dfbaa494-57bd-4ac9-9ee1-c76e2e202260",
+      "id": "31fe27db-72f8-436b-9296-1e5cc3f30715",
       "name": "restaurants",
       "description": {
         "content": "",
@@ -53,7 +53,7 @@
       },
       "item": [
         {
-          "id": "b98c3993-4b88-409c-a011-903b601ff163",
+          "id": "43eee532-7f5d-4b6e-9717-20f4e3a3c1d6",
           "name": "List restaurants",
           "request": {
             "name": "List restaurants",
@@ -87,7 +87,7 @@
           }
         },
         {
-          "id": "897cb46e-272b-4b26-9e31-121246b368a5",
+          "id": "721e3f51-a2a6-45da-8a11-6895b4e2c6b4",
           "name": "Create restaurant",
           "request": {
             "name": "Create restaurant",
@@ -129,7 +129,7 @@
           }
         },
         {
-          "id": "b625ba3f-6f67-42ea-a44e-c9b2eea9711f",
+          "id": "3b8d00de-9b73-4aab-89bb-b679944ec713",
           "name": "Restaurant details (with menu)",
           "request": {
             "name": "Restaurant details (with menu)",
@@ -150,7 +150,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -165,7 +165,7 @@
           }
         },
         {
-          "id": "b23ad82d-e94c-4955-9d0b-abdaa728211b",
+          "id": "e8f59a86-dea1-4778-b3dc-4fae79d03cff",
           "name": "Update restaurant",
           "request": {
             "name": "Update restaurant",
@@ -186,7 +186,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -216,7 +216,7 @@
           }
         },
         {
-          "id": "ed88b966-db88-4653-8aed-5682eb646d06",
+          "id": "4fd2e2c3-69dc-4eea-b4f7-47e7ae4c6285",
           "name": "Add category",
           "request": {
             "name": "Add category",
@@ -238,7 +238,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -268,7 +268,7 @@
           }
         },
         {
-          "id": "f2da6183-91c9-4ea5-a4e9-21a38707398c",
+          "id": "cb22aa66-12da-4bc7-bab6-d8d9b80bc57f",
           "name": "Add menu item",
           "request": {
             "name": "Add menu item",
@@ -290,7 +290,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -305,7 +305,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"acc4417d-0787-fe9c-d661-f78186677c6d\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"a633753e-ab9d-dcf7-fa49-277baad78239\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -320,7 +320,7 @@
           }
         },
         {
-          "id": "836c2655-8066-4850-9b7e-dc79ce6f26df",
+          "id": "348617d7-ad44-478c-bf2f-23981c028145",
           "name": "Update menu item",
           "request": {
             "name": "Update menu item",
@@ -343,14 +343,14 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "id",
                   "description": "(Required) "
                 },
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "itemId",
                   "description": "(Required) "
                 }
@@ -365,7 +365,7 @@
             "method": "PATCH",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"08f92bf5-9852-1404-29e7-3f64050ebdc6\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
+              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"4fc444dd-27cb-6921-e577-f414f108f347\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -380,7 +380,7 @@
           }
         },
         {
-          "id": "39b90e8c-18d4-4b63-a542-21a92acdd843",
+          "id": "e487933b-f11d-456e-8392-18056fe0bedb",
           "name": "Delete menu item",
           "request": {
             "name": "Delete menu item",
@@ -403,14 +403,14 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "id",
                   "description": "(Required) "
                 },
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "9c961360-5de4-400c-5de4-917cb84ba4a1",
+                  "value": "8b44f448-5918-4ab9-de80-2f95ddde76f8",
                   "key": "itemId",
                   "description": "(Required) "
                 }
@@ -458,7 +458,7 @@
     }
   ],
   "info": {
-    "_postman_id": "2dd974bb-7945-4966-9cc6-b7b0c1dec469",
+    "_postman_id": "65045bad-61a1-41c2-b954-cf5a333bfb45",
     "name": "QuickBite — Restaurant Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

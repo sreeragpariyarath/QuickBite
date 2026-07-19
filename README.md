@@ -105,7 +105,12 @@ pnpm generate:api
 
 (This runs `pnpm openapi` in every service, then converts the specs to Postman collections.)
 
-**2. Import into Postman:** `File → Import` → pick both files from `postman/generated/` → choose **Replace** when prompted.
+**2. Import into Postman:** `File → Import` → pick the files from `postman/generated/` → choose **Replace** when prompted.
+
+| Collection | Purpose |
+|---|---|
+| `QuickBite-Flows` | **Start here.** Connected end-to-end script split by role: 1 · Owner login & setup → 2 · Customer browse & order → 3 · Owner fulfil → 4 · Customer track/cancel. Run top to bottom; ids and tokens chain automatically. Owner and customer keep separate tokens (`ownerAccessToken` / `customerAccessToken`) so both stay logged in. |
+| `QuickBite-Auth` / `-Restaurant` / `-Order` | Per-service reference collections (every endpoint, generated from OpenAPI). |
 
 The generated collections already include:
 - Collection-level auth: `Bearer {{accessToken}}` (all guarded requests inherit it)
@@ -121,6 +126,8 @@ The generated collections already include:
 | `restaurantBaseUrl` | `http://localhost:3001` |
 | `orderBaseUrl` | `http://localhost:3002` |
 | `accessToken`, `refreshToken`, `userId`, `restaurantId`, `categoryId`, `menuItemId`, `orderId`, `devOtp` | empty — filled automatically |
+| `customerAccessToken`, `ownerAccessToken` (+ refresh variants) | empty — filled by the Flows collection logins |
+| `customerPhone`, `ownerPhone` | optional overrides — the Flows collection ships defaults |
 
 Typical session: `OTP Request` → `OTP Verify` (tokens saved) → any guarded request just works.
 
