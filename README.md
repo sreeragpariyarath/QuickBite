@@ -1,5 +1,7 @@
 # QuickBite
 
+![CI](https://github.com/sreeragpariyarath/QuickBite/actions/workflows/ci.yml/badge.svg)
+
 A production-grade, microservices-based food delivery platform.
 
 Customers browse restaurants and place orders. Restaurant owners manage menus and fulfill them.
@@ -58,7 +60,7 @@ Customers browse restaurants and place orders. Restaurant owners manage menus an
 | Messaging | RabbitMQ |
 | Caching | Redis |
 | Containers | Docker |
-| CI/CD | GitHub Actions |
+| CI/CD | GitHub Actions — CI live (typecheck, build, tests per service); CD in Phase 2 |
 | Deployment | AWS EC2 |
 
 ---

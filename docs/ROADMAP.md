@@ -54,7 +54,8 @@ Introduce only when real usage demands it:
 
 - [ ] RabbitMQ for order events (order.created → notifications) — replaces direct SMS calls
 - [ ] Redis: session/token cache, hot restaurant listing cache, distributed rate limiting
-- [ ] CI/CD: GitHub Actions test + deploy pipelines
+- [x] CI: GitHub Actions — per-service typecheck, build, unit tests on every push/PR (added early, 2026-07; `.github/workflows/ci.yml`)
+- [ ] CD: GitHub Actions deploy pipeline (needs a deploy target — Phase 2)
 - [ ] Observability: Sentry (errors) + structured logs + uptime monitoring
 - [ ] Delivery-partner role and assignment, live order tracking
 
