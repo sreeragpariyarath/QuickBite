@@ -141,7 +141,14 @@ Typical session: `OTP Request` → `OTP Verify` (tokens saved) → any guarded r
 docker compose -f infrastructure/docker/docker-compose.yml up -d
 ```
 
-**2. Run the auth service**
+**2. Run the frontend** (Next.js, http://localhost:3100)
+
+```bash
+cd apps/web
+pnpm dev
+```
+
+**3. Run the auth service**
 
 ```bash
 cd services/auth-service
