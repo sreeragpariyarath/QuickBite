@@ -24,7 +24,7 @@ QuickBite is being built as a real product, not a learning exercise. The roadmap
   - [x] Status flow: `PENDING → ACCEPTED → PREPARING → DELIVERED`, `REJECTED`, `CANCELLED`
   - [x] Customer order history; owner incoming-order list
   - [x] Payment fields on order: `paymentMethod` (COD at launch), `paymentStatus` (PAID on delivery)
-- [ ] Restaurant discovery basics: city/area field on restaurants + filtered listing
+- [x] Restaurant discovery basics: required `city` field + `GET /restaurants?city=` filter (case-insensitive); duplicate protection via `(ownerId, name, address)` unique (D-014)
 - [ ] User profile: name capture after first OTP login (`PATCH /auth/me`)
 
 ## Phase 2 — A product people can use

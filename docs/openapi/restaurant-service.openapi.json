@@ -34,9 +34,20 @@
     },
     "/restaurants": {
       "get": {
-        "description": "All active restaurants. Public — no auth required.",
+        "description": "All active restaurants, optionally filtered by city (case-insensitive). Public — no auth required.",
         "operationId": "RestaurantsController_findAll",
-        "parameters": [],
+        "parameters": [
+          {
+            "name": "city",
+            "required": false,
+            "in": "query",
+            "description": "Filter by city",
+            "schema": {
+              "example": "Kochi",
+              "type": "string"
+            }
+          }
+        ],
         "responses": {
           "200": {
             "description": "Array of active restaurants"
@@ -48,7 +59,7 @@
         ]
       },
       "post": {
-        "description": "OWNER role required.",
+        "description": "OWNER role required. Names are not globally unique (branches and same-name restaurants are allowed), but the same owner cannot create the same name at the same address twice.",
         "operationId": "RestaurantsController_create",
         "parameters": [],
         "requestBody": {
@@ -70,6 +81,9 @@
           },
           "403": {
             "description": "CUSTOMER role cannot create restaurants"
+          },
+          "409": {
+            "description": "You already have a restaurant with this name at this address"
           }
         },
         "security": [
@@ -386,6 +400,11 @@
             "example": "123 Main Street, Kochi",
             "minLength": 5
           },
+          "city": {
+            "type": "string",
+            "example": "Kochi",
+            "minLength": 2
+          },
           "imageUrl": {
             "type": "string",
             "example": "https://res.cloudinary.com/demo/image/upload/restaurant.jpg"
@@ -393,7 +412,8 @@
         },
         "required": [
           "name",
-          "address"
+          "address",
+          "city"
         ]
       },
       "UpdateRestaurantDto": {
@@ -412,6 +432,11 @@
             "type": "string",
             "example": "123 Main Street, Kochi",
             "minLength": 5
+          },
+          "city": {
+            "type": "string",
+            "example": "Kochi",
+            "minLength": 2
           },
           "imageUrl": {
             "type": "string",

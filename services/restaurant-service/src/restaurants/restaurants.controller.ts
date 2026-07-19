@@ -9,10 +9,12 @@ import {
   ParseUUIDPipe,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 import {
   ApiBearerAuth,
+  ApiConflictResponse,
   ApiCreatedResponse,
   ApiForbiddenResponse,
   ApiNoContentResponse,
@@ -20,6 +22,7 @@ import {
   ApiOkResponse,
   ApiOperation,
   ApiParam,
+  ApiQuery,
   ApiTags,
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
@@ -44,11 +47,18 @@ export class RestaurantsController {
   @Get()
   @ApiOperation({
     summary: 'List restaurants',
-    description: 'All active restaurants. Public — no auth required.',
+    description:
+      'All active restaurants, optionally filtered by city (case-insensitive). Public — no auth required.',
+  })
+  @ApiQuery({
+    name: 'city',
+    required: false,
+    example: 'Kochi',
+    description: 'Filter by city',
   })
   @ApiOkResponse({ description: 'Array of active restaurants' })
-  findAll() {
-    return this.restaurantsService.findAll();
+  findAll(@Query('city') city?: string) {
+    return this.restaurantsService.findAll(city);
   }
 
   @Get(':id')
@@ -72,9 +82,13 @@ export class RestaurantsController {
   @ApiBearerAuth()
   @ApiOperation({
     summary: 'Create restaurant',
-    description: 'OWNER role required.',
+    description:
+      'OWNER role required. Names are not globally unique (branches and same-name restaurants are allowed), but the same owner cannot create the same name at the same address twice.',
   })
   @ApiCreatedResponse({ description: 'Restaurant created' })
+  @ApiConflictResponse({
+    description: 'You already have a restaurant with this name at this address',
+  })
   @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
   @ApiForbiddenResponse({ description: 'CUSTOMER role cannot create restaurants' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateRestaurantDto) {

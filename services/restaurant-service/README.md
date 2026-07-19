@@ -23,7 +23,7 @@ PostgreSQL — `restaurant_db`
 
 | Table | Key Columns |
 |---|---|
-| `restaurants` | `id` (UUID), `ownerId` (from JWT, no FK), `name`, `description`, `address`, `imageUrl`, `isActive` |
+| `restaurants` | `id` (UUID), `ownerId` (from JWT, no FK), `name`, `description`, `address`, `city` (indexed), `imageUrl`, `isActive` — UNIQUE `(ownerId, name, address)` |
 | `categories` | `id`, `restaurantId` → restaurants, `name` |
 | `menu_items` | `id`, `restaurantId`, `categoryId?`, `name`, `description`, `price` (Decimal 10,2), `imageUrl`, `isAvailable` |
 
@@ -65,7 +65,7 @@ Service is available at `http://localhost:3001`.
 | Method | Path | Auth | Description |
 |---|---|---|---|
 | `GET` | `/health` | Public | Service + database health check |
-| `GET` | `/restaurants` | Public | List all active restaurants |
+| `GET` | `/restaurants` | Public | List active restaurants (`?city=` filter, case-insensitive) |
 | `GET` | `/restaurants/:id` | Public | Restaurant detail with categories and available menu items |
 | `POST` | `/restaurants` | OWNER | Create a restaurant |
 | `PATCH` | `/restaurants/:id` | OWNER (own) | Update restaurant fields |

@@ -96,13 +96,16 @@ Otp
 Restaurant
   id           UUID        PK
   ownerId      UUID        from JWT — no FK to auth_db
-  name         String
+  name         String      NOT unique — see D-014
   description  String?
   address      String
+  city         String      required, indexed, filterable
   imageUrl     String?     Cloudinary URL
   isActive     Boolean     default true
   createdAt    DateTime
   updatedAt    DateTime
+  UNIQUE (ownerId, name, address) — same owner can't duplicate a restaurant;
+  branches (same name, different address) are allowed
 
 Category
   id           UUID        PK

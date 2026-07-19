@@ -13,6 +13,7 @@ model Restaurant {
   name        String
   description String?
   address     String
+  city        String
   imageUrl    String?
   isActive    Boolean @default(true)
 
@@ -22,6 +23,11 @@ model Restaurant {
   categories Category[]
   menuItems  MenuItem[]
 
+  // Names are not globally unique (real cities have same-name restaurants;
+  // same owner may run branches at different addresses) — but the same owner
+  // cannot create the same restaurant twice at the same address
+  @@unique([ownerId, name, address])
+  @@index([city])
   @@map("restaurants")
 }
 

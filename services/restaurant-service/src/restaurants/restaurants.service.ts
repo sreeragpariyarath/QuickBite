@@ -1,4 +1,5 @@
 import {
+  ConflictException,
   ForbiddenException,
   Injectable,
   NotFoundException,
@@ -16,15 +17,22 @@ export class RestaurantsService {
 
   // ---------- Restaurants ----------
 
-  create(ownerId: string, dto: CreateRestaurantDto) {
-    return this.prisma.restaurant.create({
-      data: { ...dto, ownerId },
-    });
+  async create(ownerId: string, dto: CreateRestaurantDto) {
+    try {
+      return await this.prisma.restaurant.create({
+        data: { ...dto, ownerId },
+      });
+    } catch (err) {
+      this.rethrowDuplicate(err);
+    }
   }
 
-  findAll() {
+  findAll(city?: string) {
     return this.prisma.restaurant.findMany({
-      where: { isActive: true },
+      where: {
+        isActive: true,
+        ...(city ? { city: { equals: city, mode: 'insensitive' } } : {}),
+      },
       orderBy: { createdAt: 'desc' },
     });
   }
@@ -54,10 +62,28 @@ export class RestaurantsService {
   async update(id: string, ownerId: string, dto: UpdateRestaurantDto) {
     await this.assertOwnership(id, ownerId);
 
-    return this.prisma.restaurant.update({
-      where: { id },
-      data: dto,
-    });
+    try {
+      return await this.prisma.restaurant.update({
+        where: { id },
+        data: dto,
+      });
+    } catch (err) {
+      this.rethrowDuplicate(err);
+    }
+  }
+
+  /** Maps the (ownerId, name, address) unique violation (P2002) to a 409. */
+  private rethrowDuplicate(err: unknown): never {
+    const code =
+      typeof err === 'object' && err !== null
+        ? (err as { code?: string }).code
+        : undefined;
+    if (code === 'P2002') {
+      throw new ConflictException(
+        'You already have a restaurant with this name at this address',
+      );
+    }
+    throw err;
   }
 
   // ---------- Categories ----------

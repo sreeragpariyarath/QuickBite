@@ -17,6 +17,11 @@ export class CreateRestaurantDto {
   @MinLength(5)
   address: string;
 
+  @ApiProperty({ example: 'Kochi', minLength: 2 })
+  @IsString()
+  @MinLength(2)
+  city: string;
+
   @ApiPropertyOptional({
     example: 'https://res.cloudinary.com/demo/image/upload/restaurant.jpg',
   })

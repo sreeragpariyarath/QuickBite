@@ -275,6 +275,25 @@ Order placement fails with 503 when restaurant-service is down (10s timeout) —
 
 ---
 
+## D-014 — Restaurant identity: names are not unique; (owner, name, address) is
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Real markets have many same-name restaurants ("Hotel Krishna" in every town), and one owner may run branches. Meanwhile dev data showed the same owner accidentally creating identical restaurants repeatedly.
+
+**Decision:**
+- No global or per-city uniqueness on restaurant `name` — `id` is the identifier, customers disambiguate via address/city (and later photos/ratings).
+- Same owner + same name at a **different address** is allowed (branches).
+- Same owner + same name + same address is blocked by a DB unique constraint `(ownerId, name, address)`, surfaced as a friendly `409`.
+- `city` is a required field, indexed, filterable via `GET /restaurants?city=` (case-insensitive) — the discovery basis until geolocation exists.
+
+**Consequences:**
+Accidental duplicates are impossible at the database level, not just the app level. Frontend listings must always show address/city next to the name.
+
+---
+
 ## D-011 — Phased release discipline (feature freeze per phase)
 
 **Date:** 2026-07
