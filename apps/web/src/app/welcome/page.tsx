@@ -42,12 +42,12 @@ export default function WelcomePage() {
           placeholder="Your name"
           minLength={2}
           required
-          className="w-full border border-zinc-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-red-500"
+          className="w-full border border-zinc-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-teal-500"
           autoFocus
         />
         <button
           disabled={busy}
-          className="w-full bg-red-600 text-white rounded-md py-2 font-medium hover:bg-red-700 disabled:opacity-50"
+          className="w-full bg-teal-600 text-white rounded-md py-2 font-medium hover:bg-teal-500 disabled:opacity-50"
         >
           {busy ? 'Saving…' : 'Continue'}
         </button>
