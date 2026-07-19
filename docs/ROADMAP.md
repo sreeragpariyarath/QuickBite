@@ -19,11 +19,11 @@ QuickBite is being built as a real product, not a learning exercise. The roadmap
 
 **Exit criteria: a customer can order food and the owner can fulfil it, end to end.**
 
-- [ ] order-service (port 3002, `order_db`)
-  - [ ] Place order with menu snapshot (name + price copied at order time)
-  - [ ] Status flow: `PENDING → ACCEPTED → PREPARING → DELIVERED`, `REJECTED`, `CANCELLED`
-  - [ ] Customer order history; owner incoming-order list
-  - [ ] Payment fields on order: `paymentMethod` (COD at launch), `paymentStatus`
+- [x] order-service (port 3002, `order_db`)
+  - [x] Place order with menu snapshot (name + price copied at order time)
+  - [x] Status flow: `PENDING → ACCEPTED → PREPARING → DELIVERED`, `REJECTED`, `CANCELLED`
+  - [x] Customer order history; owner incoming-order list
+  - [x] Payment fields on order: `paymentMethod` (COD at launch), `paymentStatus` (PAID on delivery)
 - [ ] Restaurant discovery basics: city/area field on restaurants + filtered listing
 - [ ] User profile: name capture after first OTP login (`PATCH /auth/me`)
 

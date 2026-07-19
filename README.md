@@ -42,7 +42,7 @@ Customers browse restaurants and place orders. Restaurant owners manage menus an
 |---|---|---|---|
 | `auth-service` | Registration, authentication, JWT | Live | `3000` |
 | `restaurant-service` | Restaurants, categories, menus | Live | `3001` |
-| `order-service` | Order lifecycle management | Planned | — |
+| `order-service` | Order lifecycle management | Live | `3002` |
 | `notification-service` | Email and SMS alerts | Planned | — |
 
 ---
@@ -83,6 +83,7 @@ The backend is the single source of truth — Swagger docs are generated from co
 |---|---|---|
 | auth-service | http://localhost:3000/docs | http://localhost:3000/docs-json |
 | restaurant-service | http://localhost:3001/docs | http://localhost:3001/docs-json |
+| order-service | http://localhost:3002/docs | http://localhost:3002/docs-json |
 
 **Authorize in Swagger:** click **Authorize**, paste the JWT from login/OTP verify (without the `Bearer ` prefix) — all protected endpoints then send it automatically.
 
@@ -116,6 +117,7 @@ The generated collections already include:
 |---|---|
 | `authBaseUrl` | `http://localhost:3000` |
 | `restaurantBaseUrl` | `http://localhost:3001` |
+| `orderBaseUrl` | `http://localhost:3002` |
 | `accessToken`, `refreshToken`, `userId`, `restaurantId`, `categoryId`, `menuItemId`, `orderId`, `devOtp` | empty — filled automatically |
 
 Typical session: `OTP Request` → `OTP Verify` (tokens saved) → any guarded request just works.

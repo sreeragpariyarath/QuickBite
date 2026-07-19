@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "2d17fed6-25fa-481e-b91e-f001ce87a1f9",
+      "id": "d9b690f2-daf6-4494-8823-2e937487b5b6",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "8aad83d3-c71b-45f1-9a67-b667a74a1be3",
+          "id": "a5930c0d-b36f-4658-820c-3b53cca391d9",
           "name": "Health check",
           "request": {
             "name": "Health check",
@@ -45,7 +45,7 @@
       "event": []
     },
     {
-      "id": "9cc11daf-d33d-4e0c-8753-9c9fb57efe51",
+      "id": "bed49370-d05d-40ef-ab8f-23434122ebbd",
       "name": "auth",
       "description": {
         "content": "",
@@ -53,7 +53,7 @@
       },
       "item": [
         {
-          "id": "1b00c8e7-2136-4595-a31d-54ecc4446a7a",
+          "id": "2105f13d-3b4f-452f-b5d4-401eba41b92d",
           "name": "Request OTP",
           "request": {
             "name": "Request OTP",
@@ -101,7 +101,7 @@
           }
         },
         {
-          "id": "38303112-6b72-4e3d-b62f-4f94c3432047",
+          "id": "e5663349-58e0-4708-b12a-e633dcae6db4",
           "name": "Verify OTP (login / register)",
           "request": {
             "name": "Verify OTP (login / register)",
@@ -149,7 +149,7 @@
           }
         },
         {
-          "id": "e8c91fbb-f6fe-4fa6-bbd2-3ba7435670c8",
+          "id": "41a73513-33f7-41c4-99bf-5ad5236a246a",
           "name": "Email register (customer / owner)",
           "request": {
             "name": "Email register (customer / owner)",
@@ -197,7 +197,7 @@
           }
         },
         {
-          "id": "bfe00239-418c-44c5-a71f-f011dc477140",
+          "id": "5f20932c-1e51-4013-8887-2bb58187c3ae",
           "name": "Verify email link",
           "request": {
             "name": "Verify email link",
@@ -232,7 +232,7 @@
           }
         },
         {
-          "id": "0ad5c2f0-8548-4368-bebe-411958b1790e",
+          "id": "8c27a1a1-b86a-4f04-b793-01915cd439ac",
           "name": "Email login",
           "request": {
             "name": "Email login",
@@ -280,7 +280,7 @@
           }
         },
         {
-          "id": "16c88d9a-8692-4857-8960-1c2f014dd63b",
+          "id": "e300f1ca-a981-481c-b866-d94a2fc62e3a",
           "name": "Resend verification email",
           "request": {
             "name": "Resend verification email",
@@ -328,7 +328,7 @@
           }
         },
         {
-          "id": "f53f31a0-8f00-4588-bfce-3a94241d874a",
+          "id": "9cd58273-cc70-4d46-8803-3fde336dcfa6",
           "name": "Attach email to account",
           "request": {
             "name": "Attach email to account",
@@ -376,7 +376,7 @@
           }
         },
         {
-          "id": "c4cd3806-6209-46d0-909b-0a2566239567",
+          "id": "cfd92d03-f870-41f6-a972-185bb9cdf04f",
           "name": "Refresh access token",
           "request": {
             "name": "Refresh access token",
@@ -423,7 +423,7 @@
           }
         },
         {
-          "id": "defbac34-fdf1-4370-a825-baac3b0c65e9",
+          "id": "edc98fb7-18fa-4548-8985-e498d988decd",
           "name": "Logout",
           "request": {
             "name": "Logout",
@@ -503,7 +503,7 @@
     }
   ],
   "info": {
-    "_postman_id": "808f3a5a-589c-40ba-ab1d-478e6a5cd094",
+    "_postman_id": "2172f559-14c2-465a-b85f-97c95e39f594",
     "name": "QuickBite — Auth Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {

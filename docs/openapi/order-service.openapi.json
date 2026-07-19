@@ -1,0 +1,404 @@
+{
+  "openapi": "3.0.0",
+  "paths": {
+    "/health": {
+      "get": {
+        "description": "Service + database connectivity check.",
+        "operationId": "AppController_getHealth",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "example": {
+                    "status": "ok",
+                    "service": "order-service",
+                    "database": "up",
+                    "timestamp": "2026-07-14T10:00:00.000Z"
+                  }
+                }
+              }
+            }
+          },
+          "503": {
+            "description": "Database unreachable"
+          }
+        },
+        "summary": "Health check",
+        "tags": [
+          "health"
+        ]
+      }
+    },
+    "/orders": {
+      "post": {
+        "description": "CUSTOMER only. Menu item names and prices are snapshotted at order time; total is computed server-side. Payment: COD. Status starts at PENDING.",
+        "operationId": "OrdersController_create",
+        "parameters": [],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateOrderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Order created with nested items"
+          },
+          "400": {
+            "description": "Restaurant inactive, or a menu item is unavailable"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "OWNER role cannot place orders"
+          },
+          "404": {
+            "description": "Restaurant not found"
+          },
+          "503": {
+            "description": "Restaurant service unreachable"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Place order",
+        "tags": [
+          "orders"
+        ]
+      },
+      "get": {
+        "description": "CUSTOMER: orders they placed. OWNER: incoming orders for their restaurants. Newest first.",
+        "operationId": "OrdersController_findAll",
+        "parameters": [],
+        "responses": {
+          "200": {
+            "description": "Array of orders with items"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "List my orders",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}": {
+      "get": {
+        "description": "Visible to the ordering customer and the restaurant owner.",
+        "operationId": "OrdersController_findOne",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order with items"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "Not your order"
+          },
+          "404": {
+            "description": "Order not found"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Order details",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}/accept": {
+      "patch": {
+        "description": "Owner of the restaurant only. PENDING → ACCEPTED.",
+        "operationId": "OrdersController_accept",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order accepted"
+          },
+          "400": {
+            "description": "Order is not PENDING"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "Not your restaurant’s order"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Accept order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}/reject": {
+      "patch": {
+        "description": "Owner of the restaurant only. PENDING → REJECTED.",
+        "operationId": "OrdersController_reject",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order rejected"
+          },
+          "400": {
+            "description": "Order is not PENDING"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "Not your restaurant’s order"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Reject order",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}/prepare": {
+      "patch": {
+        "description": "Owner of the restaurant only. ACCEPTED → PREPARING.",
+        "operationId": "OrdersController_prepare",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order moved to PREPARING"
+          },
+          "400": {
+            "description": "Order is not ACCEPTED"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "Not your restaurant’s order"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Start preparing",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}/deliver": {
+      "patch": {
+        "description": "Owner of the restaurant only. PREPARING → DELIVERED; COD payment is marked PAID.",
+        "operationId": "OrdersController_deliver",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order delivered, payment marked PAID"
+          },
+          "400": {
+            "description": "Order is not PREPARING"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "Not your restaurant’s order"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Mark delivered",
+        "tags": [
+          "orders"
+        ]
+      }
+    },
+    "/orders/{id}/cancel": {
+      "patch": {
+        "description": "The ordering customer only. Allowed while PENDING or ACCEPTED.",
+        "operationId": "OrdersController_cancel",
+        "parameters": [
+          {
+            "name": "id",
+            "required": true,
+            "in": "path",
+            "schema": {
+              "format": "uuid",
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Order cancelled"
+          },
+          "400": {
+            "description": "Order can no longer be cancelled"
+          },
+          "401": {
+            "description": "Missing or invalid access token"
+          },
+          "403": {
+            "description": "Not your order"
+          }
+        },
+        "security": [
+          {
+            "bearer": []
+          }
+        ],
+        "summary": "Cancel order",
+        "tags": [
+          "orders"
+        ]
+      }
+    }
+  },
+  "info": {
+    "title": "QuickBite API — Order Service",
+    "description": "QuickBite Backend Documentation. Order lifecycle: customers place orders (COD), owners accept/reject/prepare/deliver. Requires a JWT issued by the auth service.",
+    "version": "1.0.0",
+    "contact": {}
+  },
+  "tags": [],
+  "servers": [],
+  "components": {
+    "securitySchemes": {
+      "bearer": {
+        "scheme": "bearer",
+        "bearerFormat": "JWT",
+        "type": "http"
+      }
+    },
+    "schemas": {
+      "OrderItemInputDto": {
+        "type": "object",
+        "properties": {
+          "menuItemId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Menu item to order"
+          },
+          "quantity": {
+            "type": "number",
+            "example": 2,
+            "minimum": 1,
+            "maximum": 50
+          }
+        },
+        "required": [
+          "menuItemId",
+          "quantity"
+        ]
+      },
+      "CreateOrderDto": {
+        "type": "object",
+        "properties": {
+          "restaurantId": {
+            "type": "string",
+            "format": "uuid",
+            "description": "Restaurant to order from"
+          },
+          "items": {
+            "minItems": 1,
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/OrderItemInputDto"
+            }
+          }
+        },
+        "required": [
+          "restaurantId",
+          "items"
+        ]
+      }
+    }
+  }
+}

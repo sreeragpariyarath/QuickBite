@@ -254,6 +254,27 @@ One auth surface with no unverified back door. A future web frontend needs CORS 
 
 ---
 
+## D-013 — Order placement does a synchronous read of restaurant-service
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Placing an order requires trusted menu prices (D-007 snapshots) and the restaurant's owner id. The client cannot be trusted to send prices, and order-service has no access to `restaurant_db` (D-008).
+
+**Decision:**
+At order time, order-service performs one synchronous HTTP GET against restaurant-service's **public** restaurant-detail endpoint (`RESTAURANT_SERVICE_URL`), validates the restaurant is active and every requested menu item exists/is available, snapshots names + prices, computes the total server-side, and stores `ownerId` on the order.
+
+**Reasons:**
+- A read-only query at command time is not command coupling — restaurant-service stays unaware of orders
+- Snapshotting `ownerId` lets owners list incoming orders without cross-service joins
+- Events (RabbitMQ) can't answer a synchronous "what does this cost right now" question
+
+**Consequences:**
+Order placement fails with 503 when restaurant-service is down (10s timeout) — an acceptable coupling for the core loop. Status-change notifications remain event-driven work for Phase 4.
+
+---
+
 ## D-011 — Phased release discipline (feature freeze per phase)
 
 **Date:** 2026-07

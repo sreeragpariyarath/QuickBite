@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "1a380bb9-f2ac-4805-82c3-b0717be2c6ee",
+      "id": "b5891c39-ee90-49e5-ad3c-ec7812b7b8f3",
       "name": "health",
       "description": {
         "content": "",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "ff62edc6-19b1-45b6-9e99-d1c5d8497125",
+          "id": "4bc3f92f-925c-417c-b89e-d5b839611074",
           "name": "Health check",
           "request": {
             "name": "Health check",
@@ -45,52 +45,25 @@
       "event": []
     },
     {
-      "id": "08b1f11d-3e44-48c6-858d-7a3866c0b4b6",
-      "name": "restaurants",
+      "id": "1c2d205b-ff06-4899-b22f-b498e388f5d3",
+      "name": "orders",
       "description": {
         "content": "",
         "type": "text/plain"
       },
       "item": [
         {
-          "id": "b125abf1-b1f4-4ca7-b777-16fc4c0f510b",
-          "name": "List restaurants",
+          "id": "a4cd8b9b-17c9-48d7-b96f-3e9f8662f336",
+          "name": "Place order",
           "request": {
-            "name": "List restaurants",
+            "name": "Place order",
             "description": {
-              "content": "All active restaurants. Public — no auth required.",
+              "content": "CUSTOMER only. Menu item names and prices are snapshotted at order time; total is computed server-side. Payment: COD. Status starts at PENDING.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants"
-              ],
-              "host": [
-                "{{baseUrl}}"
-              ],
-              "query": [],
-              "variable": []
-            },
-            "method": "GET"
-          },
-          "response": [],
-          "event": [],
-          "protocolProfileBehavior": {
-            "disableBodyPruning": true
-          }
-        },
-        {
-          "id": "dc4e9733-0108-46c7-b886-7e3c8d6abf65",
-          "name": "Create restaurant",
-          "request": {
-            "name": "Create restaurant",
-            "description": {
-              "content": "OWNER role required.",
-              "type": "text/plain"
-            },
-            "url": {
-              "path": [
-                "restaurants"
+                "orders"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -107,7 +80,7 @@
             "method": "POST",
             "body": {
               "mode": "raw",
-              "raw": "{\n  \"name\": \"Spice Garden\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"description\": \"Authentic Indian cuisine\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\"\n}",
+              "raw": "{\n  \"restaurantId\": \"5cc3086b-abfa-2c26-8271-66db00cedf1d\",\n  \"items\": [\n    {\n      \"menuItemId\": \"1cd7fbc3-10e5-ae92-7555-815a4fe6ec2b\",\n      \"quantity\": 2\n    }\n  ]\n}",
               "options": {
                 "raw": {
                   "language": "json"
@@ -122,17 +95,44 @@
           }
         },
         {
-          "id": "8196735e-514e-48d1-ad15-e9a475367b1c",
-          "name": "Restaurant details (with menu)",
+          "id": "39d20f83-ca76-4751-bb6d-9752b0a56f45",
+          "name": "List my orders",
           "request": {
-            "name": "Restaurant details (with menu)",
+            "name": "List my orders",
             "description": {
-              "content": "Restaurant with its categories and available menu items. Public — no auth required.",
+              "content": "CUSTOMER: orders they placed. OWNER: incoming orders for their restaurants. Newest first.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants",
+                "orders"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "GET"
+          },
+          "response": [],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "311623de-74f7-4cce-845c-b809f4313923",
+          "name": "Order details",
+          "request": {
+            "name": "Order details",
+            "description": {
+              "content": "Visible to the ordering customer and the restaurant owner.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "orders",
                 ":id"
               ],
               "host": [
@@ -143,7 +143,7 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
+                  "value": "e27ff8c8-eaeb-51e6-6aa7-ab6799009557",
                   "key": "id",
                   "description": "(Required) "
                 }
@@ -158,18 +158,19 @@
           }
         },
         {
-          "id": "13e0b835-a407-4b16-bb4d-ea9c9e8e8587",
-          "name": "Update restaurant",
+          "id": "71ab1e1e-c5d8-47a6-a9c1-f82d49a0f48c",
+          "name": "Accept order",
           "request": {
-            "name": "Update restaurant",
+            "name": "Accept order",
             "description": {
-              "content": "Only the owner of this restaurant.",
+              "content": "Owner of the restaurant only. PENDING → ACCEPTED.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants",
-                ":id"
+                "orders",
+                ":id",
+                "accept"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -179,28 +180,13 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
+                  "value": "e27ff8c8-eaeb-51e6-6aa7-ab6799009557",
                   "key": "id",
                   "description": "(Required) "
                 }
               ]
             },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Spice Garden\",\n  \"description\": \"Now with tandoor specials\",\n  \"address\": \"123 Main Street, Kochi\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/restaurant.jpg\",\n  \"isActive\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+            "method": "PATCH"
           },
           "response": [],
           "event": [],
@@ -209,19 +195,19 @@
           }
         },
         {
-          "id": "ee871109-6b3e-4040-b4bf-7a47dabf1f56",
-          "name": "Add category",
+          "id": "789e0ec5-dc8a-42bd-82f6-97eb078c9968",
+          "name": "Reject order",
           "request": {
-            "name": "Add category",
+            "name": "Reject order",
             "description": {
-              "content": "Only the owner of this restaurant.",
+              "content": "Owner of the restaurant only. PENDING → REJECTED.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants",
+                "orders",
                 ":id",
-                "categories"
+                "reject"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -231,28 +217,13 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
+                  "value": "e27ff8c8-eaeb-51e6-6aa7-ab6799009557",
                   "key": "id",
                   "description": "(Required) "
                 }
               ]
             },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Main Course\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+            "method": "PATCH"
           },
           "response": [],
           "event": [],
@@ -261,19 +232,19 @@
           }
         },
         {
-          "id": "0b7ce448-bd32-4409-8e4e-a197ad3b98f8",
-          "name": "Add menu item",
+          "id": "5fbc7cbb-f36a-4301-aec5-5905ef8ec43b",
+          "name": "Start preparing",
           "request": {
-            "name": "Add menu item",
+            "name": "Start preparing",
             "description": {
-              "content": "Only the owner of this restaurant. categoryId is optional.",
+              "content": "Owner of the restaurant only. ACCEPTED → PREPARING.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants",
+                "orders",
                 ":id",
-                "menu-items"
+                "prepare"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -283,28 +254,13 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
+                  "value": "e27ff8c8-eaeb-51e6-6aa7-ab6799009557",
                   "key": "id",
                   "description": "(Required) "
                 }
               ]
             },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "POST",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"price\": 250,\n  \"description\": \"Creamy tomato-based curry\",\n  \"categoryId\": \"04c333c8-ff53-ef4d-d309-e6890beaf46d\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\"\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+            "method": "PATCH"
           },
           "response": [],
           "event": [],
@@ -313,20 +269,19 @@
           }
         },
         {
-          "id": "74f76004-3773-4d79-8e3a-e3ed3750940b",
-          "name": "Update menu item",
+          "id": "a9c39498-0d0a-4452-b49a-33e130c963be",
+          "name": "Mark delivered",
           "request": {
-            "name": "Update menu item",
+            "name": "Mark delivered",
             "description": {
-              "content": "Only the owner of this restaurant.",
+              "content": "Owner of the restaurant only. PREPARING → DELIVERED; COD payment is marked PAID.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants",
+                "orders",
                 ":id",
-                "menu-items",
-                ":itemId"
+                "deliver"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -336,35 +291,13 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
+                  "value": "e27ff8c8-eaeb-51e6-6aa7-ab6799009557",
                   "key": "id",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
-                  "key": "itemId",
                   "description": "(Required) "
                 }
               ]
             },
-            "header": [
-              {
-                "key": "Content-Type",
-                "value": "application/json"
-              }
-            ],
-            "method": "PATCH",
-            "body": {
-              "mode": "raw",
-              "raw": "{\n  \"name\": \"Butter Chicken\",\n  \"description\": \"Creamy tomato-based curry\",\n  \"price\": 275.5,\n  \"categoryId\": \"55f5e438-66f8-dbd0-5c9f-c886c417278b\",\n  \"imageUrl\": \"https://res.cloudinary.com/demo/image/upload/butter-chicken.jpg\",\n  \"isAvailable\": true\n}",
-              "options": {
-                "raw": {
-                  "language": "json"
-                }
-              }
-            }
+            "method": "PATCH"
           },
           "response": [],
           "event": [],
@@ -373,20 +306,19 @@
           }
         },
         {
-          "id": "82a930de-b667-45b1-ac39-4dbb235e2050",
-          "name": "Delete menu item",
+          "id": "0f62b604-1ba2-4a7e-91cf-caede9ebcb51",
+          "name": "Cancel order",
           "request": {
-            "name": "Delete menu item",
+            "name": "Cancel order",
             "description": {
-              "content": "Only the owner of this restaurant. Returns 204.",
+              "content": "The ordering customer only. Allowed while PENDING or ACCEPTED.",
               "type": "text/plain"
             },
             "url": {
               "path": [
-                "restaurants",
+                "orders",
                 ":id",
-                "menu-items",
-                ":itemId"
+                "cancel"
               ],
               "host": [
                 "{{baseUrl}}"
@@ -396,20 +328,13 @@
                 {
                   "disabled": false,
                   "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
+                  "value": "e27ff8c8-eaeb-51e6-6aa7-ab6799009557",
                   "key": "id",
-                  "description": "(Required) "
-                },
-                {
-                  "disabled": false,
-                  "type": "any",
-                  "value": "88babf68-cc6d-78ea-d5d3-9c049bdeb2d7",
-                  "key": "itemId",
                   "description": "(Required) "
                 }
               ]
             },
-            "method": "DELETE"
+            "method": "PATCH"
           },
           "response": [],
           "event": [],
@@ -447,12 +372,12 @@
   "variable": [
     {
       "key": "baseUrl",
-      "value": "{{restaurantBaseUrl}}"
+      "value": "{{orderBaseUrl}}"
     }
   ],
   "info": {
-    "_postman_id": "f0abc742-70f9-49b8-8ffd-9f3f2e0b1940",
-    "name": "QuickBite — Restaurant Service",
+    "_postman_id": "d8612e03-fb97-431a-9436-da324c50ca5e",
+    "name": "QuickBite — Order Service",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
       "content": "GENERATED FILE — do not edit. Regenerate with `pnpm openapi` (service) + `pnpm postman` (root). Uses the Local environment: baseUrl variables, {{accessToken}} bearer auth, and auto-saved ids via the collection post-response script."

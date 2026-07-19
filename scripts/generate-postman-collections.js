@@ -33,6 +33,12 @@ const SERVICES = [
     baseUrlVar: '{{restaurantBaseUrl}}',
     name: 'QuickBite — Restaurant Service',
   },
+  {
+    spec: 'order-service.openapi.json',
+    out: 'QuickBite-Order.postman_collection.json',
+    baseUrlVar: '{{orderBaseUrl}}',
+    name: 'QuickBite — Order Service',
+  },
 ];
 
 // Saves ids/tokens to the environment after every successful response.

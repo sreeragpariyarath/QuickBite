@@ -133,14 +133,17 @@ Order
   id            UUID        PK
   customerId    UUID        from JWT — no FK to auth_db
   restaurantId  UUID        reference only — no FK to restaurant_db
+  ownerId       UUID        SNAPSHOT of restaurant owner (owner queries, D-013)
   status        PENDING | ACCEPTED | REJECTED | PREPARING | DELIVERED | CANCELLED
-  total         Decimal
+  total         Decimal     computed server-side from snapshots
+  paymentMethod COD
+  paymentStatus PENDING | PAID  (PAID on delivery for COD)
   createdAt     DateTime
   updatedAt     DateTime
 
 OrderItem
   id          UUID        PK
-  orderId     UUID        → Order
+  orderId     UUID        → Order (cascade)
   menuItemId  UUID        reference only — no FK to restaurant_db
   name        String      SNAPSHOT at order time
   price       Decimal     SNAPSHOT at order time
@@ -269,22 +272,25 @@ Endpoints:
 
 ### Order Service
 
-**Status:** Planned (Sprint 3)
+**Status:** Live (port 3002)
 
 Responsibilities:
-- Order creation from customer
-- Order status transitions
-- Order history for customers and owners
+- Order creation with menu snapshots (synchronous read of restaurant-service, D-013)
+- Order status transitions with per-state validation
+- Order history for customers; incoming orders for owners (via `ownerId` snapshot)
+- COD payment fields (`paymentStatus` → PAID on delivery)
 
-Endpoints:
-| Method | Path | Description |
-|---|---|---|
-| `POST` | `/orders` | Place an order |
-| `GET` | `/orders` | List own orders (customer or owner) |
-| `GET` | `/orders/:id` | Get order detail |
-| `PATCH` | `/orders/:id/accept` | Accept order (owner only) |
-| `PATCH` | `/orders/:id/reject` | Reject order (owner only) |
-| `PATCH` | `/orders/:id/cancel` | Cancel order (customer only) |
+Endpoints (all require a Bearer token):
+| Method | Path | Who | Description |
+|---|---|---|---|
+| `POST` | `/orders` | CUSTOMER | Place an order (server-side total) |
+| `GET` | `/orders` | both | Customer: own orders; Owner: incoming orders |
+| `GET` | `/orders/:id` | both | Order detail (customer or owner of that order) |
+| `PATCH` | `/orders/:id/accept` | OWNER | `PENDING → ACCEPTED` |
+| `PATCH` | `/orders/:id/reject` | OWNER | `PENDING → REJECTED` |
+| `PATCH` | `/orders/:id/prepare` | OWNER | `ACCEPTED → PREPARING` |
+| `PATCH` | `/orders/:id/deliver` | OWNER | `PREPARING → DELIVERED`, COD marked PAID |
+| `PATCH` | `/orders/:id/cancel` | CUSTOMER | `PENDING/ACCEPTED → CANCELLED` |
 
 ---
 

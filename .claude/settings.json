@@ -1,0 +1,14 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:knowledgebase.msg91.com)",
+      "WebFetch(domain:msg91.com)",
+      "Bash(curl -s -m 10 -X POST 'https://control.msg91.com/api/v5/otp?mobile=917987305932&otp=778899&otp_expiry=5' -H 'authkey: 549554ALlnn03uD96a5525cdP1')",
+      "Bash(curl -s -m 10 'https://control.msg91.com/api/v5/otp/verify?mobile=917987305932&otp=778899' -H 'authkey: 549554ALlnn03uD96a5525cdP1')",
+      "Bash(curl -s -m 10 -X POST 'https://control.msg91.com/api/v5/otp?template_id=0000000000000000000000ff&mobile=917987305932&otp=112233&otp_expiry=5' -H 'authkey: 549554ALlnn03uD96a5525cdP1')",
+      "Bash(curl -s -m 15 -w \"\\\\n[%{http_code}]\" -X POST http://localhost:3000/auth/otp/request -H \"Content-Type: application/json\" -d '{\"phone\":\"+917306259602\"}')",
+      "Bash(curl -s -m 3 -o /dev/null -w \"port 3001: %{http_code}\\\\n\" http://localhost:3001/health)",
+      "Bash(curl -s -m 3 -o /dev/null -w \"port 3002: %{http_code}\\\\n\" http://localhost:3002/health)"
+    ]
+  }
+}

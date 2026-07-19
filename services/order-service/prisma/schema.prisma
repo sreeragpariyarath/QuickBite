@@ -1,0 +1,62 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../node_modules/@prisma-app/client"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum OrderStatus {
+  PENDING
+  ACCEPTED
+  REJECTED
+  PREPARING
+  DELIVERED
+  CANCELLED
+}
+
+enum PaymentMethod {
+  COD
+}
+
+enum PaymentStatus {
+  PENDING
+  PAID
+}
+
+model Order {
+  id           String        @id @default(uuid()) @db.Uuid
+  customerId   String        @db.Uuid
+  restaurantId String        @db.Uuid
+  // Snapshot of the restaurant's owner at order time — lets owners query
+  // incoming orders without a cross-service join (D-008, D-013)
+  ownerId      String        @db.Uuid
+  status       OrderStatus   @default(PENDING)
+  total        Decimal       @db.Decimal(10, 2)
+
+  paymentMethod PaymentMethod @default(COD)
+  paymentStatus PaymentStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items OrderItem[]
+
+  @@index([customerId])
+  @@index([ownerId])
+  @@map("orders")
+}
+
+model OrderItem {
+  id         String  @id @default(uuid()) @db.Uuid
+  orderId    String  @db.Uuid
+  order      Order   @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  menuItemId String  @db.Uuid
+  // Snapshots at order time — menu names/prices change, receipts don't (D-007)
+  name       String
+  price      Decimal @db.Decimal(10, 2)
+  quantity   Int
+
+  @@map("order_items")
+}

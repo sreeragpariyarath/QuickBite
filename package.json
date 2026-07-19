@@ -5,7 +5,7 @@
   "private": true,
   "scripts": {
     "postman": "node scripts/generate-postman-collections.js",
-    "generate:api": "pnpm --filter auth-service openapi && pnpm --filter restaurant-service openapi && pnpm postman"
+    "generate:api": "pnpm --filter auth-service openapi && pnpm --filter restaurant-service openapi && pnpm --filter order-service openapi && pnpm postman"
   },
   "keywords": [],
   "author": "",
