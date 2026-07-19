@@ -1,18 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { usePathname, useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation';
 import { useAuth } from '@/lib/auth';
-
-const STANDALONE_ROUTES = ['/login', '/signup', '/auth/verified'];
 
 export function Header() {
   const { profile, loading, logout } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
-
-  // Auth pages render their own immersive layout (AuthShell)
-  if (STANDALONE_ROUTES.includes(pathname)) return null;
 
   return (
     <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white">
