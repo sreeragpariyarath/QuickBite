@@ -42,18 +42,6 @@ model EmailVerificationToken {
   @@map("email_verification_tokens")
 }
 
-model Otp {
-  id        String   @id @default(uuid()) @db.Uuid
-  phone     String
-  codeHash  String
-  attempts  Int      @default(0)
-  expiresAt DateTime
-  createdAt DateTime @default(now())
-
-  @@index([phone])
-  @@map("otps")
-}
-
 model RefreshToken {
   id        String   @id @default(uuid()) @db.Uuid
   token     String   @unique

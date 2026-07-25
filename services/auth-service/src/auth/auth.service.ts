@@ -1,4 +1,5 @@
 import {
+  BadRequestException,
   ConflictException,
   Injectable,
   NotFoundException,
@@ -8,8 +9,8 @@ import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcryptjs';
 import { createHash, randomBytes } from 'crypto';
 import { PrismaService } from '../prisma/prisma.service';
-import { OtpService } from './otp.service';
 import { EmailVerificationService } from './email-verification.service';
+import { FirebaseAdminService } from './firebase-admin.service';
 import { RegisterEmailDto } from './dto/register-email.dto';
 import { LoginDto } from './dto/login.dto';
 import { VerifyOtpDto } from './dto/verify-otp.dto';
@@ -22,23 +23,33 @@ export class AuthService {
   constructor(
     private readonly prisma: PrismaService,
     private readonly jwtService: JwtService,
-    private readonly otpService: OtpService,
     private readonly emailVerification: EmailVerificationService,
+    private readonly firebaseAdmin: FirebaseAdminService,
   ) {}
 
   // ---------- Phone OTP (primary) ----------
 
   async verifyOtp(dto: VerifyOtpDto) {
-    await this.otpService.assertValid(dto.phone, dto.otp);
+    let decodedToken;
+    try {
+      decodedToken = await this.firebaseAdmin.verifyIdToken(dto.firebaseToken);
+    } catch (err) {
+      throw new UnauthorizedException('Invalid or expired Firebase token');
+    }
+
+    const phone = decodedToken.phone_number;
+    if (!phone) {
+      throw new BadRequestException('Token does not contain a verified phone number');
+    }
 
     let user = await this.prisma.user.findUnique({
-      where: { phone: dto.phone },
+      where: { phone },
     });
     const isNewUser = !user;
 
     if (!user) {
       user = await this.prisma.user.create({
-        data: { phone: dto.phone, role: dto.role ?? 'CUSTOMER' },
+        data: { phone, role: dto.role ?? 'CUSTOMER' },
       });
     }
 

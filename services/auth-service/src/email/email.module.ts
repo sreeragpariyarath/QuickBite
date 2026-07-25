@@ -1,5 +1,6 @@
 import { Logger, Module } from '@nestjs/common';
 import { EMAIL_PROVIDER } from './email.provider';
+import { SmtpEmailProvider } from './smtp-email.provider';
 import { ResendEmailProvider } from './resend-email.provider';
 import { ConsoleEmailProvider } from './console-email.provider';
 
@@ -8,12 +9,20 @@ import { ConsoleEmailProvider } from './console-email.provider';
     {
       provide: EMAIL_PROVIDER,
       useFactory: () => {
+        const logger = new Logger('EmailModule');
+        
+        if (process.env.SMTP_USER && process.env.SMTP_PASS) {
+          logger.log('Email via SMTP (Google Gmail)');
+          return new SmtpEmailProvider();
+        }
+        
         if (process.env.RESEND_API_KEY) {
-          new Logger('EmailModule').log('Email via Resend');
+          logger.log('Email via Resend');
           return new ResendEmailProvider();
         }
-        new Logger('EmailModule').warn(
-          'RESEND_API_KEY not set — using console email provider (verification URL is logged, not sent)',
+        
+        logger.warn(
+          'Neither SMTP credentials nor RESEND_API_KEY set — using console email provider (verification URL is logged, not sent)',
         );
         return new ConsoleEmailProvider();
       },
