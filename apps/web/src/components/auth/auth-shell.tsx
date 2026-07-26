@@ -26,7 +26,18 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
         />
       </div>
 
-      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 lg:px-8">
+      {/* Mobile top-right salad plate image */}
+      <div className="absolute right-0 top-0 pointer-events-none lg:hidden w-48 h-48 z-0 select-none">
+        <Image
+          src="/mobile_auth_plate.png"
+          alt=""
+          fill
+          priority
+          className="object-contain object-right-top"
+        />
+      </div>
+
+      <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 lg:px-8 z-10">
         <motion.header
           {...fadeUp(0)}
           className="flex items-center justify-between w-full relative"

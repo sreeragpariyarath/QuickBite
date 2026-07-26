@@ -51,16 +51,16 @@ export default function LoginPage() {
 
   return (
     <AuthShell>
-      <div className="mb-6 text-center">
-        {/* chef hat / dish cover circle icon */}
-        <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438]">
+      <div className="mb-6 text-center mt-6 lg:mt-0">
+        {/* chef hat / dish cover circle icon - hidden on mobile, visible on desktop */}
+        <div className="mx-auto mb-3 hidden lg:flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438]">
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
           </svg>
         </div>
-        <h2 className="text-2xl font-bold">Welcome back</h2>
-        <p className="mt-1 text-sm text-zinc-500">
-          Sign in to continue to your account
+        <h2 className="text-3xl font-extrabold text-zinc-900 tracking-tight">Welcome back!</h2>
+        <p className="mt-2 text-sm text-zinc-500 max-w-[280px] mx-auto leading-relaxed">
+          Sign in to continue to your account and enjoy your favorite meals.
         </p>
       </div>
 

@@ -76,17 +76,7 @@ export function EmailLoginForm() {
         required
       />
       <TextField
-        label={
-          <div className="flex items-center justify-between w-full">
-            <span>Password</span>
-            <Link
-              href="/forgot-password"
-              className="text-xs font-semibold text-[#335438] hover:underline"
-            >
-              Forgot password?
-            </Link>
-          </div>
-        }
+        label="Password"
         type="password"
         icon={<Lock className="h-5 w-5 text-zinc-400" />}
         value={password}
@@ -96,6 +86,14 @@ export function EmailLoginForm() {
         error={error}
         required
       />
+      <div className="flex justify-end pt-1">
+        <Link
+          href="/forgot-password"
+          className="text-xs font-semibold text-[#335438] hover:underline cursor-pointer"
+        >
+          Forgot password?
+        </Link>
+      </div>
       {needsVerification && (
         <div className="rounded-xl bg-amber-50 border border-amber-200 p-3 text-xs text-amber-800">
           {resent ? (
