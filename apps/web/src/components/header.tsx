@@ -12,17 +12,17 @@ export function Header() {
     <header className="sticky top-0 z-10 border-b border-zinc-200 bg-white">
       <div className="mx-auto flex h-14 max-w-4xl items-center justify-between px-4">
         <Link href="/" className="flex items-center gap-2">
-          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-600 text-sm font-black text-white">
+          <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-[#335438] text-sm font-black text-white">
             QB
           </span>
           <span className="text-lg font-bold text-zinc-900">
-            Quick<span className="text-teal-600">Bite</span>
+            Quick<span className="text-[#335438]">Bite</span>
           </span>
         </Link>
         <nav className="flex items-center gap-4 text-sm">
           {loading ? null : profile ? (
             <>
-              <Link href="/orders" className="hover:text-teal-600">
+              <Link href="/orders" className="hover:text-[#335438]">
                 My orders
               </Link>
               <span className="text-zinc-500">
@@ -33,7 +33,7 @@ export function Header() {
                   logout();
                   router.push('/');
                 }}
-                className="text-zinc-500 hover:text-teal-600"
+                className="text-zinc-500 hover:text-[#335438]"
               >
                 Logout
               </button>
@@ -41,7 +41,7 @@ export function Header() {
           ) : (
             <Link
               href="/login"
-              className="rounded-lg bg-teal-600 px-4 py-1.5 font-semibold text-white hover:bg-teal-500"
+              className="rounded-lg bg-[#335438] px-4 py-1.5 font-semibold text-white hover:bg-[#27402b]"
             >
               Login
             </Link>

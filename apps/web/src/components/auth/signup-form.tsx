@@ -43,7 +43,7 @@ export function SignupForm() {
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-4"
       >
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-teal-100 text-2xl">
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F2F3E9] text-2xl">
           ✉️
         </div>
         <h3 className="text-lg font-bold text-zinc-900">Check your inbox</h3>
@@ -54,7 +54,7 @@ export function SignupForm() {
         {done.devVerificationUrl && (
           <a
             href={done.devVerificationUrl}
-            className="mt-4 inline-block text-xs font-semibold text-teal-600 underline"
+            className="mt-4 inline-block text-xs font-semibold text-[#335438] underline"
           >
             Dev mode: verify instantly →
           </a>

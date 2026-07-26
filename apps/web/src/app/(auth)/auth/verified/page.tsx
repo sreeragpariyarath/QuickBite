@@ -17,7 +17,7 @@ export default function EmailVerifiedPage() {
           initial={{ scale: 0 }}
           animate={{ scale: 1 }}
           transition={{ type: 'spring', bounce: 0.5, delay: 0.15 }}
-          className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-teal-100 text-3xl"
+          className="mx-auto mb-4 flex h-16 w-16 items-center justify-center rounded-full bg-[#F2F3E9] text-3xl"
         >
           ✅
         </motion.div>

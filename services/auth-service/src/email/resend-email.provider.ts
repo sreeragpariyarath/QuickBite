@@ -44,6 +44,30 @@ export class ResendEmailProvider implements EmailProvider {
     }
   }
 
+  async sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {
+    const response = await fetch('https://api.resend.com/emails', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      },
+      body: JSON.stringify({
+        from: process.env.EMAIL_FROM ?? 'QuickBite <onboarding@resend.dev>',
+        to: [to],
+        subject: 'Reset your QuickBite password',
+        html: this.resetTemplate(resetUrl),
+      }),
+    });
+
+    if (!response.ok) {
+      const body = await response.text();
+      this.logger.error(`Resend reset request failed (${response.status}): ${body}`);
+      throw new ServiceUnavailableException(
+        'Could not send password reset email, try again',
+      );
+    }
+  }
+
   private template(verifyUrl: string): string {
     return `
 <div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px">
@@ -56,6 +80,21 @@ export class ResendEmailProvider implements EmailProvider {
     </a>
   </p>
   <p style="color:#666;font-size:13px">This link expires in 24 hours. If you didn't create a QuickBite account, ignore this email.</p>
+</div>`;
+  }
+
+  private resetTemplate(resetUrl: string): string {
+    return `
+<div style="font-family:Arial,sans-serif;max-width:480px;margin:0 auto;padding:24px">
+  <h2 style="color:#e23744">QuickBite</h2>
+  <p>You requested a password reset for your QuickBite account.</p>
+  <p style="margin:32px 0">
+    <a href="${resetUrl}"
+       style="background:#e23744;color:#ffffff;text-decoration:none;padding:12px 28px;border-radius:6px;display:inline-block">
+      Reset Password
+    </a>
+  </p>
+  <p style="color:#666;font-size:13px">This link expires in 1 hour. If you didn't request a password reset, you can safely ignore this email.</p>
 </div>`;
   }
 }

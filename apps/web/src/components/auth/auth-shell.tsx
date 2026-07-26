@@ -48,7 +48,7 @@ const fadeUp = (delay: number) => ({
 
 export function AuthShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-gradient-to-r from-white to-[#F0EFED] text-zinc-900">
+    <div className="relative min-h-screen overflow-hidden bg-linear-to-r from-white to-[#F0EFED] text-zinc-900">
       {/* background image */}
       <div className="pointer-events-none absolute inset-0">
         <Image

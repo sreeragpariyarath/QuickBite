@@ -33,7 +33,7 @@ export default function HomePage() {
           <Link
             key={r.id}
             href={`/r/${r.id}`}
-            className="bg-white rounded-lg border border-zinc-200 p-4 hover:border-teal-400 hover:shadow-sm transition"
+            className="bg-white rounded-lg border border-zinc-200 p-4 hover:border-[#335438]/50 hover:shadow-sm transition"
           >
             <h2 className="font-semibold text-lg">{r.name}</h2>
             {r.description && (

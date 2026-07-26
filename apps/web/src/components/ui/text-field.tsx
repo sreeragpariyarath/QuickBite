@@ -4,7 +4,7 @@ import { forwardRef, useId, useState } from 'react';
 
 interface TextFieldProps
   extends Omit<React.InputHTMLAttributes<HTMLInputElement>, 'prefix'> {
-  label: string;
+  label: React.ReactNode;
   hint?: string;
   error?: string | null;
   prefix?: React.ReactNode;

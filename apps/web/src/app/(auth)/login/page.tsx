@@ -51,7 +51,7 @@ export default function LoginPage() {
 
   return (
     <AuthShell>
-      <div className="mb-4 text-center">
+      <div className="mb-6 text-center">
         {/* chef hat / dish cover circle icon */}
         <div className="mx-auto mb-3 flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438]">
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
@@ -112,7 +112,7 @@ export default function LoginPage() {
 
       <p className="mt-4 text-center text-sm text-zinc-500">
         Don&apos;t have an account?{' '}
-        <Link href="/signup" className="font-semibold text-teal-600 hover:underline">
+        <Link href="/signup" className="font-semibold text-[#335438] hover:underline">
           Sign up
         </Link>
       </p>

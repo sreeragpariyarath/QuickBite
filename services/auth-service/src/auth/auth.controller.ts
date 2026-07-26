@@ -26,23 +26,27 @@ import {
   ApiUnauthorizedResponse,
 } from '@nestjs/swagger';
 import { AuthService } from './auth.service';
-import { LoginDto } from './dto/login.dto';
-import { RefreshDto } from './dto/refresh.dto';
-import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { RegisterEmailDto } from './dto/register-email.dto';
-import { UpdateMeDto } from './dto/update-me.dto';
-import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { LoginDto } from './dto/login.dto';
+import { VerifyOtpDto } from './dto/verify-otp.dto';
 import { AttachEmailDto } from './dto/attach-email.dto';
+import { PasswordResetService } from './password-reset.service';
+import { RequestPasswordResetDto } from './dto/request-password-reset.dto';
+import { ConfirmPasswordResetDto } from './dto/confirm-password-reset.dto';
 import { VerifyEmailQueryDto } from './dto/verify-email-query.dto';
 import { JwtAuthGuard } from './jwt-auth.guard';
+import { RefreshDto } from './dto/refresh.dto';
+import { ResendVerificationDto } from './dto/resend-verification.dto';
+import { UpdateMeDto } from './dto/update-me.dto';
 
 const REFRESH_COOKIE = 'refresh_token';
 
-@ApiTags('auth')
+@ApiTags('Authentication')
 @Controller('auth')
 export class AuthController {
   constructor(
     private readonly authService: AuthService,
+    private readonly passwordResetService: PasswordResetService,
   ) {}
 
   // ---------- Phone OTP (primary) ----------
@@ -263,5 +267,29 @@ export class AuthController {
     }
     res.clearCookie(REFRESH_COOKIE, { path: '/auth' });
     return this.authService.logout(token);
+  }
+
+  @Post('password/reset/request')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Request password reset link',
+    description: 'Generates a secure password reset token and emails it to the user. Returns a dev URL in the console provider fallback.',
+  })
+  @ApiOkResponse({ description: 'Reset email sent successfully' })
+  @ApiNotFoundResponse({ description: 'No account found with this email' })
+  requestPasswordReset(@Body() dto: RequestPasswordResetDto) {
+    return this.passwordResetService.requestReset(dto.email);
+  }
+
+  @Post('password/reset/confirm')
+  @HttpCode(HttpStatus.OK)
+  @ApiOperation({
+    summary: 'Confirm password reset',
+    description: 'Consumes the reset token and updates the user password in PostgreSQL.',
+  })
+  @ApiOkResponse({ description: 'Password reset successfully' })
+  @ApiConflictResponse({ description: 'Token is invalid or expired' })
+  confirmPasswordReset(@Body() dto: ConfirmPasswordResetDto) {
+    return this.passwordResetService.confirmReset(dto.token, dto.password);
   }
 }

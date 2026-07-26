@@ -4,6 +4,7 @@ import { AuthController } from './auth.controller';
 import { AuthService } from './auth.service';
 import { EmailVerificationService } from './email-verification.service';
 import { FirebaseAdminService } from './firebase-admin.service';
+import { PasswordResetService } from './password-reset.service';
 import { EmailModule } from '../email/email.module';
 
 @Module({
@@ -18,6 +19,11 @@ import { EmailModule } from '../email/email.module';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, EmailVerificationService, FirebaseAdminService],
+  providers: [
+    AuthService,
+    EmailVerificationService,
+    FirebaseAdminService,
+    PasswordResetService,
+  ],
 })
 export class AuthModule {}

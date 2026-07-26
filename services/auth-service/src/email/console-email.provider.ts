@@ -13,4 +13,8 @@ export class ConsoleEmailProvider implements EmailProvider {
   async sendVerificationEmail(to: string, verifyUrl: string): Promise<void> {
     this.logger.warn(`[DEV EMAIL] Verification link for ${to}: ${verifyUrl}`);
   }
+
+  async sendPasswordResetEmail(to: string, resetUrl: string): Promise<void> {
+    this.logger.warn(`[DEV EMAIL] Password reset link for ${to}: ${resetUrl}`);
+  }
 }

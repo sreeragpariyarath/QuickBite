@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { api, AUTH_URL } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -73,7 +74,17 @@ export function EmailLoginForm() {
         required
       />
       <TextField
-        label="Password"
+        label={
+          <div className="flex items-center justify-between w-full">
+            <span>Password</span>
+            <Link
+              href="/forgot-password"
+              className="text-xs font-semibold text-[#335438] hover:underline"
+            >
+              Forgot?
+            </Link>
+          </div>
+        }
         type="password"
         value={password}
         onChange={(e) => setPassword(e.target.value)}
