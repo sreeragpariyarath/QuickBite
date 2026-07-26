@@ -3,7 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Lock, ShieldCheck, Headphones, Zap } from 'lucide-react';
+import { Lock, ShieldCheck, Headphones, Zap, ArrowLeft } from 'lucide-react';
 import { FEATURES, STATS } from './auth.constants';
 
 const fadeUp = (delay: number) => ({
@@ -29,9 +29,18 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 lg:px-8">
         <motion.header
           {...fadeUp(0)}
-          className="flex items-center justify-between"
+          className="flex items-center justify-between w-full relative"
         >
-          <Link href="/" className="flex items-center gap-2">
+          {/* Back arrow on left for mobile */}
+          <Link href="/" className="lg:hidden text-zinc-800 hover:text-zinc-900 z-10">
+            <ArrowLeft className="h-6 w-6" />
+          </Link>
+
+          {/* Logo (Centered on mobile, left-aligned on desktop) */}
+          <Link
+            href="/"
+            className="flex items-center gap-2 lg:static absolute left-1/2 -translate-x-1/2 lg:translate-x-0"
+          >
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#335438] font-black text-white">
               QB
             </span>
@@ -39,9 +48,11 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
               Quick<span className="text-[#335438]">Bite</span>
             </span>
           </Link>
+
+          {/* Right link for desktop */}
           <Link
             href="/"
-            className="text-sm font-semibold text-zinc-600 transition hover:text-zinc-900 flex items-center gap-1"
+            className="hidden lg:flex text-sm font-semibold text-zinc-600 transition hover:text-zinc-900 items-center gap-1"
           >
             Browse restaurants <span className="text-base">→</span>
           </Link>
@@ -60,8 +71,8 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             </div>
           </motion.div>
 
-          {/* hero copy */}
-          <div className="order-2 lg:order-1">
+          {/* hero copy - hidden on mobile/tablet, visible on desktop */}
+          <div className="order-2 lg:order-1 hidden lg:block">
             <motion.div
               {...fadeUp(0.1)}
               className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#F2F3E9] px-4 py-1.5 text-xs font-semibold text-[#335438]"

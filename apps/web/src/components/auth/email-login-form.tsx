@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { Mail, Lock, ChevronRight } from "lucide-react";
 import { api, AUTH_URL } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
@@ -65,11 +66,12 @@ export function EmailLoginForm() {
   return (
     <form onSubmit={login} className="space-y-4">
       <TextField
-        label="Email"
+        label="Email address"
         type="email"
+        icon={<Mail className="h-5 w-5 text-zinc-400" />}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@example.com"
+        placeholder="Enter your email address"
         autoComplete="email"
         required
       />
@@ -81,14 +83,15 @@ export function EmailLoginForm() {
               href="/forgot-password"
               className="text-xs font-semibold text-[#335438] hover:underline"
             >
-              Forgot?
+              Forgot password?
             </Link>
           </div>
         }
         type="password"
+        icon={<Lock className="h-5 w-5 text-zinc-400" />}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="••••••••"
+        placeholder="Enter your password"
         autoComplete="current-password"
         error={error}
         required
@@ -111,8 +114,11 @@ export function EmailLoginForm() {
           )}
         </div>
       )}
-      <Button type="submit" fullWidth loading={busy}>
-        Login
+      <Button type="submit" className="relative font-bold" fullWidth loading={busy}>
+        <span>Sign in</span>
+        <span className="absolute right-4 top-1/2 -translate-y-1/2">
+          <ChevronRight className="h-4 w-4 stroke-[3]" />
+        </span>
       </Button>
     </form>
   );

@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef } from "react";
+import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { AnimatePresence, motion } from "framer-motion";
 import {
@@ -8,6 +8,7 @@ import {
   RecaptchaVerifier,
   signInWithPhoneNumber,
 } from "firebase/auth";
+import { ChevronRight, ShieldCheck } from "lucide-react";
 import { auth } from "@/lib/firebase";
 import { api, AUTH_URL } from "@/lib/api";
 import { useAuth } from "@/lib/auth";
@@ -35,12 +36,21 @@ export function PhoneOtpForm() {
   const [otp, setOtp] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [busy, setBusy] = useState(false);
+  const [cooldown, setCooldown] = useState(45);
 
   const [confirmationResult, setConfirmationResult] =
     useState<ConfirmationResult | null>(null);
   const recaptchaVerifierRef = useRef<RecaptchaVerifier | null>(null);
 
-  const fullPhone = `+91${phone.replace(/\D/g, "")}`;
+  const fullPhone = `+91 ${phone.replace(/\D/g, "")}`;
+
+  useEffect(() => {
+    if (stage !== "otp" || cooldown <= 0) return;
+    const timer = setInterval(() => {
+      setCooldown((c) => c - 1);
+    }, 1000);
+    return () => clearInterval(timer);
+  }, [stage, cooldown]);
 
   const getRecaptchaVerifier = () => {
     if (recaptchaVerifierRef.current) {
@@ -54,17 +64,19 @@ export function PhoneOtpForm() {
   };
 
   async function requestOtp(e: React.FormEvent) {
-    e.preventDefault();
+    if (e) e.preventDefault();
     setError(null);
     setBusy(true);
     try {
       const verifier = getRecaptchaVerifier();
+      const sanitizedPhone = `+91${phone.replace(/\D/g, "")}`;
       const confirmation = await signInWithPhoneNumber(
         auth,
-        fullPhone,
+        sanitizedPhone,
         verifier,
       );
       setConfirmationResult(confirmation);
+      setCooldown(45);
       setStage("otp");
     } catch (e: any) {
       setError(e instanceof Error ? e.message : "Something went wrong");
@@ -136,11 +148,11 @@ export function PhoneOtpForm() {
               autoFocus
               required
             />
-            <Button type="submit" fullWidth loading={busy}>
+            <Button type="submit" className="relative font-bold animate-fade-in" fullWidth loading={busy}>
               <span>Send verification code</span>
-              <svg className="h-4 w-4 -rotate-12 transform fill-current" viewBox="0 0 24 24">
-                <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-              </svg>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                <ChevronRight className="h-4 w-4 stroke-[3]" />
+              </span>
             </Button>
           </motion.form>
         ) : (
@@ -152,9 +164,24 @@ export function PhoneOtpForm() {
             className="space-y-3"
           >
             <div className="space-y-2">
-              <label className="block text-sm font-medium text-zinc-700 text-center">
-                Enter the 6-digit code sent to {fullPhone}
-              </label>
+              <div className="mb-4 text-center">
+                <h2 className="text-2xl font-bold">Enter OTP</h2>
+                <p className="mt-1 text-sm text-zinc-500">
+                  We&apos;ve sent a 6-digit code to{" "}
+                  <span className="font-semibold text-zinc-850">{fullPhone}</span>
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setStage("phone");
+                      setOtp("");
+                      setError(null);
+                    }}
+                    className="font-bold text-[#335438] hover:underline ml-1.5 cursor-pointer"
+                  >
+                    Change
+                  </button>
+                </p>
+              </div>
               
               <div className="relative flex justify-center py-2">
                 {/* Hidden input overlaying the boxes to capture typing/paste */}
@@ -199,29 +226,38 @@ export function PhoneOtpForm() {
                   })}
                 </div>
               </div>
+
+              <div className="text-center text-xs text-zinc-500 pt-2">
+                Didn&apos;t receive the code?{" "}
+                {cooldown > 0 ? (
+                  <span>
+                    Resend OTP in 00:{cooldown < 10 ? `0${cooldown}` : cooldown}
+                  </span>
+                ) : (
+                  <button
+                    type="button"
+                    onClick={(e) => requestOtp(e)}
+                    className="font-bold text-[#335438] hover:underline cursor-pointer"
+                  >
+                    Resend OTP
+                  </button>
+                )}
+              </div>
               
-              {error && <p className="text-xs text-red-600 text-center">{error}</p>}
+              {error && <p className="text-xs text-red-600 text-center pt-1">{error}</p>}
             </div>
 
-            <Button type="submit" fullWidth loading={busy}>
-              Verify & Sign In
+            <Button type="submit" className="relative font-bold mt-4" fullWidth loading={busy}>
+              <span>Verify OTP</span>
+              <span className="absolute right-4 top-1/2 -translate-y-1/2">
+                <ChevronRight className="h-4 w-4 stroke-[3]" />
+              </span>
             </Button>
-            <Button
-              type="button"
-              variant="ghost"
-              fullWidth
-              onClick={() => {
-                setStage("phone");
-                setOtp("");
-                setError(null);
-                if (recaptchaVerifierRef.current) {
-                  recaptchaVerifierRef.current.clear();
-                  recaptchaVerifierRef.current = null;
-                }
-              }}
-            >
-              ← Edit phone number
-            </Button>
+
+            <div className="flex items-center justify-center gap-2 rounded-xl bg-[#F2F3E9] p-3 text-[11px] text-[#335438] mt-6 select-none border border-[#335438]/5">
+              <ShieldCheck className="h-4 w-4 shrink-0 text-[#335438]" />
+              <span>Your data is safe and secure. We never share your information.</span>
+            </div>
           </motion.form>
         )}
       </AnimatePresence>
