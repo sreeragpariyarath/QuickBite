@@ -3,31 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Lock, ShieldCheck, Headphones, Clock, Star, Shield, Zap } from 'lucide-react';
-
-const FEATURES = [
-  {
-    icon: <Clock className="h-5 w-5 stroke-[#335438] stroke-[2.5]" />,
-    title: 'Fast Delivery',
-    text: 'On-time, every time',
-  },
-  {
-    icon: <Star className="h-5 w-5 stroke-[#335438] stroke-[2.5]" />,
-    title: 'Top Restaurants',
-    text: 'Handpicked for you',
-  },
-  {
-    icon: <Shield className="h-5 w-5 stroke-[#335438] stroke-[2.5]" />,
-    title: 'Safe & Secure',
-    text: 'Your data is protected',
-  },
-];
-
-const STATS = [
-  { value: '50K+', label: 'Happy customers' },
-  { value: '5K+', label: 'Restaurants' },
-  { value: '1M+', label: 'Orders delivered' },
-];
+import { Lock, ShieldCheck, Headphones, Zap } from 'lucide-react';
+import { FEATURES, STATS } from './auth.constants';
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 24 },
