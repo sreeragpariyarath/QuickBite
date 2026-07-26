@@ -3,6 +3,7 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
+import { Lock, ShieldCheck, Headphones } from 'lucide-react';
 
 const FEATURES = [
   {
@@ -156,9 +157,9 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           className="flex flex-wrap items-center justify-between border-t border-zinc-200/60 pt-4 text-xs text-zinc-400"
         >
           <div className="flex gap-4">
-            <span className="flex items-center gap-1">🔒 100% Secure payments</span>
-            <span className="flex items-center gap-1">🛡️ Privacy protected</span>
-            <span className="flex items-center gap-1">🎧 24/7 Support</span>
+            <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 stroke-[2.5]" /> 100% Secure payments</span>
+            <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 stroke-[2.5]" /> Privacy protected</span>
+            <span className="flex items-center gap-1.5"><Headphones className="h-3.5 w-3.5 stroke-[2.5]" /> 24/7 Support</span>
           </div>
           <span>© {new Date().getFullYear()} QuickBite</span>
         </motion.footer>
