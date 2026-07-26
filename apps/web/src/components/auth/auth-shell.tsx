@@ -66,7 +66,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="order-1 lg:order-2"
           >
-            <div className="mx-auto w-full max-w-md rounded-2xl bg-white p-6 text-zinc-900 shadow-2xl shadow-zinc-200/50 sm:p-8 border border-zinc-100">
+            <div className="mx-auto w-full max-w-md bg-transparent lg:bg-white p-0 lg:p-8 border-none lg:border lg:border-zinc-100 shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 rounded-none lg:rounded-2xl text-zinc-900">
               {children}
             </div>
           </motion.div>
