@@ -26,13 +26,13 @@ export const TextField = forwardRef<HTMLInputElement, TextFieldProps>(
           {label}
         </label>
         <div
-          className={`flex items-stretch overflow-hidden rounded-xl border bg-white transition-colors focus-within:ring-2 focus-within:ring-teal-500 ${
+          className={`flex items-stretch overflow-hidden rounded-xl border bg-white transition-colors focus-within:ring-2 focus-within:ring-[#335438] ${
             error ? 'border-red-400' : 'border-zinc-300'
           }`}
         >
           {prefix && (
-            <span className="flex items-center border-r border-zinc-200 bg-zinc-50 px-3 text-sm font-medium text-zinc-600">
-              {prefix}
+            <span className="flex items-center border-r border-zinc-200 bg-zinc-50 px-2 text-sm font-medium text-zinc-600">
+              {prefix} 
             </span>
           )}
           <input

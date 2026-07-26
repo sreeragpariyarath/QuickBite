@@ -38,19 +38,47 @@ export class AuthService {
     }
 
     const phone = decodedToken.phone_number;
-    if (!phone) {
-      throw new BadRequestException('Token does not contain a verified phone number');
+    const email = decodedToken.email;
+
+    if (!phone && !email) {
+      throw new BadRequestException('Token does not contain a verified phone or email');
     }
 
-    let user = await this.prisma.user.findUnique({
-      where: { phone },
-    });
-    const isNewUser = !user;
+    let user;
+    let isNewUser = false;
 
-    if (!user) {
-      user = await this.prisma.user.create({
-        data: { phone, role: dto.role ?? 'CUSTOMER' },
+    if (phone) {
+      user = await this.prisma.user.findUnique({
+        where: { phone },
       });
+      isNewUser = !user;
+
+      if (!user) {
+        user = await this.prisma.user.create({
+          data: { phone, role: dto.role ?? 'CUSTOMER' },
+        });
+      }
+    } else if (email) {
+      user = await this.prisma.user.findUnique({
+        where: { email },
+      });
+      isNewUser = !user;
+
+      if (!user) {
+        user = await this.prisma.user.create({
+          data: {
+            email,
+            name: decodedToken.name || null,
+            isEmailVerified: true,
+            role: dto.role ?? 'CUSTOMER',
+          },
+        });
+      } else if (!user.isEmailVerified) {
+        user = await this.prisma.user.update({
+          where: { id: user.id },
+          data: { isEmailVerified: true },
+        });
+      }
     }
 
     const accessToken = await this.signAccessToken(user.id, user.role);
@@ -60,7 +88,7 @@ export class AuthService {
       accessToken,
       refreshToken,
       isNewUser,
-      user: { id: user.id, phone: user.phone, role: user.role },
+      user: { id: user.id, phone: user.phone, email: user.email, role: user.role },
     };
   }
 

@@ -6,10 +6,10 @@ type Variant = 'primary' | 'secondary' | 'ghost';
 
 const VARIANTS: Record<Variant, string> = {
   primary:
-    'bg-teal-600 text-white hover:bg-teal-500 disabled:bg-teal-600/50 shadow-lg shadow-teal-600/20',
+    'bg-[#335438] text-white hover:bg-[#27402b] disabled:bg-[#335438]/50 shadow-md shadow-[#335438]/10 cursor-pointer',
   secondary:
-    'bg-white/10 text-white hover:bg-white/20 border border-white/15 disabled:opacity-50',
-  ghost: 'text-zinc-500 hover:text-zinc-800 disabled:opacity-50',
+    'bg-zinc-100 text-zinc-800 hover:bg-zinc-200 border border-zinc-200 disabled:opacity-50 cursor-pointer',
+  ghost: 'text-zinc-500 hover:text-zinc-800 disabled:opacity-50 cursor-pointer',
 };
 
 interface ButtonProps extends Omit<HTMLMotionProps<'button'>, 'children'> {
@@ -33,7 +33,7 @@ export function Button({
       whileTap={{ scale: 0.98 }}
       transition={{ duration: 0.1 }}
       disabled={disabled || loading}
-      className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-teal-400 disabled:cursor-not-allowed ${VARIANTS[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}
+      className={`inline-flex items-center justify-center gap-2 rounded-xl px-5 py-3 text-sm font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[#335438] disabled:cursor-not-allowed ${VARIANTS[variant]} ${fullWidth ? 'w-full' : ''} ${className}`}
       {...props}
     >
       {loading && (

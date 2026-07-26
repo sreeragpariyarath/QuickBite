@@ -6,19 +6,31 @@ import { motion } from 'framer-motion';
 
 const FEATURES = [
   {
-    icon: '⚡',
-    title: 'Lightning fast delivery',
-    text: 'Your favorite meals delivered hot and on time.',
+    icon: (
+      <svg className="h-5 w-5 stroke-[#335438]" fill="none" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+      </svg>
+    ),
+    title: 'Fast Delivery',
+    text: 'On-time, every time',
   },
   {
-    icon: '⭐',
-    title: 'Top rated restaurants',
-    text: 'Handpicked restaurants near you.',
+    icon: (
+      <svg className="h-5 w-5 stroke-[#335438]" fill="none" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.969 0 1.371 1.24.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.175 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 10.1c-.783-.57-.38-1.81.588-1.81h4.907a1 1 0 00.95-.69l1.52-4.674z" />
+      </svg>
+    ),
+    title: 'Top Restaurants',
+    text: 'Handpicked for you',
   },
   {
-    icon: '🛡️',
-    title: 'Safe & secure',
-    text: 'Your data and payments are protected.',
+    icon: (
+      <svg className="h-5 w-5 stroke-[#335438]" fill="none" viewBox="0 0 24 24" strokeWidth={2}>
+        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
+      </svg>
+    ),
+    title: 'Safe & Secure',
+    text: 'Your data is protected',
   },
 ];
 
@@ -34,23 +46,18 @@ const fadeUp = (delay: number) => ({
   transition: { duration: 0.5, delay },
 });
 
-/**
- * Two-column auth layout: marketing hero on the left, the auth card on the
- * right. Stacks vertically on mobile (card first — it's what users came for).
- */
 export function AuthShell({ children }: { children: React.ReactNode }) {
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#04252b] text-white">
-      {/* hero food image as ambient backdrop */}
+    <div className="relative min-h-screen overflow-hidden bg-gradient-to-r from-white to-[#F0EFED] text-zinc-900">
+      {/* background image */}
       <div className="pointer-events-none absolute inset-0">
         <Image
-          src="/login_food.png"
+          src="/auth_bg.png"
           alt=""
           fill
           priority
-          className="object-cover opacity-25"
+          className="object-cover object-right"
         />
-        <div className="absolute inset-0 bg-gradient-to-br from-[#04252b] via-[#04252b]/80 to-[#063a42]/70" />
       </div>
 
       <div className="relative mx-auto flex min-h-screen w-full max-w-6xl flex-col px-5 py-6 lg:px-8">
@@ -59,18 +66,18 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           className="flex items-center justify-between"
         >
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-teal-500 font-black text-white">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#335438] font-black text-white">
               QB
             </span>
             <span className="text-xl font-bold">
-              Quick<span className="text-teal-400">Bite</span>
+              Quick<span className="text-[#335438]">Bite</span>
             </span>
           </Link>
           <Link
             href="/"
-            className="text-sm text-white/70 transition hover:text-white"
+            className="text-sm font-semibold text-zinc-600 transition hover:text-zinc-900 flex items-center gap-1"
           >
-            Browse restaurants →
+            Browse restaurants <span className="text-base">→</span>
           </Link>
         </motion.header>
 
@@ -82,55 +89,62 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="order-1 lg:order-2"
           >
-            <div className="mx-auto w-full max-w-md rounded-2xl bg-white p-6 text-zinc-900 shadow-2xl shadow-black/40 sm:p-8">
+            <div className="mx-auto w-full max-w-md rounded-2xl bg-white p-6 text-zinc-900 shadow-2xl shadow-zinc-200/50 sm:p-8 border border-zinc-100">
               {children}
             </div>
           </motion.div>
 
           {/* hero copy */}
           <div className="order-2 lg:order-1">
-            <motion.p
+            <motion.div
               {...fadeUp(0.1)}
-              className="mb-4 inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-4 py-1.5 text-xs font-semibold tracking-wide"
+              className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#F2F3E9] px-4 py-1.5 text-xs font-semibold text-[#335438]"
             >
-              ⚡ FAST DELIVERY · LIVE TRACKING
-            </motion.p>
+              <svg className="h-3.5 w-3.5 fill-[#335438]" viewBox="0 0 24 24">
+                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
+              </svg>
+              <span>Fast delivery</span>
+              <span className="text-[#335438]/20">•</span>
+              <span>Live tracking</span>
+            </motion.div>
             <motion.h1
               {...fadeUp(0.2)}
-              className="text-4xl font-black leading-tight sm:text-5xl"
+              className="text-4xl font-black leading-tight sm:text-5xl text-zinc-900"
             >
               Good food,{' '}
-              <span className="text-teal-400">delivered</span> to your door.
+              <span className="text-[#5b8c66]">delivered</span> to your door.
             </motion.h1>
-            <motion.p {...fadeUp(0.3)} className="mt-4 max-w-md text-white/70">
-              Discover the best restaurants near you and enjoy your favorite
-              meals, delivered fast and fresh.
+            <motion.p {...fadeUp(0.3)} className="mt-4 max-w-md text-zinc-500">
+              Order from top restaurants near you and enjoy fresh meals, fast.
             </motion.p>
 
-            <motion.ul {...fadeUp(0.4)} className="mt-8 space-y-4">
+            {/* Horizontal row of 3 feature boxes */}
+            <motion.ul {...fadeUp(0.4)} className="mt-10 grid grid-cols-3 gap-4">
               {FEATURES.map((f) => (
-                <li key={f.title} className="flex items-start gap-3">
-                  <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/10 text-lg">
+                <li key={f.title} className="flex flex-col items-center text-center">
+                  <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438] mb-3">
                     {f.icon}
                   </span>
-                  <div>
-                    <p className="font-semibold">{f.title}</p>
-                    <p className="text-sm text-white/60">{f.text}</p>
-                  </div>
+                  <p className="font-bold text-xs text-zinc-800 leading-snug">{f.title}</p>
+                  <p className="text-[10px] text-zinc-500 mt-1 leading-normal">{f.text}</p>
                 </li>
               ))}
             </motion.ul>
 
+            {/* Stats list separated by dividers and thin line on top */}
             <motion.div
               {...fadeUp(0.5)}
-              className="mt-8 flex max-w-md divide-x divide-white/10 rounded-2xl border border-white/10 bg-white/5"
+              className="mt-8 pt-8 border-t border-zinc-200/80 flex justify-between items-center"
             >
-              {STATS.map((s) => (
-                <div key={s.label} className="flex-1 px-4 py-3 text-center">
-                  <p className="text-lg font-extrabold text-teal-400">
+              {STATS.map((s, idx) => (
+                <div key={s.label} className="flex-1 text-center relative">
+                  {idx > 0 && (
+                    <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[1px] bg-zinc-200" />
+                  )}
+                  <p className="text-xl font-black text-zinc-900">
                     {s.value}
                   </p>
-                  <p className="text-xs text-white/60">{s.label}</p>
+                  <p className="text-[10px] text-zinc-500 mt-1">{s.label}</p>
                 </div>
               ))}
             </motion.div>
@@ -139,11 +153,13 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
 
         <motion.footer
           {...fadeUp(0.6)}
-          className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 border-t border-white/10 pt-4 text-xs text-white/50"
+          className="flex flex-wrap items-center justify-between border-t border-zinc-200/60 pt-4 text-xs text-zinc-400"
         >
-          <span>🔒 100% Secure</span>
-          <span>🛡️ Privacy protected</span>
-          <span>🎧 24/7 Support</span>
+          <div className="flex gap-4">
+            <span className="flex items-center gap-1">🔒 100% Secure payments</span>
+            <span className="flex items-center gap-1">🛡️ Privacy protected</span>
+            <span className="flex items-center gap-1">🎧 24/7 Support</span>
+          </div>
           <span>© {new Date().getFullYear()} QuickBite</span>
         </motion.footer>
       </div>
