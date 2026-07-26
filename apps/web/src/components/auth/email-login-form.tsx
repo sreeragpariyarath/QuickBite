@@ -64,7 +64,7 @@ export function EmailLoginForm() {
   }
 
   return (
-    <form onSubmit={login} className="space-y-4">
+    <form onSubmit={login} className="space-y-5">
       <TextField
         label="Email address"
         type="email"

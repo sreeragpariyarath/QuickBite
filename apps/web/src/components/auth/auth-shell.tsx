@@ -27,13 +27,13 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
       </div>
 
       {/* Mobile top-right salad plate image */}
-      <div className="absolute right-0 top-0 pointer-events-none lg:hidden w-48 h-48 z-0 select-none">
+      <div className="absolute right-0 top-0 translate-x-[50%] -translate-y-[50%] pointer-events-none lg:hidden w-120 h-120 z-0 select-none">
         <Image
           src="/mobile_auth_plate.png"
           alt=""
           fill
           priority
-          className="object-contain object-right-top"
+          className="object-contain"
         />
       </div>
 
@@ -47,10 +47,10 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             <ArrowLeft className="h-6 w-6" />
           </Link>
 
-          {/* Logo (Centered on mobile, left-aligned on desktop) */}
+          {/* Logo (Visible on desktop, hidden on mobile header) */}
           <Link
             href="/"
-            className="flex items-center gap-2 lg:static absolute left-1/2 -translate-x-1/2 lg:translate-x-0"
+            className="hidden lg:flex items-center gap-2"
           >
             <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#335438] font-black text-white">
               QB
@@ -77,7 +77,17 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             transition={{ duration: 0.5, delay: 0.15 }}
             className="order-1 lg:order-2"
           >
-            <div className="mx-auto w-full max-w-md bg-transparent lg:bg-white p-0 lg:p-8 border-none lg:border lg:border-zinc-100 shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 rounded-none lg:rounded-2xl text-zinc-900">
+            <div className="mx-auto w-full max-w-md bg-transparent lg:bg-white px-4 lg:px-8 py-2 lg:py-8 border-none lg:border lg:border-zinc-100 shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 rounded-none lg:rounded-2xl text-zinc-900">
+              {/* Centered brand logo at the top inside body container on mobile */}
+              <div className="flex flex-col items-center mb-6 lg:hidden select-none">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#335438] font-black text-xl text-white shadow-md shadow-zinc-200/50">
+                  QB
+                </span>
+                <span className="text-2xl font-black text-zinc-950 mt-2">
+                  Quick<span className="text-[#335438]">Bite</span>
+                </span>
+              </div>
+              
               {children}
             </div>
           </motion.div>

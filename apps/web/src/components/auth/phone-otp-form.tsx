@@ -126,7 +126,7 @@ export function PhoneOtpForm() {
             {...step}
             transition={{ duration: 0.2 }}
             onSubmit={requestOtp}
-            className="space-y-3"
+            className="space-y-5"
           >
             <TextField
               label="Phone number"
@@ -161,7 +161,7 @@ export function PhoneOtpForm() {
             {...step}
             transition={{ duration: 0.2 }}
             onSubmit={verifyOtp}
-            className="space-y-3"
+            className="space-y-5"
           >
             <div className="space-y-2">
               <div className="mb-4 text-center">
