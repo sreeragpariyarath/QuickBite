@@ -3,33 +3,21 @@
 import Image from 'next/image';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
-import { Lock, ShieldCheck, Headphones } from 'lucide-react';
+import { Lock, ShieldCheck, Headphones, Clock, Star, Shield, Zap } from 'lucide-react';
 
 const FEATURES = [
   {
-    icon: (
-      <svg className="h-5 w-5 stroke-[#335438]" fill="none" viewBox="0 0 24 24" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
-      </svg>
-    ),
+    icon: <Clock className="h-5 w-5 stroke-[#335438] stroke-[2.5]" />,
     title: 'Fast Delivery',
     text: 'On-time, every time',
   },
   {
-    icon: (
-      <svg className="h-5 w-5 stroke-[#335438]" fill="none" viewBox="0 0 24 24" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M11.049 2.927c.3-.921 1.603-.921 1.902 0l1.519 4.674a1 1 0 00.95.69h4.907c.969 0 1.371 1.24.588 1.81l-3.97 2.883a1 1 0 00-.364 1.118l1.518 4.674c.3.922-.755 1.688-1.538 1.118l-3.971-2.883a1 1 0 00-1.175 0l-3.97 2.883c-.783.57-1.838-.197-1.538-1.118l1.518-4.674a1 1 0 00-.364-1.118L2.98 10.1c-.783-.57-.38-1.81.588-1.81h4.907a1 1 0 00.95-.69l1.52-4.674z" />
-      </svg>
-    ),
+    icon: <Star className="h-5 w-5 stroke-[#335438] stroke-[2.5]" />,
     title: 'Top Restaurants',
     text: 'Handpicked for you',
   },
   {
-    icon: (
-      <svg className="h-5 w-5 stroke-[#335438]" fill="none" viewBox="0 0 24 24" strokeWidth={2}>
-        <path strokeLinecap="round" strokeLinejoin="round" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" />
-      </svg>
-    ),
+    icon: <Shield className="h-5 w-5 stroke-[#335438] stroke-[2.5]" />,
     title: 'Safe & Secure',
     text: 'Your data is protected',
   },
@@ -101,9 +89,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
               {...fadeUp(0.1)}
               className="mb-6 inline-flex items-center gap-2 rounded-full bg-[#F2F3E9] px-4 py-1.5 text-xs font-semibold text-[#335438]"
             >
-              <svg className="h-3.5 w-3.5 fill-[#335438]" viewBox="0 0 24 24">
-                <path d="M13 10V3L4 14h7v7l9-11h-7z" />
-              </svg>
+              <Zap className="h-3.5 w-3.5 fill-[#335438] text-[#335438]" />
               <span>Fast delivery</span>
               <span className="text-[#335438]/20">•</span>
               <span>Live tracking</span>
