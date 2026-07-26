@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { motion } from 'framer-motion';
+import { User, Mail, Lock, ChevronRight } from 'lucide-react';
 import { api, AUTH_URL } from '@/lib/api';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/text-field';
@@ -43,11 +44,11 @@ export function SignupForm() {
         animate={{ opacity: 1, scale: 1 }}
         className="text-center py-4"
       >
-        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F2F3E9] text-2xl">
-          ✉️
+        <div className="mx-auto mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438]">
+          <Mail className="h-6 w-6 stroke-[2.5]" />
         </div>
         <h3 className="text-lg font-bold text-zinc-900">Check your inbox</h3>
-        <p className="mt-2 text-sm text-zinc-600">
+        <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
           We sent a verification link to <strong>{email}</strong>. Click it to
           activate your account, then log in.
         </p>
@@ -64,12 +65,13 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={signup} className="space-y-4">
+    <form onSubmit={signup} className="space-y-5">
       <TextField
         label="Full name"
+        icon={<User className="h-5 w-5 text-zinc-400" />}
         value={name}
         onChange={(e) => setName(e.target.value)}
-        placeholder="John Doe"
+        placeholder="Enter your full name"
         autoComplete="name"
         minLength={2}
         required
@@ -77,26 +79,31 @@ export function SignupForm() {
       <TextField
         label="Email"
         type="email"
+        icon={<Mail className="h-5 w-5 text-zinc-400" />}
         value={email}
         onChange={(e) => setEmail(e.target.value)}
-        placeholder="you@example.com"
+        placeholder="Enter your email address"
         autoComplete="email"
         required
       />
       <TextField
         label="Password"
         type="password"
+        icon={<Lock className="h-5 w-5 text-zinc-400" />}
         value={password}
         onChange={(e) => setPassword(e.target.value)}
-        placeholder="Minimum 8 characters"
+        placeholder="Enter your password"
         autoComplete="new-password"
         minLength={8}
         hint="At least 8 characters."
         error={error}
         required
       />
-      <Button type="submit" fullWidth loading={busy}>
-        Create account
+      <Button type="submit" className="relative font-bold mt-2" fullWidth loading={busy}>
+        <span>Create account</span>
+        <span className="absolute right-4 top-1/2 -translate-y-1/2">
+          <ChevronRight className="h-4 w-4 stroke-[3]" />
+        </span>
       </Button>
     </form>
   );
