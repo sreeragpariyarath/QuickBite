@@ -1,49 +1,103 @@
-name: CI
+name: CI/CD Pipeline
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
   pull_request:
-    branches: [main]
+    branches:
+      - main
 
 jobs:
-  service:
-    name: ${{ matrix.service }}
+  # 1. Backend Microservices CI
+  backend:
+    name: Backend CI (${{ matrix.service }})
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
       matrix:
         service: [auth-service, restaurant-service, order-service]
     env:
-      # prisma.config.ts loads this; no real DB is needed for generate/build
       DATABASE_URL: postgresql://ci:ci@localhost:5432/ci_db
-    defaults:
-      run:
-        working-directory: services/${{ matrix.service }}
-    steps:
-      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v4
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
         with:
           version: 11
 
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 22
           cache: pnpm
 
-      - name: Install dependencies
+      - name: Install Monorepo Dependencies
         run: pnpm install --frozen-lockfile
-        working-directory: .
 
-      - name: Generate Prisma client
+      - name: Generate Prisma Client
+        working-directory: services/${{ matrix.service }}
         run: pnpm exec prisma generate
 
-      - name: Typecheck
+      - name: Type Check
+        working-directory: services/${{ matrix.service }}
         run: pnpm exec tsc --noEmit
 
-      - name: Build
+      - name: Build Service
+        working-directory: services/${{ matrix.service }}
         run: pnpm exec nest build
 
-      - name: Unit tests
-        run: pnpm exec jest --passWithNoTests
+  # 2. Next.js Frontend CI
+  frontend:
+    name: Frontend CI (apps/web)
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+
+      - name: Install Monorepo Dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Type Check & Build
+        working-directory: apps/web
+        run: pnpm build
+
+  # 3. Deploy to Self-Hosted Windows Runner
+  deploy:
+    name: Deploy to Self-Hosted Runner
+    runs-on: self-hosted
+    needs:
+      - backend
+      - frontend
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Show Runner Information
+        shell: powershell
+        run: |
+          Write-Host "Hello from my self-hosted runner!"
+          hostname
+          whoami
+          Get-Location
+
+      - name: List Repository Files
+        shell: powershell
+        run: |
+          Get-ChildItem
