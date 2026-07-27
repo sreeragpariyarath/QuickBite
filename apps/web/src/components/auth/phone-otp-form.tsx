@@ -131,12 +131,9 @@ export function PhoneOtpForm() {
             <TextField
               label="Phone number"
               prefix={
-                <div className="flex items-center gap-1 select-none">
-                  <span>+91</span>
-                  <svg className="h-3 w-3 text-zinc-400" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={3}>
-                    <path strokeLinecap="round" strokeLinejoin="round" d="M19 9l-7 7-7-7" />
-                  </svg>
-                </div>
+                <span className="text-zinc-500 font-semibold select-none px-1">
+                  +91
+                </span>
               }
               value={phone}
               onChange={(e) => setPhone(e.target.value)}
