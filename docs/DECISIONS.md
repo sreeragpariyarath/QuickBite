@@ -326,3 +326,50 @@ permission-based RBAC beyond the CUSTOMER/OWNER enum, inventory,
 analytics, subscriptions/billing) are deliberately out of scope until a
 future phase explicitly calls for them. See [ROADMAP.md](ROADMAP.md)
 "Standing rules" for the phase-gating rule this formalizes.
+
+---
+
+## D-015 — Password Reset Flow with Expiration and Email Provider Fallback
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+Users authentication via email and password requires a secure recovery flow for forgotten passwords. This involves token creation, database tracking, rate-limiting, and SMTP/API email dispatch. During development, developers need to test this flow locally without configuration overhead (like setting up SMTP credentials or Resend API keys).
+
+**Decision:**
+Implement a secure password reset system on the NestJS `auth-service` (endpoints `/auth/password-reset/request` and `/auth/password-reset/confirm`) using custom single-use tokens tracked in a new `PasswordResetToken` schema model with a 15-minute expiration window.
+Build an extensible NestJS `EmailModule` utilizing an `EmailProvider` interface, providing concrete implementations for `ResendEmailProvider`, `SmtpEmailProvider`, and a local development `ConsoleEmailProvider` that logs the sent emails and activation links directly to stdout.
+
+**Reasons:**
+- Ensures security by checking token expiration and single-use constraints.
+- Decreases local development friction by printing verification URLs directly to the terminal stdout without external service dependencies.
+- Extensible provider design lets us swap local development logging for SMTP/Resend in production with environment variables.
+
+**Consequences:**
+The schema migration is deployed to database-per-service Postgres. Developers can locally trigger and test the full forgot/reset flows (with email activation links) immediately out of the box.
+
+---
+
+## D-016 — Brand Redesign and Responsive Auth Layout Polish
+
+**Date:** 2026-07
+**Status:** Accepted
+
+**Context:**
+The initial client authorization screens looked generic. We needed to update the project with a premium look, custom branding palettes, responsive layout constraints, and modern icons matching our 2026 design guidelines.
+
+**Decision:**
+Redesign the styling and responsiveness of authentication layouts:
+- Colors: Set the primary brand theme to `#335438` (forest green), secondary highlight background to `#F2F3E9` (light sage), and page backgrounds to a left-to-right white-to-[#F0EFED] gradient.
+- Layout: Collapse the desktop dual-column layout to a clean single-column form on mobile viewports by hiding the left-side hero text copy and layout card wrappers (`bg-transparent border-none`).
+- Illustrations: Position `mobile_auth_plate.png` absolutely in the top-right corner on mobile viewports using translate translations to overlap cleanly, hiding the desktop background image `auth_bg.png` on small screens.
+- Prefix elements: Use Lucide React vector icons instead of text emojis or custom SVGs, and use a static `+91` label indicator instead of a simulated country code dropdown.
+
+**Reasons:**
+- Implements premium design elements (glassmorphism, smooth colors, aligned layout padding) to wow the user.
+- Prevents overlapping text collisions and element congestion on mobile viewports.
+- Static country code indicator removes misleading simulated dropdown chevron indicators for a better UX.
+
+**Consequences:**
+Significantly improved responsive UX and visual design. The screens scale seamlessly from small mobile screens up to full desktop layouts.

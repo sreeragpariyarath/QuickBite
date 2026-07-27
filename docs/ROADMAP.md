@@ -9,8 +9,9 @@ QuickBite is being built as a real product, not a learning exercise. The roadmap
 ## Phase 0 — Foundation ✅ (done)
 
 - [x] Monorepo (pnpm + Turborepo), Docker Postgres, database-per-service
-- [x] auth-service: phone OTP registration/login (MSG91, console fallback in dev),
+- [x] auth-service: phone OTP registration/login via Firebase Auth (exchanging Firebase ID Token for local JWT),
       email+password as secondary, JWT access + refresh tokens, logout, rate limiting
+- [x] Google Auth integration (Google Sign-In via Firebase Auth provider)
 - [x] restaurant-service: owner-scoped restaurant/category/menu CRUD,
       role guards, public browse endpoints
 - [x] Postman collection with automated token/ID handling
@@ -31,7 +32,11 @@ QuickBite is being built as a real product, not a learning exercise. The roadmap
 
 **Exit criteria: a person with a phone can order without Postman.**
 
-- [ ] Next.js customer app (browse → cart → order → track status)
+- [/] Next.js customer app
+  - [x] Responsive Auth screens (Phone OTP, Email Login, Signup, Forgot/Reset Password)
+  - [x] Restaurant discovery & browsing pages (`/` homepage, `/r/[id]` category/menu lists)
+  - [x] User profile settings (`/welcome` first name setup)
+  - [ ] Cart, checkout, and order status tracking pages
 - [ ] Next.js owner dashboard (menu management, incoming orders, accept/reject)
 - [ ] Nginx API gateway — one public origin, services not exposed directly
 - [ ] Notifications v1: order status via MSG91 SMS (reuse SMS provider)

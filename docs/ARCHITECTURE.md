@@ -187,6 +187,16 @@ Upload endpoint to be implemented in Sprint 6.
 
 ---
 
+## External Integrations
+
+### Firebase Auth
+Used as the verification gateway for client identities:
+- **Phone OTP:** The Next.js client utilizes the Firebase Client SDK (`signInWithPhoneNumber`) to solve Recaptcha validation challenges and trigger SMS codes to the user. Once the user submits the code, Firebase issues a secure Firebase ID Token.
+- **Google Sign-In:** The Next.js client triggers a Google authentication popup using the Firebase Auth provider, generating a Firebase ID Token.
+- **Verification Flow:** The client submits the retrieved Firebase ID Token to the NestJS `auth-service` `/auth/otp/verify` endpoint. The backend decodes and validates the signature of the token, mapping it to a local Postgres user record (registering them if it is a new number or email), and returns our own custom JWT access and refresh tokens.
+
+---
+
 ## Inter-Service Communication
 
 Services communicate asynchronously via **RabbitMQ** for event-driven flows.
