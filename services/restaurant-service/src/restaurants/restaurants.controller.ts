@@ -48,7 +48,7 @@ export class RestaurantsController {
   @ApiOperation({
     summary: 'List restaurants',
     description:
-      'All active restaurants, optionally filtered by city (case-insensitive). Public — no auth required.',
+      'All active restaurants, optionally filtered by city (case-insensitive) and/or cuisine. Public — no auth required.',
   })
   @ApiQuery({
     name: 'city',
@@ -56,9 +56,18 @@ export class RestaurantsController {
     example: 'Kochi',
     description: 'Filter by city',
   })
+  @ApiQuery({
+    name: 'cuisine',
+    required: false,
+    example: 'Burgers',
+    description: 'Filter by cuisine tag',
+  })
   @ApiOkResponse({ description: 'Array of active restaurants' })
-  findAll(@Query('city') city?: string) {
-    return this.restaurantsService.findAll(city);
+  findAll(
+    @Query('city') city?: string,
+    @Query('cuisine') cuisine?: string,
+  ) {
+    return this.restaurantsService.findAll(city, cuisine);
   }
 
   @Get(':id')

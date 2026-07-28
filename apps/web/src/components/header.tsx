@@ -35,10 +35,10 @@ export function Header() {
         {/* Left Side: Logo & Location dropdown */}
         <div className="flex items-center gap-6">
           <Link href="/" className="flex items-center gap-2">
-            <span className="flex h-8.5 w-8.5 items-center justify-center rounded-xl bg-[#335438] text-sm font-black text-white select-none">
+            <span className="flex h-8.5 w-8.5 items-center justify-center rounded-xl bg-[#335438] text-sm font-bold text-white select-none">
               QB
             </span>
-            <span className="text-lg font-black text-zinc-900 tracking-tight">
+            <span className="text-lg font-bold text-zinc-900 tracking-tight">
               Quick<span className="text-[#335438]">Bite</span>
             </span>
           </Link>
@@ -106,7 +106,7 @@ export function Header() {
           {/* Static Cart Button */}
           <button className="relative p-2 text-zinc-700 hover:text-[#335438] transition cursor-pointer select-none focus:outline-none">
             <ShoppingBag className="h-5.5 w-5.5 stroke-[2]" />
-            <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#335438] text-[9px] font-black text-white">
+            <span className="absolute top-1 right-1 flex h-4 w-4 items-center justify-center rounded-full bg-[#335438] text-[9px] font-bold text-white">
               2
             </span>
           </button>
@@ -126,7 +126,7 @@ export function Header() {
               >
                 Logout
               </button>
-              <div className="h-8.5 w-8.5 rounded-full bg-[#F2F3E9] flex items-center justify-center font-black text-[#335438] text-xs border border-[#335438]/5 select-none shadow-sm shadow-zinc-200/50">
+              <div className="h-8.5 w-8.5 rounded-full bg-[#F2F3E9] flex items-center justify-center font-bold text-[#335438] text-xs border border-[#335438]/5 select-none shadow-sm shadow-zinc-200/50">
                 {profile.name ? profile.name.slice(0, 2).toUpperCase() : 'U'}
               </div>
             </div>

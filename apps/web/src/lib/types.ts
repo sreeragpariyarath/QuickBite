@@ -30,6 +30,14 @@ export interface Restaurant {
   city: string;
   imageUrl: string | null;
   isActive: boolean;
+  cuisines: string[];
+}
+
+export interface GlobalCategory {
+  id: string;
+  name: string;
+  imageUrl: string | null;
+  isActive: boolean;
 }
 
 export interface RestaurantDetail extends Restaurant {

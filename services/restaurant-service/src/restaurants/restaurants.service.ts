@@ -3,6 +3,7 @@ import {
   ForbiddenException,
   Injectable,
   NotFoundException,
+  OnModuleInit,
 } from '@nestjs/common';
 import { PrismaService } from '../prisma/prisma.service';
 import { CreateRestaurantDto } from './dto/create-restaurant.dto';
@@ -12,7 +13,7 @@ import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
 
 @Injectable()
-export class RestaurantsService {
+export class RestaurantsService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
 
   // ---------- Restaurants ----------
@@ -27,11 +28,12 @@ export class RestaurantsService {
     }
   }
 
-  findAll(city?: string) {
+  findAll(city?: string, cuisine?: string) {
     return this.prisma.restaurant.findMany({
       where: {
         isActive: true,
         ...(city ? { city: { equals: city, mode: 'insensitive' } } : {}),
+        ...(cuisine ? { cuisines: { has: cuisine } } : {}),
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -185,6 +187,84 @@ export class RestaurantsService {
 
     if (!item || item.restaurantId !== restaurantId) {
       throw new NotFoundException('Menu item not found in this restaurant');
+    }
+  }
+
+  async onModuleInit() {
+    await this.seed();
+  }
+
+  async seed() {
+    try {
+      const count = await this.prisma.restaurant.count();
+      if (count > 0) return;
+
+      const ownerId = '00000000-0000-0000-0000-000000000000';
+      const defaults = [
+        {
+          name: 'The Burger Co.',
+          description: 'Delicious premium burgers and sides',
+          address: '123 Main St, Koramangala',
+          city: 'Koramangala',
+          imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=400',
+          cuisines: ['Burgers', 'American'],
+          ownerId,
+        },
+        {
+          name: 'Pizza House',
+          description: 'Wood-fired oven pizzas and pastas',
+          address: '456 Ring Rd, Koramangala',
+          city: 'Koramangala',
+          imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400',
+          cuisines: ['Pizza', 'Italian'],
+          ownerId,
+        },
+        {
+          name: 'Wok Express',
+          description: 'Indo-Chinese street food stir-frys',
+          address: '789 Double Rd, Koramangala',
+          city: 'Koramangala',
+          imageUrl: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=400',
+          cuisines: ['Chinese', 'Asian'],
+          ownerId,
+        },
+        {
+          name: 'Sweet Truth',
+          description: 'Decadent chocolates and layer cakes',
+          address: '101 Baker St, Koramangala',
+          city: 'Koramangala',
+          imageUrl: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400',
+          cuisines: ['Desserts', 'Bakery'],
+          ownerId,
+        },
+        {
+          name: 'Andhra Ruchulu',
+          description: 'Spicy traditional Andhra thalis',
+          address: '202 Andhra Ln, Koramangala',
+          city: 'Koramangala',
+          imageUrl: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=400',
+          cuisines: ['Indian'],
+          ownerId,
+        },
+        {
+          name: 'Burger King',
+          description: 'Flame-grilled burgers and hot fries',
+          address: '303 Mall St, Koramangala',
+          city: 'Koramangala',
+          imageUrl: 'https://images.unsplash.com/photo-1534790566855-4cb788d389ec?q=80&w=400',
+          cuisines: ['Burgers', 'Fast Food'],
+          ownerId,
+        },
+      ];
+
+      for (const item of defaults) {
+        await this.prisma.restaurant.create({
+          data: item,
+        });
+      }
+      console.log('✅ Restaurants successfully seeded!');
+    } catch (err) {
+      console.error('Failed to seed restaurants:', err);
     }
   }
 }

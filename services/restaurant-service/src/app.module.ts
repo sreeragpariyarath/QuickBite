@@ -4,6 +4,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { PrismaModule } from './prisma/prisma.module';
 import { RestaurantsModule } from './restaurants/restaurants.module';
+import { GlobalCategoryModule } from './global-category/global-category.module';
 
 @Module({
   imports: [
@@ -13,6 +14,7 @@ import { RestaurantsModule } from './restaurants/restaurants.module';
     }),
     PrismaModule,
     RestaurantsModule,
+    GlobalCategoryModule,
   ],
   controllers: [AppController],
   providers: [AppService],

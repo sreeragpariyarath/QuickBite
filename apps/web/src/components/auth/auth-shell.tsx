@@ -1,10 +1,10 @@
-'use client';
+"use client";
 
-import Image from 'next/image';
-import Link from 'next/link';
-import { motion } from 'framer-motion';
-import { Lock, ShieldCheck, Headphones, Zap, ArrowLeft } from 'lucide-react';
-import { FEATURES, STATS } from './auth.constants';
+import Image from "next/image";
+import Link from "next/link";
+import { motion } from "framer-motion";
+import { Lock, ShieldCheck, Headphones, Zap, ArrowLeft } from "lucide-react";
+import { FEATURES, STATS } from "./auth.constants";
 
 const fadeUp = (delay: number) => ({
   initial: { opacity: 0, y: 24 },
@@ -43,16 +43,16 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           className="flex items-center justify-between w-full relative"
         >
           {/* Back arrow on left for mobile */}
-          <Link href="/" className="lg:hidden text-zinc-800 hover:text-zinc-900 z-10">
+          <Link
+            href="/"
+            className="lg:hidden text-zinc-800 hover:text-zinc-900 z-10"
+          >
             <ArrowLeft className="h-6 w-6" />
           </Link>
 
           {/* Logo (Visible on desktop, hidden on mobile header) */}
-          <Link
-            href="/"
-            className="hidden lg:flex items-center gap-2"
-          >
-            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#335438] font-black text-white">
+          <Link href="/" className="hidden lg:flex items-center gap-2">
+            <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-[#335438] font-bold text-white">
               QB
             </span>
             <span className="text-xl font-bold">
@@ -80,14 +80,14 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             <div className="mx-auto w-full max-w-md bg-transparent lg:bg-white px-4 lg:px-8 py-2 lg:py-8 border-none lg:border lg:border-zinc-100 shadow-none lg:shadow-2xl lg:shadow-zinc-200/50 rounded-none lg:rounded-2xl text-zinc-900">
               {/* Centered brand logo at the top inside body container on mobile */}
               <div className="flex flex-col items-center mb-6 lg:hidden select-none">
-                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#335438] font-black text-xl text-white shadow-md shadow-zinc-200/50">
+                <span className="flex h-12 w-12 items-center justify-center rounded-2xl bg-[#335438] font-bold text-xl text-white shadow-md shadow-zinc-200/50">
                   QB
                 </span>
-                <span className="text-2xl font-black text-zinc-950 mt-2">
+                <span className="text-2xl font-bold text-zinc-950 mt-2">
                   Quick<span className="text-[#335438]">Bite</span>
                 </span>
               </div>
-              
+
               {children}
             </div>
           </motion.div>
@@ -105,24 +105,34 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
             </motion.div>
             <motion.h1
               {...fadeUp(0.2)}
-              className="text-4xl font-black leading-tight sm:text-5xl text-zinc-900"
+              className="text-4xl font-bold leading-tight sm:text-5xl text-zinc-900"
             >
-              Good food,{' '}
-              <span className="text-[#5b8c66]">delivered</span> to your door.
+              Good food, <span className="text-[#5b8c66]">delivered</span> to
+              your door.
             </motion.h1>
             <motion.p {...fadeUp(0.3)} className="mt-4 max-w-md text-zinc-500">
               Order from top restaurants near you and enjoy fresh meals, fast.
             </motion.p>
 
             {/* Horizontal row of 3 feature boxes */}
-            <motion.ul {...fadeUp(0.4)} className="mt-10 grid grid-cols-3 gap-4">
+            <motion.ul
+              {...fadeUp(0.4)}
+              className="mt-10 grid grid-cols-3 gap-4"
+            >
               {FEATURES.map((f) => (
-                <li key={f.title} className="flex flex-col items-center text-center">
+                <li
+                  key={f.title}
+                  className="flex flex-col items-center text-center"
+                >
                   <span className="flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438] mb-3">
                     {f.icon}
                   </span>
-                  <p className="font-bold text-xs text-zinc-800 leading-snug">{f.title}</p>
-                  <p className="text-[10px] text-zinc-500 mt-1 leading-normal">{f.text}</p>
+                  <p className="font-bold text-xs text-zinc-800 leading-snug">
+                    {f.title}
+                  </p>
+                  <p className="text-[10px] text-zinc-500 mt-1 leading-normal">
+                    {f.text}
+                  </p>
                 </li>
               ))}
             </motion.ul>
@@ -137,9 +147,7 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
                   {idx > 0 && (
                     <div className="absolute left-0 top-1/2 -translate-y-1/2 h-8 w-[1px] bg-zinc-200" />
                   )}
-                  <p className="text-xl font-black text-zinc-900">
-                    {s.value}
-                  </p>
+                  <p className="text-xl font-bold text-zinc-900">{s.value}</p>
                   <p className="text-[10px] text-zinc-500 mt-1">{s.label}</p>
                 </div>
               ))}
@@ -152,9 +160,16 @@ export function AuthShell({ children }: { children: React.ReactNode }) {
           className="flex flex-wrap items-center justify-between border-t border-zinc-200/60 pt-4 text-xs text-zinc-400"
         >
           <div className="flex gap-4">
-            <span className="flex items-center gap-1.5"><Lock className="h-3.5 w-3.5 stroke-[2.5]" /> 100% Secure payments</span>
-            <span className="flex items-center gap-1.5"><ShieldCheck className="h-3.5 w-3.5 stroke-[2.5]" /> Privacy protected</span>
-            <span className="flex items-center gap-1.5"><Headphones className="h-3.5 w-3.5 stroke-[2.5]" /> 24/7 Support</span>
+            <span className="flex items-center gap-1.5">
+              <Lock className="h-3.5 w-3.5 stroke-[2.5]" /> 100% Secure payments
+            </span>
+            <span className="flex items-center gap-1.5">
+              <ShieldCheck className="h-3.5 w-3.5 stroke-[2.5]" /> Privacy
+              protected
+            </span>
+            <span className="flex items-center gap-1.5">
+              <Headphones className="h-3.5 w-3.5 stroke-[2.5]" /> 24/7 Support
+            </span>
           </div>
           <span>© {new Date().getFullYear()} QuickBite</span>
         </motion.footer>

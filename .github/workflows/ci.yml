@@ -83,28 +83,3 @@ jobs:
       - name: Type Check & Build
         working-directory: apps/web
         run: pnpm build
-
-  # 3. Deploy to Self-Hosted Windows Runner
-  deploy:
-    name: Deploy to Self-Hosted Runner
-    runs-on: self-hosted
-    needs:
-      - backend
-      - frontend
-
-    steps:
-      - name: Checkout Repository
-        uses: actions/checkout@v4
-
-      - name: Show Runner Information
-        shell: powershell
-        run: |
-          Write-Host "Hello from my self-hosted runner!"
-          hostname
-          whoami
-          Get-Location
-
-      - name: List Repository Files
-        shell: powershell
-        run: |
-          Get-ChildItem

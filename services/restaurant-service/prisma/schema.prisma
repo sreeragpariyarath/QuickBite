@@ -22,6 +22,7 @@ model Restaurant {
 
   categories Category[]
   menuItems  MenuItem[]
+  cuisines   String[]   @default([])
 
   // Names are not globally unique (real cities have same-name restaurants;
   // same owner may run branches at different addresses) — but the same owner
@@ -61,4 +62,15 @@ model MenuItem {
   updatedAt DateTime @updatedAt
 
   @@map("menu_items")
+}
+
+model GlobalCategory {
+  id        String   @id @default(uuid()) @db.Uuid
+  name      String   @unique
+  imageUrl  String?
+  isActive  Boolean  @default(true)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("global_categories")
 }
