@@ -239,8 +239,11 @@ export function Hero({
               <h3 className="text-lg md:text-xl font-bold text-[#2B4E32] tracking-tight">Flat 50% OFF</h3>
               <p className="text-xs font-semibold text-[#5C7E63]">On your first order</p>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-xl text-[10px] font-bold text-zinc-500 shadow-3xs select-all">
-              Use code: <span className="text-[#2B4E32] font-extrabold tracking-wide">QUICK50</span>
+            <div className="flex items-center gap-2 text-[11px] font-semibold text-[#5C7E63]">
+              <span>Use code:</span>
+              <span className="bg-white px-3 py-1.5 rounded-xl shadow-2xs text-[10px] font-bold text-[#2B4E32] tracking-wider select-all">
+                QUICK50
+              </span>
             </div>
           </div>
           
