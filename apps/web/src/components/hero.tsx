@@ -222,6 +222,59 @@ export function Hero({
           className="sm:border-l border-zinc-200/60 sm:pl-6"
         />
       </div>
+
+      {/* Promo & Offer Banners */}
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 select-none">
+        
+        {/* Banner 1: Flat 50% OFF */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#EBF2ED] to-[#F4FAF6] border border-[#335438]/10 rounded-3xl p-6 flex justify-between items-center group shadow-2xs hover:shadow-xs transition duration-300">
+          <div className="space-y-3.5 z-10">
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold text-[#335438] tracking-tight">Flat 50% OFF</h3>
+              <p className="text-xs font-medium text-zinc-600">On your first order</p>
+            </div>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-150 rounded-xl text-[10px] font-bold text-zinc-500 shadow-3xs">
+              Use code: <span className="text-[#335438] font-bold bg-[#335438]/5 px-2 py-0.5 rounded-md">QUICK50</span>
+            </div>
+          </div>
+          {/* Decorative Sparkles & Bowl Image */}
+          <div className="absolute right-4 bottom-0 w-32 h-32 md:w-36 md:h-36 flex items-center justify-center shrink-0">
+            {/* Sparkles */}
+            <span className="absolute left-0 top-8 text-[9px] text-[#335438] animate-pulse">✦</span>
+            <span className="absolute right-12 bottom-4 text-[9px] text-[#335438]">✦</span>
+            <img 
+              src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=250" 
+              alt="Promo Salad Bowl" 
+              className="w-22 h-22 md:w-26 md:h-26 object-cover rounded-full shadow-sm border-3 border-white/80 transform rotate-12 group-hover:rotate-45 transition-transform duration-700"
+            />
+          </div>
+        </div>
+
+        {/* Banner 2: Free Delivery */}
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#FAF5EC] to-[#FFFBF2] border border-[#d97706]/10 rounded-3xl p-6 flex justify-between items-center group shadow-2xs hover:shadow-xs transition duration-300">
+          <div className="space-y-3.5 z-10">
+            <div className="space-y-1">
+              <h3 className="text-xl font-bold text-zinc-800 tracking-tight">Free Delivery</h3>
+              <p className="text-xs font-medium text-zinc-600">On orders above ₹199</p>
+            </div>
+            <p className="text-[10px] font-bold text-amber-800 bg-amber-50/50 border border-amber-100/60 px-3 py-1 rounded-xl w-fit">
+              No Coupon Required
+            </p>
+          </div>
+          {/* Decorative Sparkles & Scooter Image */}
+          <div className="absolute right-2 bottom-2 w-32 h-24 md:w-36 md:h-28 flex items-center justify-end shrink-0">
+            {/* Sparkles */}
+            <span className="absolute left-6 top-1 text-[9px] text-amber-500 animate-pulse">✦</span>
+            <span className="absolute right-2 top-8 text-[9px] text-amber-500/40">✦</span>
+            <img 
+              src="https://images.unsplash.com/photo-1562920841-02824487651d?q=80&w=250" 
+              alt="Free Delivery Scooter" 
+              className="w-24 h-20 md:w-28 md:h-24 object-contain group-hover:translate-x-1 transition-transform duration-500"
+            />
+          </div>
+        </div>
+
+      </div>
     </section>
   );
 }
