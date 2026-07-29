@@ -1,66 +1,17 @@
 'use client';
 
 import { useState } from 'react';
-import { Pizza, CupSoda, Cake, Salad, CookingPot, Utensils, LayoutGrid, Flame, X, Zap, Award, ShieldCheck, Bike } from 'lucide-react';
+import { LayoutGrid, X, Zap, Award, ShieldCheck, Bike } from 'lucide-react';
 import type { GlobalCategory } from '@/lib/types';
-
-const SparkleSVG = ({ className = '' }: { className?: string }) => (
-  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
-    <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" />
-  </svg>
-);
+import { BenefitCard } from './benefit-card';
+import { SparkleSVG } from './sparkle-svg';
+import { getCategoryIcon } from './category-icons';
 
 interface HeroProps {
   categories: GlobalCategory[];
   selectedCategory: string | null;
   onSelectCategory: (categoryName: string | null) => void;
   onOrderNowClick: () => void;
-}
-
-export function getCategoryIcon(name: string) {
-  switch (name.toLowerCase()) {
-    case 'burgers':
-      return (
-        <svg className="w-8 h-8 text-[#335438]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-          <path d="M3 11c0-3.3 2.7-6 6-6h6c3.3 0 6 2.7 6 6M3 11h18M3 11v2c0 2.2 1.8 4 4 4h10c2.2 0 4-1.8 4-4v-2M5 17h14c0 1.7-1.3 3-3 3H8c-1.7 0-3-1.3-3-3" strokeLinecap="round" strokeLinejoin="round"/>
-        </svg>
-      );
-    case 'pizza':
-      return <Pizza className="w-8 h-8 text-[#335438]" />;
-    case 'beverages':
-      return <CupSoda className="w-8 h-8 text-[#335438]" />;
-    case 'desserts':
-      return <Cake className="w-8 h-8 text-[#335438]" />;
-    case 'indian':
-      return <CookingPot className="w-8 h-8 text-[#335438]" />;
-    case 'healthy':
-      return <Salad className="w-8 h-8 text-[#335438]" />;
-    case 'street food':
-      return <Flame className="w-8 h-8 text-[#335438]" />;
-    default:
-      return <Utensils className="w-8 h-8 text-[#335438]" />;
-  }
-}
-
-interface BenefitCardProps {
-  icon: React.ReactNode;
-  title: string;
-  description: string;
-  className?: string;
-}
-
-function BenefitCard({ icon, title, description, className = '' }: BenefitCardProps) {
-  return (
-    <div className={`flex items-center gap-3.5 ${className}`}>
-      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#335438]/5">
-        {icon}
-      </div>
-      <div>
-        <h4 className="text-xs font-bold text-zinc-900 tracking-tight">{title}</h4>
-        <p className="text-[10px] font-medium text-zinc-500 mt-0.5">{description}</p>
-      </div>
-    </div>
-  );
 }
 
 export function Hero({
