@@ -36,6 +36,27 @@ export function getCategoryIcon(name: string) {
   }
 }
 
+interface BenefitCardProps {
+  icon: React.ReactNode;
+  title: string;
+  description: string;
+  className?: string;
+}
+
+function BenefitCard({ icon, title, description, className = '' }: BenefitCardProps) {
+  return (
+    <div className={`flex items-center gap-3.5 ${className}`}>
+      <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#335438]/5">
+        {icon}
+      </div>
+      <div>
+        <h4 className="text-xs font-bold text-zinc-900 tracking-tight">{title}</h4>
+        <p className="text-[10px] font-medium text-zinc-500 mt-0.5">{description}</p>
+      </div>
+    </div>
+  );
+}
+
 export function Hero({
   categories,
   selectedCategory,
@@ -177,51 +198,29 @@ export function Hero({
 
       {/* Trust Benefits Bar */}
       <div className="mt-10 bg-white border border-zinc-200/50 rounded-3xl p-5 shadow-xs grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 select-none">
-        
-        {/* Card 1: Fast Delivery */}
-        <div className="flex items-center gap-3.5">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#335438]/5">
-            <Zap className="h-4.5 w-4.5 text-[#335438]" />
-          </div>
-          <div>
-            <h4 className="text-xs font-bold text-zinc-900 tracking-tight">Fast Delivery</h4>
-            <p className="text-[10px] font-medium text-zinc-500 mt-0.5">On-time, every time</p>
-          </div>
-        </div>
-
-        {/* Card 2: Top Restaurants */}
-        <div className="flex items-center gap-3.5 sm:border-l border-zinc-200/60 sm:pl-6">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#335438]/5">
-            <Award className="h-4.5 w-4.5 text-[#335438]" />
-          </div>
-          <div>
-            <h4 className="text-xs font-bold text-zinc-900 tracking-tight">Top Restaurants</h4>
-            <p className="text-[10px] font-medium text-zinc-500 mt-0.5">Handpicked for you</p>
-          </div>
-        </div>
-
-        {/* Card 3: Safe & Secure */}
-        <div className="flex items-center gap-3.5 lg:border-l border-zinc-200/60 lg:pl-6">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#335438]/5">
-            <ShieldCheck className="h-4.5 w-4.5 text-[#335438]" />
-          </div>
-          <div>
-            <h4 className="text-xs font-bold text-zinc-900 tracking-tight">Safe & Secure</h4>
-            <p className="text-[10px] font-medium text-zinc-500 mt-0.5">Your data is protected</p>
-          </div>
-        </div>
-
-        {/* Card 4: Live Tracking */}
-        <div className="flex items-center gap-3.5 sm:border-l border-zinc-200/60 sm:pl-6">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-[#335438]/5">
-            <Bike className="h-4.5 w-4.5 text-[#335438]" />
-          </div>
-          <div>
-            <h4 className="text-xs font-bold text-zinc-900 tracking-tight">Live Tracking</h4>
-            <p className="text-[10px] font-medium text-zinc-500 mt-0.5">Track your order real-time</p>
-          </div>
-        </div>
-
+        <BenefitCard
+          icon={<Zap className="h-4.5 w-4.5 text-[#335438]" />}
+          title="Fast Delivery"
+          description="On-time, every time"
+        />
+        <BenefitCard
+          icon={<Award className="h-4.5 w-4.5 text-[#335438]" />}
+          title="Top Restaurants"
+          description="Handpicked for you"
+          className="sm:border-l border-zinc-200/60 sm:pl-6"
+        />
+        <BenefitCard
+          icon={<ShieldCheck className="h-4.5 w-4.5 text-[#335438]" />}
+          title="Safe & Secure"
+          description="Your data is protected"
+          className="lg:border-l border-zinc-200/60 lg:pl-6"
+        />
+        <BenefitCard
+          icon={<Bike className="h-4.5 w-4.5 text-[#335438]" />}
+          title="Live Tracking"
+          description="Track your order real-time"
+          className="sm:border-l border-zinc-200/60 sm:pl-6"
+        />
       </div>
     </section>
   );
