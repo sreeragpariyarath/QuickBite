@@ -4,6 +4,12 @@ import { useState } from 'react';
 import { Pizza, CupSoda, Cake, Salad, CookingPot, Utensils, LayoutGrid, Flame, X, Zap, Award, ShieldCheck, Bike } from 'lucide-react';
 import type { GlobalCategory } from '@/lib/types';
 
+const SparkleSVG = ({ className = '' }: { className?: string }) => (
+  <svg className={className} viewBox="0 0 24 24" fill="currentColor">
+    <path d="M12 0L14.6 9.4L24 12L14.6 14.6L12 24L9.4 14.6L0 12L9.4 9.4L12 0Z" />
+  </svg>
+);
+
 interface HeroProps {
   categories: GlobalCategory[];
   selectedCategory: string | null;
@@ -227,51 +233,52 @@ export function Hero({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 select-none">
         
         {/* Banner 1: Flat 50% OFF */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#EBF2ED] to-[#F4FAF6] border border-[#335438]/10 rounded-3xl p-6 flex justify-between items-center group shadow-2xs hover:shadow-xs transition duration-300">
-          <div className="space-y-3.5 z-10">
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-[#335438] tracking-tight">Flat 50% OFF</h3>
-              <p className="text-xs font-medium text-zinc-600">On your first order</p>
+        <div className="relative overflow-hidden bg-[#EEF4F0] border border-[#335438]/5 rounded-3xl p-6 md:p-7 flex justify-between items-center group shadow-2xs hover:shadow-xs transition duration-300 min-h-[140px]">
+          <div className="space-y-4.5 z-10">
+            <div className="space-y-0.5">
+              <h3 className="text-lg md:text-xl font-bold text-[#2B4E32] tracking-tight">Flat 50% OFF</h3>
+              <p className="text-xs font-semibold text-[#5C7E63]">On your first order</p>
             </div>
-            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-150 rounded-xl text-[10px] font-bold text-zinc-500 shadow-3xs">
-              Use code: <span className="text-[#335438] font-bold bg-[#335438]/5 px-2 py-0.5 rounded-md">QUICK50</span>
+            <div className="inline-flex items-center gap-1.5 px-3 py-1.5 bg-white rounded-xl text-[10px] font-bold text-zinc-500 shadow-3xs select-all">
+              Use code: <span className="text-[#2B4E32] font-extrabold tracking-wide">QUICK50</span>
             </div>
           </div>
-          {/* Decorative Sparkles & Bowl Image */}
-          <div className="absolute right-4 bottom-0 w-32 h-32 md:w-36 md:h-36 flex items-center justify-center shrink-0">
-            {/* Sparkles */}
-            <span className="absolute left-0 top-8 text-[9px] text-[#335438] animate-pulse">✦</span>
-            <span className="absolute right-12 bottom-4 text-[9px] text-[#335438]">✦</span>
+          
+          {/* Overlapping Salad Plate */}
+          <div className="absolute right-[-12%] top-1/2 -translate-y-1/2 h-[125%] aspect-square rounded-full bg-white shadow-md flex items-center justify-center p-2 z-0">
             <img 
               src="https://images.unsplash.com/photo-1546069901-ba9599a7e63c?q=80&w=250" 
-              alt="Promo Salad Bowl" 
-              className="w-22 h-22 md:w-26 md:h-26 object-cover rounded-full shadow-sm border-3 border-white/80 transform rotate-12 group-hover:rotate-45 transition-transform duration-700"
+              alt="Flat 50% OFF Salad Bowl" 
+              className="w-full h-full object-cover rounded-full transform rotate-12 group-hover:rotate-45 transition-transform duration-700"
             />
           </div>
+
+          {/* Green Sparkles */}
+          <SparkleSVG className="absolute right-[43%] top-5 w-3 h-3 text-[#2B4E32]/75 animate-pulse" />
+          <SparkleSVG className="absolute right-[45%] bottom-8 w-2.5 h-2.5 text-[#2B4E32]/50" />
+          <SparkleSVG className="absolute right-[33%] top-14 w-2 h-2 text-[#2B4E32]/35" />
         </div>
 
         {/* Banner 2: Free Delivery */}
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#FAF5EC] to-[#FFFBF2] border border-[#d97706]/10 rounded-3xl p-6 flex justify-between items-center group shadow-2xs hover:shadow-xs transition duration-300">
-          <div className="space-y-3.5 z-10">
-            <div className="space-y-1">
-              <h3 className="text-xl font-bold text-zinc-800 tracking-tight">Free Delivery</h3>
-              <p className="text-xs font-medium text-zinc-600">On orders above ₹199</p>
-            </div>
-            <p className="text-[10px] font-bold text-amber-800 bg-amber-50/50 border border-amber-100/60 px-3 py-1 rounded-xl w-fit">
-              No Coupon Required
-            </p>
+        <div className="relative overflow-hidden bg-[#FAF5EC] border border-amber-900/5 rounded-3xl p-6 md:p-7 flex justify-between items-center group shadow-2xs hover:shadow-xs transition duration-300 min-h-[140px]">
+          <div className="space-y-1 z-10">
+            <h3 className="text-lg md:text-xl font-bold text-zinc-800 tracking-tight">Free Delivery</h3>
+            <p className="text-xs font-semibold text-zinc-500">On orders above ₹199</p>
           </div>
-          {/* Decorative Sparkles & Scooter Image */}
-          <div className="absolute right-2 bottom-2 w-32 h-24 md:w-36 md:h-28 flex items-center justify-end shrink-0">
-            {/* Sparkles */}
-            <span className="absolute left-6 top-1 text-[9px] text-amber-500 animate-pulse">✦</span>
-            <span className="absolute right-2 top-8 text-[9px] text-amber-500/40">✦</span>
+          
+          {/* Delivery Scooter Illustration */}
+          <div className="absolute right-3 bottom-0 w-32 h-[85%] md:w-36 flex items-end justify-end z-0">
             <img 
               src="https://images.unsplash.com/photo-1562920841-02824487651d?q=80&w=250" 
               alt="Free Delivery Scooter" 
-              className="w-24 h-20 md:w-28 md:h-24 object-contain group-hover:translate-x-1 transition-transform duration-500"
+              className="w-24 h-20 md:w-28 md:h-24 object-contain group-hover:translate-x-2 transition-transform duration-500 filter drop-shadow-sm"
             />
           </div>
+
+          {/* Yellow/Gold Sparkles */}
+          <SparkleSVG className="absolute right-[36%] top-6 w-3 h-3 text-amber-500 animate-pulse" />
+          <SparkleSVG className="absolute right-[40%] bottom-10 w-2.5 h-2.5 text-amber-500/50" />
+          <SparkleSVG className="absolute right-[30%] bottom-5 w-2 h-2 text-amber-500/30" />
         </div>
 
       </div>
