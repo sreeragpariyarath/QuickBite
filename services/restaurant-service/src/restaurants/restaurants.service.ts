@@ -28,10 +28,10 @@ export class RestaurantsService implements OnModuleInit {
     }
   }
 
-  findAll(city?: string, cuisine?: string) {
+  findAll(city?: string, cuisine?: string, ownerId?: string) {
     return this.prisma.restaurant.findMany({
       where: {
-        isActive: true,
+        ...(ownerId ? { ownerId } : { isActive: true }),
         ...(city ? { city: { equals: city, mode: 'insensitive' } } : {}),
         ...(cuisine ? { cuisines: { has: cuisine } } : {}),
       },

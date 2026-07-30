@@ -13,8 +13,8 @@ import type { Profile } from './types';
 interface AuthContextValue {
   profile: Profile | null;
   loading: boolean;
-  loginWithTokens: (accessToken: string, refreshToken: string) => Promise<void>;
-  refreshProfile: () => Promise<void>;
+  loginWithTokens: (accessToken: string, refreshToken: string) => Promise<Profile | null>;
+  refreshProfile: () => Promise<Profile | null>;
   logout: () => void;
 }
 
@@ -24,16 +24,19 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
 
-  const refreshProfile = useCallback(async () => {
+  const refreshProfile = useCallback(async (): Promise<Profile | null> => {
     if (!getAccessToken()) {
       setProfile(null);
-      return;
+      return null;
     }
     try {
-      setProfile(await api<Profile>(AUTH_URL, '/auth/me', { auth: true }));
+      const data = await api<Profile>(AUTH_URL, '/auth/me', { auth: true });
+      setProfile(data);
+      return data;
     } catch {
       clearTokens();
       setProfile(null);
+      return null;
     }
   }, []);
 
@@ -42,9 +45,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [refreshProfile]);
 
   const loginWithTokens = useCallback(
-    async (accessToken: string, refreshToken: string) => {
+    async (accessToken: string, refreshToken: string): Promise<Profile | null> => {
       storeTokens(accessToken, refreshToken);
-      await refreshProfile();
+      return await refreshProfile();
     },
     [refreshProfile],
   );

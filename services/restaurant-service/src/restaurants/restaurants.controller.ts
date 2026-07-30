@@ -66,8 +66,9 @@ export class RestaurantsController {
   findAll(
     @Query('city') city?: string,
     @Query('cuisine') cuisine?: string,
+    @Query('ownerId') ownerId?: string,
   ) {
-    return this.restaurantsService.findAll(city, cuisine);
+    return this.restaurantsService.findAll(city, cuisine, ownerId);
   }
 
   @Get(':id')
