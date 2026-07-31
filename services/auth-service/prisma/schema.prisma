@@ -10,6 +10,11 @@ datasource db {
 enum UserRole {
   CUSTOMER
   OWNER
+  SUPER_ADMIN
+  MANAGER
+  CASHIER
+  KITCHEN_STAFF
+  DRIVER
 }
 
 model User {

@@ -2,6 +2,8 @@ import { Injectable, ServiceUnavailableException, OnModuleInit } from '@nestjs/c
 import { PrismaService } from './prisma/prisma.service';
 import * as bcrypt from 'bcryptjs';
 
+import { UserRole } from '@prisma-app/client';
+
 @Injectable()
 export class AppService implements OnModuleInit {
   constructor(private readonly prisma: PrismaService) {}
@@ -26,12 +28,18 @@ export class AppService implements OnModuleInit {
             id: adminId,
             email: adminEmail,
             password: hashedPassword,
-            role: 'OWNER',
+            role: UserRole.SUPER_ADMIN,
             isEmailVerified: true,
             name: 'Super Admin',
           },
         });
-        console.log('✅ Super Admin/Owner successfully seeded!');
+        console.log('✅ Super Admin successfully seeded!');
+      } else if (existing.role !== UserRole.SUPER_ADMIN) {
+        await this.prisma.user.update({
+          where: { email: adminEmail },
+          data: { role: UserRole.SUPER_ADMIN },
+        });
+        console.log('✅ Updated existing admin user role to SUPER_ADMIN!');
       }
     } catch (err) {
       console.error('❌ Failed to seed Super Admin:', err);

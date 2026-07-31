@@ -7,9 +7,11 @@ import {
 import { JwtService } from '@nestjs/jwt';
 import { Request } from 'express';
 
+import { UserRoleType } from './roles.decorator';
+
 export interface JwtPayload {
   sub: string;
-  role: 'CUSTOMER' | 'OWNER';
+  role: UserRoleType;
 }
 
 @Injectable()
