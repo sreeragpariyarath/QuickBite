@@ -2,13 +2,14 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
-import { ShieldCheck, Mail, Lock, ArrowRight, AlertCircle, Store, Clock, TrendingUp, Sparkles } from 'lucide-react';
+import { Mail, Lock, AlertCircle, Eye, EyeOff } from 'lucide-react';
 import { AUTH_SERVICE_URL, setAuthToken } from '@/lib/api';
 
 export default function AdminLoginPage() {
   const router = useRouter();
   const [email, setEmail] = useState('admin@quickbite.com');
   const [password, setPassword] = useState('admin123');
+  const [showPassword, setShowPassword] = useState(false);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState('');
 
@@ -49,187 +50,123 @@ export default function AdminLoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#07090e] grid grid-cols-1 lg:grid-cols-12 overflow-hidden select-none">
+    <div className="min-h-screen bg-[#03060a] flex items-center justify-center p-4 relative overflow-hidden select-none font-sans">
       
-      {/* LEFT COLUMN: Features Panel (Hidden on Mobile/Tablet) */}
-      <div className="hidden lg:flex lg:col-span-5 relative bg-[#090d16] border-r border-zinc-900/60 p-12 flex-col justify-between overflow-hidden">
-        {/* Animated Accent Gradients */}
-        <div className="absolute -top-40 -left-40 w-96 h-96 bg-emerald-500/10 rounded-full blur-3xl pointer-events-none animate-pulse duration-[8s]" />
-        <div className="absolute -bottom-40 right-0 w-80 h-80 bg-emerald-700/5 rounded-full blur-3xl pointer-events-none" />
+      {/* Background Accent Blue/Violet Glows */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[700px] h-[700px] bg-blue-600/[0.05] rounded-full blur-[120px] pointer-events-none" />
+      <div className="absolute -bottom-20 -left-20 w-[450px] h-[450px] bg-blue-800/[0.03] rounded-full blur-[90px] pointer-events-none" />
 
-        {/* Food Table Spread Background Overlay */}
-        <div className="absolute inset-0 z-0 opacity-15 mix-blend-luminosity grayscale pointer-events-none select-none scale-105 hover:scale-100 transition-transform duration-[12s]">
-          <img 
-            src="https://images.unsplash.com/photo-1504674900247-0877df9cc836?q=80&w=1000" 
-            alt="Gourmet Background Spread" 
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        {/* Portal Branding / Logo */}
-        <div className="z-10 flex items-center gap-2.5">
-          <div className="w-10 h-10 rounded-xl bg-gradient-to-tr from-emerald-600 to-emerald-500 flex items-center justify-center shadow-lg shadow-emerald-900/25">
-            <span className="font-heading font-black text-white text-lg tracking-tight">Q</span>
-          </div>
-          <div>
-            <span className="font-heading font-bold text-sm tracking-wide uppercase text-zinc-300">QuickBite</span>
-            <span className="block text-[10px] font-bold text-emerald-500 uppercase tracking-widest leading-none mt-0.5">Control Center</span>
-          </div>
-        </div>
-
-        {/* Value Propositions / Highlighting features */}
-        <div className="z-10 space-y-8 my-auto max-w-sm">
-          <div className="space-y-3">
-            <div className="inline-flex items-center gap-1.5 px-3 py-1 bg-emerald-500/10 border border-emerald-500/25 rounded-full text-[10px] font-bold text-emerald-400 tracking-wider uppercase">
-              <Sparkles className="w-3 h-3 animate-spin duration-[4s]" />
-              Partner Interface
-            </div>
-            <h2 className="text-3xl font-heading font-bold text-white tracking-tight leading-tight">
-              Manage your food business in <span className="text-emerald-500">real-time</span>.
-            </h2>
-          </div>
-
-          <div className="space-y-6 pt-2">
-            
-            {/* Feature 1 */}
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-zinc-900/80 border border-zinc-800/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-2xs">
-                <Clock className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-zinc-100 uppercase tracking-wider">Live Order Flow</h4>
-                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Accept, reject, prepare, and track delivery stages dynamically.</p>
-              </div>
-            </div>
-
-            {/* Feature 2 */}
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-zinc-900/80 border border-zinc-800/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-2xs">
-                <Store className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-zinc-100 uppercase tracking-wider">Store Catalog Control</h4>
-                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Instantly add dishes, categories, and toggle item ordering availability.</p>
-              </div>
-            </div>
-
-            {/* Feature 3 */}
-            <div className="flex gap-4">
-              <div className="w-10 h-10 rounded-xl bg-zinc-900/80 border border-zinc-800/40 flex items-center justify-center text-emerald-400 shrink-0 shadow-2xs">
-                <TrendingUp className="w-5 h-5" />
-              </div>
-              <div>
-                <h4 className="text-xs font-bold text-zinc-100 uppercase tracking-wider">Performance Metrics</h4>
-                <p className="text-xs text-zinc-400 mt-1 leading-relaxed">Gain immediate insights into branch statistics and delivery performance.</p>
-              </div>
-            </div>
-
-          </div>
-        </div>
-
-        {/* Portal Footer info */}
-        <div className="z-10">
-          <p className="text-[11px] font-medium text-zinc-500">
-            Enterprise Operations Management System · v2.1.0
+      {/* Card Container */}
+      <div className="w-full max-w-[500px] bg-[#0c0f16]/90 backdrop-blur-xl border border-white/[0.04] rounded-[36px] p-8 sm:p-11 shadow-2xl relative z-10">
+        
+        {/* Header branding */}
+        <div className="text-center space-y-3 mb-9">
+          <h1 className="text-4xl font-heading font-medium tracking-tight text-white">
+            Log in
+          </h1>
+          <p className="text-xs text-zinc-400 max-w-sm mx-auto leading-relaxed">
+            Log in to your account and seamlessly continue managing your projects, ideas, and progress just where you left off.
           </p>
         </div>
-      </div>
 
-      {/* RIGHT COLUMN: Sign In Form (Center-aligned Panel) */}
-      <div className="lg:col-span-7 flex items-center justify-center p-6 sm:p-12 relative">
-        {/* Glow Accent Circle behind Login Box */}
-        <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[420px] h-[420px] bg-emerald-500/[0.04] rounded-full blur-3xl pointer-events-none" />
+        {/* Error message card */}
+        {error && (
+          <div className="mb-6 p-4 bg-red-500/10 border border-red-500/20 rounded-2xl flex items-start gap-3 text-red-400 text-xs leading-relaxed animate-scale-in">
+            <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
+            <span>{error}</span>
+          </div>
+        )}
 
-        <div className="w-full max-w-[420px] space-y-8 relative z-10">
+        {/* Form Actions */}
+        <form onSubmit={handleLogin} className="space-y-4">
           
-          {/* Header branding info */}
-          <div className="flex flex-col items-center text-center">
-            {/* Glowing Emerald Icon Shield container */}
-            <div className="w-16 h-16 bg-emerald-500/10 border border-emerald-500/20 rounded-2xl flex items-center justify-center mb-5 text-emerald-400 shadow-inner">
-              <ShieldCheck className="w-9 h-9 stroke-[1.75]" />
-            </div>
-            <h1 className="text-2xl font-heading font-bold tracking-tight text-white">
-              Partner Portal
-            </h1>
-            <p className="text-xs font-medium text-zinc-400 mt-1.5 leading-relaxed">
-              Please sign in using your authorized restaurant partner credentials.
-            </p>
+          {/* Email input field */}
+          <div className="relative group">
+            <Mail className="w-4.5 h-4.5 absolute left-4.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors" />
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              placeholder="Enter your email address"
+              className="w-full pl-12 pr-4 h-13 bg-[#070a0e] border border-white/[0.03] focus:border-blue-500/50 rounded-full text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 text-xs font-medium transition-all"
+            />
           </div>
 
-          {/* Error Message Card */}
-          {error && (
-            <div className="p-4 bg-red-500/10 border border-red-500/20 rounded-xl flex items-start gap-3.5 text-red-400 text-xs leading-relaxed animate-scale-in">
-              <AlertCircle className="w-5 h-5 shrink-0 text-red-500 mt-0.5" />
-              <span>{error}</span>
-            </div>
-          )}
-
-          {/* Form Actions */}
-          <form onSubmit={handleLogin} className="space-y-6">
-            <div className="space-y-2">
-              <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                Admin Email
-              </label>
-              <div className="relative group">
-                <Mail className="w-4.5 h-4.5 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
-                <input
-                  type="email"
-                  required
-                  value={email}
-                  onChange={(e) => setEmail(e.target.value)}
-                  placeholder="admin@quickbite.com"
-                  className="w-full pl-11 pr-4 py-3 bg-[#0d121f]/60 border border-zinc-800/80 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-xs font-medium transition-all"
-                />
-              </div>
-            </div>
-
-            <div className="space-y-2">
-              <div className="flex justify-between items-center">
-                <label className="block text-[10px] font-bold text-zinc-400 uppercase tracking-widest">
-                  Password
-                </label>
-              </div>
-              <div className="relative group">
-                <Lock className="w-4.5 h-4.5 absolute left-4 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-emerald-500 transition-colors" />
-                <input
-                  type="password"
-                  required
-                  value={password}
-                  onChange={(e) => setPassword(e.target.value)}
-                  placeholder="••••••••"
-                  className="w-full pl-11 pr-4 py-3 bg-[#0d121f]/60 border border-zinc-800/80 rounded-xl text-zinc-100 placeholder-zinc-600 focus:outline-none focus:border-emerald-500 focus:ring-4 focus:ring-emerald-500/10 text-xs font-medium transition-all"
-                />
-              </div>
-            </div>
-
-            {/* Login button */}
+          {/* Password input field */}
+          <div className="relative group">
+            <Lock className="w-4.5 h-4.5 absolute left-4.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors" />
+            <input
+              type={showPassword ? 'text' : 'password'}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Enter your password"
+              className="w-full pl-12 pr-12 h-13 bg-[#070a0e] border border-white/[0.03] focus:border-blue-500/50 rounded-full text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-4 focus:ring-blue-500/10 text-xs font-medium transition-all"
+            />
             <button
-              type="submit"
-              disabled={loading}
-              className="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-500 disabled:opacity-50 text-white font-bold rounded-xl flex items-center justify-center gap-2 text-xs uppercase tracking-wider transition-all shadow-lg shadow-emerald-950/20 active:scale-[0.98] cursor-pointer"
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-4.5 top-1/2 -translate-y-1/2 text-zinc-500 hover:text-zinc-300 transition-colors focus:outline-none cursor-pointer"
             >
-              {loading ? (
-                <span className="flex items-center gap-2">
-                  <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
-                  Authenticating...
-                </span>
-              ) : (
-                <>
-                  <span>Sign In to Dashboard</span>
-                  <ArrowRight className="w-4 h-4" />
-                </>
-              )}
+              {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
             </button>
-          </form>
-
-          {/* Secure disclaimer footer */}
-          <div className="text-center">
-            <p className="text-[10px] font-medium text-zinc-500 leading-normal">
-              Protected Admin Access · QuickBite Microservices Platform
-            </p>
           </div>
 
+          {/* Log in submit button */}
+          <button
+            type="submit"
+            disabled={loading}
+            className="w-full h-13 bg-[#181d25] hover:bg-[#202630] disabled:opacity-50 text-white font-medium rounded-full flex items-center justify-center gap-2 text-sm transition-all active:scale-[0.99] cursor-pointer mt-6"
+          >
+            {loading ? (
+              <span className="flex items-center gap-2">
+                <span className="h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent" />
+                Logging in...
+              </span>
+            ) : (
+              <span>Log in</span>
+            )}
+          </button>
+        </form>
+
+        {/* Social login divider or elements */}
+        <div className="grid grid-cols-3 gap-2.5 mt-5">
+          {/* Facebook button */}
+          <button className="flex items-center justify-center gap-1.5 h-11 border border-white/[0.03] bg-transparent hover:bg-white/[0.02] rounded-full text-[11px] text-zinc-400 font-medium transition cursor-pointer">
+            <svg className="w-4 h-4 fill-zinc-400" viewBox="0 0 24 24">
+              <path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/>
+            </svg>
+            Facebook
+          </button>
+
+          {/* Google button */}
+          <button className="flex items-center justify-center gap-1.5 h-11 border border-white/[0.03] bg-transparent hover:bg-white/[0.02] rounded-full text-[11px] text-zinc-400 font-medium transition cursor-pointer">
+            <svg className="w-4 h-4 fill-zinc-400" viewBox="0 0 24 24">
+              <path d="M12.24 10.285V14.4h6.887c-.648 2.41-2.519 4.114-6.887 4.114-4.68 0-8.46-3.87-8.46-8.514 0-4.644 3.78-8.514 8.46-8.514 2.11 0 3.99.774 5.46 2.05L19.89 1.13C17.9 0 15.19 0 12.24 0 5.58 0 0 5.376 0 12s5.58 12 12.24 12c6.96 0 11.52-4.838 11.52-11.72 0-.788-.09-1.547-.24-2.285H12.24z"/>
+            </svg>
+            Google
+          </button>
+
+          {/* Apple button */}
+          <button className="flex items-center justify-center gap-1.5 h-11 border border-white/[0.03] bg-transparent hover:bg-white/[0.02] rounded-full text-[11px] text-zinc-400 font-medium transition cursor-pointer">
+            <svg className="w-4 h-4 fill-zinc-400" viewBox="0 0 24 24">
+              <path d="M18.71 19.5c-.83 1.24-1.71 2.45-3.05 2.47-1.34.03-1.77-.79-3.29-.79-1.53 0-2 .77-3.27.82-1.31.05-2.3-1.32-3.14-2.53C4.25 17 2.94 12.45 4.7 9.39c.87-1.52 2.43-2.48 4.12-2.51 1.28-.02 2.5.87 3.29.87.78 0 2.26-1.07 3.81-.91.65.03 2.47.26 3.64 1.98-.09.06-2.17 1.28-2.15 3.81.03 3.02 2.65 4.03 2.68 4.04-.03.07-.42 1.44-1.38 2.83M15.97 4.17c.67-.81 1.11-1.93.99-3.06-1 .04-2.2.67-2.92 1.49-.62.71-1.16 1.85-1.01 2.96 1.1.09 2.23-.55 2.94-1.39z"/>
+            </svg>
+            Apple
+          </button>
         </div>
+
+        {/* Footer sign up direction link */}
+        <div className="mt-8 text-center">
+          <p className="text-xs text-zinc-500 font-medium">
+            Didn&apos;t have an account?{' '}
+            <a href="http://localhost:3000/signup" className="text-blue-500 hover:underline transition-colors">
+              Sign up
+            </a>
+          </p>
+        </div>
+
       </div>
 
     </div>
