@@ -95,7 +95,7 @@ export default function AdminLoginPage() {
               required
               value={email}
               onChange={(e) => setEmail(e.target.value)}
-              placeholder="Enter your email address"
+              placeholder="Enter your partner email address"
               icon={<Mail className="w-4.5 h-4.5" />}
             />
 
@@ -105,7 +105,7 @@ export default function AdminLoginPage() {
               required
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              placeholder="Enter your password"
+              placeholder="Enter your secure password"
               icon={<Lock className="w-4.5 h-4.5" />}
               actionButton={
                 <button
@@ -120,7 +120,7 @@ export default function AdminLoginPage() {
 
             {/* Log in submit button */}
             <Button type="submit" loading={loading} className="mt-6">
-              Log in
+              Sign In to Dashboard
             </Button>
           </form>
 
