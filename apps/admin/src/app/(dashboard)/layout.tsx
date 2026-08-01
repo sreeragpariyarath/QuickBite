@@ -122,7 +122,6 @@ export default function DashboardLayout({
                 )}
                 <motion.div
                   className="flex items-center gap-2"
-                  whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.96 }}
                 >
                   <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-800'}`} />
