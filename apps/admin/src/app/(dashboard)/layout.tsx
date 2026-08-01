@@ -19,7 +19,7 @@ const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
   { name: 'Users', href: '/users', icon: Users },
   { name: 'Restaurants', href: '/restaurants', icon: Store },
-  { name: 'Live Orders', href: '/orders', icon: ShoppingBag },
+  { name: 'Orders', href: '/orders', icon: ShoppingBag },
 ];
 
 export default function DashboardLayout({
@@ -126,7 +126,7 @@ export default function DashboardLayout({
                   whileTap={{ scale: 0.96 }}
                 >
                   <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                  <span className={`text-xs transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-500'}`}>{item.name}</span>
+                  <span className={`text-xs transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-white' : 'text-slate-500'}`}>{item.name}</span>
                 </motion.div>
               </Link>
             );
