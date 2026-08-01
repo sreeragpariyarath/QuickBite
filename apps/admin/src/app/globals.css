@@ -1,10 +1,15 @@
 @import "tailwindcss";
 
+@theme {
+  --font-sans: var(--font-inter), sans-serif;
+  --font-heading: var(--font-outfit), sans-serif;
+}
+
 :root {
-  --background: #0b0f17;
-  --foreground: #f3f4f6;
-  --card-bg: #111827;
-  --card-border: #1f293d;
+  --background: #07090e;
+  --foreground: #f4f4f5;
+  --card-bg: #0d121f;
+  --card-border: #1e293b;
   --accent-emerald: #10b981;
   --accent-emerald-hover: #059669;
 }
@@ -12,7 +17,7 @@
 body {
   background-color: var(--background);
   color: var(--foreground);
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+  font-family: var(--font-inter), sans-serif;
   min-height: 100vh;
 }
 

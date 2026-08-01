@@ -1,8 +1,21 @@
 import type { Metadata } from 'next';
+import { Outfit, Inter } from 'next/font/google';
 import './globals.css';
 
+const outfit = Outfit({
+  subsets: ['latin'],
+  variable: '--font-outfit',
+  weight: ['400', '500', '600', '700', '800'],
+});
+
+const inter = Inter({
+  subsets: ['latin'],
+  variable: '--font-inter',
+  weight: ['400', '500', '600', '700'],
+});
+
 export const metadata: Metadata = {
-  title: 'QuickBite Admin Portal',
+  title: 'QuickBite Partner Portal',
   description: 'Enterprise Super Admin & Operations Management System',
 };
 
@@ -12,8 +25,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
-      <body className="antialiased bg-[#0b0f17] text-gray-100 min-h-screen">
+    <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
+      <body className="antialiased bg-[#080b11] text-zinc-100 min-h-screen font-sans">
         {children}
       </body>
     </html>
