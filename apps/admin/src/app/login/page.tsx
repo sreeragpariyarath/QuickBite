@@ -52,6 +52,14 @@ export default function AdminLoginPage() {
   return (
     <div className="min-h-screen bg-[#03060a] flex items-center justify-center p-4 relative overflow-hidden select-none font-sans">
       
+      {/* Page Matte Grain/Noise Overlay */}
+      <div 
+        className="absolute inset-0 opacity-[0.015] mix-blend-overlay pointer-events-none z-0 bg-repeat"
+        style={{
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+        }}
+      />
+
       {/* Background Accent Blue/Violet Glows */}
       <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-blue-600/[0.03] rounded-full blur-[140px] pointer-events-none" />
       <div className="absolute -bottom-20 -left-20 w-[450px] h-[450px] bg-blue-800/[0.02] rounded-full blur-[90px] pointer-events-none" />
@@ -71,6 +79,14 @@ export default function AdminLoginPage() {
           
           {/* Soft inner left light spot */}
           <div className="absolute left-[-25%] top-[15%] w-[250px] h-[250px] bg-blue-500/[0.07] rounded-full blur-[70px] pointer-events-none z-0" />
+          
+          {/* Matte Grain/Noise Overlay */}
+          <div 
+            className="absolute inset-0 opacity-[0.05] mix-blend-overlay pointer-events-none rounded-[36px] z-10 bg-repeat"
+            style={{
+              backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E")`
+            }}
+          />
           
           {/* Header branding */}
           <div className="text-center space-y-3 mb-9 relative z-10">
