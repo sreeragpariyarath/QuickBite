@@ -55,7 +55,7 @@ export default function DashboardLayout({
       </main>
 
       {/* Floating Bottom Navigation Bar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[540px] px-4">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[600px] px-4">
         <nav className="w-full bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_12px_40px_rgba(15,23,42,0.08)] rounded-full p-1.5 flex items-center justify-between gap-1">
           <div className="flex items-center justify-between flex-1">
             {navItems.map((item) => {
@@ -65,7 +65,7 @@ export default function DashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative flex items-center gap-2 px-4.5 py-2.5 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10 group"
+                  className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10 group"
                 >
                   {isActive && (
                     <motion.div
@@ -75,11 +75,11 @@ export default function DashboardLayout({
                     />
                   )}
                   <motion.div
-                    className="flex items-center gap-2"
+                    className="flex items-center gap-1.5 sm:gap-2"
                     whileTap={{ scale: 0.96 }}
                   >
                     <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-800'}`} />
-                    <span className={`text-xs transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'}`}>{item.name}</span>
+                    <span className={`text-xs transition-colors duration-300 whitespace-nowrap hidden sm:inline ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'}`}>{item.name}</span>
                   </motion.div>
                 </Link>
               );
@@ -99,7 +99,7 @@ export default function DashboardLayout({
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-full transition-colors cursor-pointer flex items-center justify-center"
+              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-55/60 rounded-full transition-colors cursor-pointer flex items-center justify-center"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
