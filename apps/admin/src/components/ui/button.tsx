@@ -18,10 +18,10 @@ export function Button({
     'w-full h-12 font-medium rounded-full flex items-center justify-center gap-2 text-sm transition-all active:scale-[0.99] cursor-pointer disabled:opacity-50 disabled:pointer-events-none select-none';
 
   const variants = {
-    primary: 'bg-[#181d25] hover:bg-[#202630] text-white border border-white/[0.04]',
-    secondary: 'bg-transparent border border-white/[0.08] hover:bg-white/[0.02] text-zinc-300',
-    danger: 'bg-red-950/30 hover:bg-red-900/40 text-red-400 border border-red-900/20',
-    ghost: 'bg-transparent hover:bg-white/[0.02] text-zinc-400',
+    primary: 'bg-slate-900 hover:bg-slate-800 text-white border border-slate-850 shadow-md shadow-slate-900/5',
+    secondary: 'bg-white border border-slate-200 hover:bg-slate-50 text-slate-700',
+    danger: 'bg-red-50 hover:bg-red-100/80 text-red-600 border border-red-200/40',
+    ghost: 'bg-transparent hover:bg-slate-150/50 text-slate-500',
   };
 
   return (

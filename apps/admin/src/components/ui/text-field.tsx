@@ -26,19 +26,19 @@ export function TextField({
       )}
       <div className="relative group">
         {icon && (
-          <div className="absolute left-4.5 top-1/2 -translate-y-1/2 text-zinc-500 group-focus-within:text-blue-500 transition-colors z-10 pointer-events-none">
+          <div className="absolute left-4.5 top-1/2 -translate-y-1/2 text-slate-400 group-focus-within:text-blue-500 transition-colors z-10 pointer-events-none">
             {icon}
           </div>
         )}
         <input
           id={id}
           className={cn(
-            'w-full h-12 bg-[#06080c] border rounded-full text-zinc-100 placeholder-zinc-500 focus:outline-none focus:ring-4 text-xs font-medium transition-all',
+            'w-full h-12 bg-slate-50 border rounded-full text-slate-900 placeholder-slate-400 focus:outline-none focus:ring-4 text-xs font-medium transition-all',
             icon ? 'pl-12' : 'pl-5',
             actionButton ? 'pr-12' : 'pr-5',
             error
-              ? 'border-red-500/50 focus:border-red-500 focus:ring-red-500/10'
-              : 'border-white/[0.03] focus:border-blue-500/50 focus:ring-blue-500/10',
+              ? 'border-red-400/50 focus:border-red-400 focus:ring-red-400/10'
+              : 'border-slate-200/80 focus:border-blue-500/50 focus:ring-blue-500/10',
             className
           )}
           {...props}
