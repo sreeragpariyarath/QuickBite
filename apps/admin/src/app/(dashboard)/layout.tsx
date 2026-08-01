@@ -103,7 +103,7 @@ export default function DashboardLayout({
 
       {/* Floating Bottom Navigation Bar */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[500px] px-4">
-        <nav className="w-full bg-slate-900/95 backdrop-blur-xl border border-slate-800/80 shadow-2xl shadow-slate-900/25 rounded-full p-1.5 flex items-center justify-between">
+        <nav className="w-full bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_12px_40px_rgba(15,23,42,0.08)] rounded-full p-1.5 flex items-center justify-between">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -116,7 +116,7 @@ export default function DashboardLayout({
                 {isActive && (
                   <motion.div
                     layoutId="activeTabPill"
-                    className="absolute inset-0 bg-white rounded-full z-[-1] shadow-md shadow-slate-950/10"
+                    className="absolute inset-0 bg-slate-900 rounded-full z-[-1] shadow-lg shadow-slate-900/10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -125,8 +125,8 @@ export default function DashboardLayout({
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.96 }}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-white'}`} />
-                  <span className={`text-xs transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-white'}`}>{item.name}</span>
+                  <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-800'}`} />
+                  <span className={`text-xs transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'}`}>{item.name}</span>
                 </motion.div>
               </Link>
             );
