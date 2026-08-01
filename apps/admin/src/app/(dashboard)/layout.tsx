@@ -9,18 +9,15 @@ import {
   Store,
   ShoppingBag,
   LogOut,
-  ShieldAlert,
-  ChevronRight,
-  Menu,
-  X,
   Bell,
   Sparkles,
 } from 'lucide-react';
 import { clearAuthToken, getAuthToken, getStoredUser } from '@/lib/api';
+import { motion } from 'framer-motion';
 
 const navItems = [
   { name: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
-  { name: 'User Management', href: '/users', icon: Users },
+  { name: 'Users', href: '/users', icon: Users },
   { name: 'Restaurants', href: '/restaurants', icon: Store },
   { name: 'Live Orders', href: '/orders', icon: ShoppingBag },
 ];
@@ -32,14 +29,12 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [mobileOpen, setMobileOpen] = useState(false);
   const [user, setUser] = useState<any>(null);
 
   useEffect(() => {
     const token = getAuthToken();
     const storedUser = getStoredUser();
     if (!token) {
-      // For development demo purposes, set mock user if none logged in
       setUser({ name: 'Super Admin', email: 'admin@quickbite.com', role: 'SUPER_ADMIN' });
     } else {
       setUser(storedUser || { name: 'Super Admin', email: 'admin@quickbite.com', role: 'SUPER_ADMIN' });
@@ -52,23 +47,63 @@ export default function DashboardLayout({
   };
 
   return (
-    <div className="min-h-screen bg-[#0b0f17] flex">
-      {/* Sidebar Desktop */}
-      <aside className="hidden lg:flex flex-col w-64 border-r border-gray-800/80 bg-[#111827]/70 backdrop-blur-xl shrink-0">
-        <div className="p-6 border-b border-gray-800/80 flex items-center gap-3">
-          <div className="w-10 h-10 bg-emerald-500/10 border border-emerald-500/30 rounded-xl flex items-center justify-center text-emerald-400">
-            <Sparkles className="w-5 h-5" />
+    <div className="min-h-screen bg-[#f8fafc] text-slate-800 flex flex-col font-sans select-none relative">
+      
+      {/* Top Header Navigation */}
+      <header className="h-16 border-b border-slate-200/60 bg-white/80 backdrop-blur-md px-6 lg:px-10 flex items-center justify-between sticky top-0 z-20">
+        
+        {/* Portal Branding */}
+        <div className="flex items-center gap-2.5">
+          <div className="w-8 h-8 rounded-lg bg-slate-900 flex items-center justify-center text-white">
+            <Sparkles className="w-4.5 h-4.5 text-blue-400" />
           </div>
           <div>
-            <h1 className="font-bold text-white tracking-wide text-base">QuickBite</h1>
-            <p className="text-xs text-emerald-400 font-medium">Admin Control Center</p>
+            <span className="font-heading font-bold text-sm tracking-wide text-slate-900">QuickBite</span>
+            <span className="block text-[9px] font-bold text-blue-600 uppercase tracking-widest leading-none mt-0.5">Partner Portal</span>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1.5 overflow-y-auto">
-          <div className="px-3 py-2 text-[10px] font-semibold text-gray-500 uppercase tracking-wider">
-            Management
+        {/* User profile & Actions */}
+        <div className="flex items-center gap-4">
+          <button className="p-2 text-slate-400 hover:text-slate-600 bg-slate-50 border border-slate-200/50 rounded-xl relative cursor-pointer transition">
+            <Bell className="w-4 h-4" />
+            <span className="absolute top-1.5 right-1.5 w-1.5 h-1.5 bg-blue-500 rounded-full" />
+          </button>
+
+          {/* User Info Badge */}
+          <div className="hidden sm:flex items-center gap-2 px-3 py-1.5 bg-slate-50 border border-slate-200/40 rounded-xl">
+            <div className="w-6 h-6 rounded-md bg-slate-900 text-white font-bold flex items-center justify-center text-[10px]">
+              {user?.name?.substring(0, 2).toUpperCase() || 'SA'}
+            </div>
+            <div className="text-left">
+              <p className="text-[10px] font-bold text-slate-700 leading-tight">
+                {user?.name || 'Super Admin'}
+              </p>
+              <p className="text-[8px] text-slate-400 font-mono leading-none">
+                {user?.role || 'SUPER_ADMIN'}
+              </p>
+            </div>
           </div>
+
+          {/* Sign Out Button */}
+          <button
+            onClick={handleLogout}
+            className="flex items-center justify-center gap-1.5 px-3 py-2 bg-slate-100 hover:bg-red-50 hover:text-red-600 border border-slate-200/50 hover:border-red-200 rounded-xl text-xs font-semibold text-slate-600 transition-all cursor-pointer"
+          >
+            <LogOut className="w-3.5 h-3.5" />
+            <span className="hidden sm:inline">Sign Out</span>
+          </button>
+        </div>
+      </header>
+
+      {/* Main Page Content Body */}
+      <main className="flex-1 p-6 lg:p-10 pb-28 overflow-y-auto">
+        {children}
+      </main>
+
+      {/* Floating Bottom Navigation Bar */}
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[500px] px-4">
+        <nav className="w-full bg-white/80 backdrop-blur-xl border border-slate-200/50 shadow-xl shadow-slate-200/20 rounded-full p-1.5 flex items-center justify-between">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -76,117 +111,29 @@ export default function DashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className={`flex items-center justify-between px-3.5 py-3 rounded-xl text-sm font-medium transition-all ${
-                  isActive
-                    ? 'bg-emerald-500/10 text-emerald-400 border border-emerald-500/20'
-                    : 'text-gray-400 hover:text-gray-200 hover:bg-gray-800/40'
-                }`}
+                className="relative flex items-center gap-2 px-4.5 py-2.5 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10"
               >
-                <div className="flex items-center gap-3">
-                  <Icon className={`w-5 h-5 ${isActive ? 'text-emerald-400' : 'text-gray-500'}`} />
-                  <span>{item.name}</span>
-                </div>
-                {isActive && <ChevronRight className="w-4 h-4 text-emerald-400" />}
+                {isActive && (
+                  <motion.div
+                    layoutId="activeTabPill"
+                    className="absolute inset-0 bg-slate-900 rounded-full z-[-1] shadow-lg shadow-slate-900/10"
+                    transition={{ type: 'spring', stiffness: 380, damping: 30 }}
+                  />
+                )}
+                <motion.div
+                  className="flex items-center gap-2"
+                  whileHover={{ y: -1 }}
+                  whileTap={{ scale: 0.96 }}
+                >
+                  <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400'}`} />
+                  <span className={`text-xs transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-500'}`}>{item.name}</span>
+                </motion.div>
               </Link>
             );
           })}
         </nav>
-
-        <div className="p-4 border-t border-gray-800/80">
-          <div className="p-3 bg-[#162032] border border-gray-800 rounded-xl flex items-center justify-between mb-3">
-            <div className="flex items-center gap-2.5 overflow-hidden">
-              <div className="w-8 h-8 rounded-lg bg-emerald-600 text-white font-bold flex items-center justify-center text-xs shrink-0">
-                SA
-              </div>
-              <div className="truncate">
-                <p className="text-xs font-semibold text-white truncate">
-                  {user?.name || 'Super Admin'}
-                </p>
-                <p className="text-[10px] text-emerald-400 font-mono">
-                  {user?.role || 'SUPER_ADMIN'}
-                </p>
-              </div>
-            </div>
-          </div>
-          <button
-            onClick={handleLogout}
-            className="w-full flex items-center justify-center gap-2 px-3 py-2.5 bg-gray-800/60 hover:bg-red-500/10 hover:text-red-400 border border-gray-700/50 hover:border-red-500/30 rounded-xl text-xs font-medium text-gray-400 transition-all cursor-pointer"
-          >
-            <LogOut className="w-4 h-4" />
-            <span>Sign Out</span>
-          </button>
-        </div>
-      </aside>
-
-      {/* Main Content Area */}
-      <div className="flex-1 flex flex-col min-w-0">
-        {/* Top Navigation Header */}
-        <header className="h-16 border-b border-gray-800/80 bg-[#111827]/40 backdrop-blur-md px-4 lg:px-8 flex items-center justify-between sticky top-0 z-20">
-          <div className="flex items-center gap-4">
-            <button
-              onClick={() => setMobileOpen(!mobileOpen)}
-              className="lg:hidden p-2 text-gray-400 hover:text-white rounded-lg"
-            >
-              {mobileOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
-            </button>
-            <div className="flex items-center gap-2">
-              <span className="text-xs px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-mono">
-                Environment: Production
-              </span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-3">
-            <button className="p-2 text-gray-400 hover:text-white bg-gray-800/40 border border-gray-800 rounded-xl relative cursor-pointer">
-              <Bell className="w-4 h-4" />
-              <span className="absolute top-1.5 right-1.5 w-2 h-2 bg-emerald-500 rounded-full" />
-            </button>
-          </div>
-        </header>
-
-        {/* Mobile Navigation Drawer */}
-        {mobileOpen && (
-          <div className="lg:hidden fixed inset-0 z-30 bg-black/60 backdrop-blur-sm flex">
-            <div className="w-64 bg-[#111827] h-full p-4 flex flex-col justify-between">
-              <div>
-                <div className="flex items-center justify-between pb-4 border-b border-gray-800 mb-4">
-                  <span className="font-bold text-white">QuickBite Admin</span>
-                  <button onClick={() => setMobileOpen(false)} className="text-gray-400">
-                    <X className="w-5 h-5" />
-                  </button>
-                </div>
-                <nav className="space-y-1">
-                  {navItems.map((item) => (
-                    <Link
-                      key={item.href}
-                      href={item.href}
-                      onClick={() => setMobileOpen(false)}
-                      className={`flex items-center gap-3 px-3.5 py-2.5 rounded-xl text-sm font-medium ${
-                        pathname === item.href
-                          ? 'bg-emerald-500/10 text-emerald-400'
-                          : 'text-gray-400'
-                      }`}
-                    >
-                      <item.icon className="w-4 h-4" />
-                      <span>{item.name}</span>
-                    </Link>
-                  ))}
-                </nav>
-              </div>
-              <button
-                onClick={handleLogout}
-                className="w-full flex items-center justify-center gap-2 p-2.5 bg-red-500/10 text-red-400 rounded-xl text-xs font-medium"
-              >
-                <LogOut className="w-4 h-4" />
-                <span>Sign Out</span>
-              </button>
-            </div>
-          </div>
-        )}
-
-        {/* Page View Body */}
-        <main className="flex-1 p-4 lg:p-8 overflow-y-auto">{children}</main>
       </div>
+
     </div>
   );
 }
