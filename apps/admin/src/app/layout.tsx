@@ -1,5 +1,6 @@
 import type { Metadata } from 'next';
 import { Outfit, Inter } from 'next/font/google';
+import { AuthProvider } from '@/context/auth-context';
 import './globals.css';
 
 const outfit = Outfit({
@@ -27,7 +28,9 @@ export default function RootLayout({
   return (
     <html lang="en" className={`dark ${outfit.variable} ${inter.variable}`}>
       <body className="antialiased bg-[#080b11] text-zinc-100 min-h-screen font-sans">
-        {children}
+        <AuthProvider>
+          {children}
+        </AuthProvider>
       </body>
     </html>
   );
