@@ -103,7 +103,7 @@ export default function DashboardLayout({
 
       {/* Floating Bottom Navigation Bar */}
       <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[500px] px-4">
-        <nav className="w-full bg-white/80 backdrop-blur-xl border border-slate-200/50 shadow-xl shadow-slate-200/20 rounded-full p-1.5 flex items-center justify-between">
+        <nav className="w-full bg-slate-900/95 backdrop-blur-xl border border-slate-800/80 shadow-2xl shadow-slate-900/25 rounded-full p-1.5 flex items-center justify-between">
           {navItems.map((item) => {
             const Icon = item.icon;
             const isActive = pathname === item.href;
@@ -111,12 +111,12 @@ export default function DashboardLayout({
               <Link
                 key={item.href}
                 href={item.href}
-                className="relative flex items-center gap-2 px-4.5 py-2.5 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10"
+                className="relative flex items-center gap-2 px-4.5 py-2.5 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10 group"
               >
                 {isActive && (
                   <motion.div
                     layoutId="activeTabPill"
-                    className="absolute inset-0 bg-slate-900 rounded-full z-[-1] shadow-lg shadow-slate-900/10"
+                    className="absolute inset-0 bg-white rounded-full z-[-1] shadow-md shadow-slate-950/10"
                     transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                   />
                 )}
@@ -125,8 +125,8 @@ export default function DashboardLayout({
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.96 }}
                 >
-                  <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400'}`} />
-                  <span className={`text-xs transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-white' : 'text-slate-500'}`}>{item.name}</span>
+                  <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-white'}`} />
+                  <span className={`text-xs transition-colors duration-300 whitespace-nowrap ${isActive ? 'text-slate-900' : 'text-slate-400 group-hover:text-white'}`}>{item.name}</span>
                 </motion.div>
               </Link>
             );
