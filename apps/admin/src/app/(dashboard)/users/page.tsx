@@ -63,13 +63,13 @@ const mockUsers = [
 ];
 
 const roleBadgeColors: Record<string, string> = {
-  SUPER_ADMIN: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-  OWNER: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-  MANAGER: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-  CASHIER: 'bg-indigo-500/10 text-indigo-400 border-indigo-500/30',
-  KITCHEN_STAFF: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-  DRIVER: 'bg-teal-500/10 text-teal-400 border-teal-500/30',
-  CUSTOMER: 'bg-gray-500/10 text-gray-400 border-gray-500/30',
+  SUPER_ADMIN: 'bg-purple-50 text-purple-600 border-purple-200/60',
+  OWNER: 'bg-emerald-50 text-emerald-600 border-emerald-200/60',
+  MANAGER: 'bg-blue-50 text-blue-600 border-blue-200/60',
+  CASHIER: 'bg-indigo-50 text-indigo-600 border-indigo-200/60',
+  KITCHEN_STAFF: 'bg-amber-50 text-amber-600 border-amber-200/60',
+  DRIVER: 'bg-teal-50 text-teal-600 border-teal-200/60',
+  CUSTOMER: 'bg-slate-100 text-slate-600 border-slate-200/60',
 };
 
 export default function UsersManagementPage() {
@@ -89,10 +89,10 @@ export default function UsersManagementPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">User Management</h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">User Management</h1>
+          <p className="text-xs text-slate-500 mt-1">
             Manage system roles, permissions, and identity verification
           </p>
         </div>
@@ -101,82 +101,82 @@ export default function UsersManagementPage() {
       {/* Filter and Search Bar */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by name, email, or phone..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#111827] border border-gray-800 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/80 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 shadow-sm"
           />
         </div>
 
         <div className="flex items-center gap-3 w-full sm:w-auto">
-          <div className="flex items-center gap-2 bg-[#111827] border border-gray-800 px-3 py-2 rounded-xl text-xs text-gray-400">
-            <Filter className="w-4 h-4 text-emerald-400" />
+          <div className="flex items-center gap-2 bg-white border border-slate-200/80 px-3.5 py-2.5 rounded-2xl text-xs text-slate-600 shadow-sm">
+            <Filter className="w-4 h-4 text-blue-600" />
             <span>Role:</span>
             <select
               value={roleFilter}
               onChange={(e) => setRoleFilter(e.target.value)}
-              className="bg-transparent text-white focus:outline-none cursor-pointer"
+              className="bg-transparent text-slate-900 font-semibold focus:outline-none cursor-pointer"
             >
-              <option value="ALL" className="bg-[#111827]">All Roles</option>
-              <option value="SUPER_ADMIN" className="bg-[#111827]">SUPER_ADMIN</option>
-              <option value="OWNER" className="bg-[#111827]">OWNER</option>
-              <option value="MANAGER" className="bg-[#111827]">MANAGER</option>
-              <option value="CASHIER" className="bg-[#111827]">CASHIER</option>
-              <option value="KITCHEN_STAFF" className="bg-[#111827]">KITCHEN_STAFF</option>
-              <option value="DRIVER" className="bg-[#111827]">DRIVER</option>
-              <option value="CUSTOMER" className="bg-[#111827]">CUSTOMER</option>
+              <option value="ALL">All Roles</option>
+              <option value="SUPER_ADMIN">SUPER_ADMIN</option>
+              <option value="OWNER">OWNER</option>
+              <option value="MANAGER">MANAGER</option>
+              <option value="CASHIER">CASHIER</option>
+              <option value="KITCHEN_STAFF">KITCHEN_STAFF</option>
+              <option value="DRIVER">DRIVER</option>
+              <option value="CUSTOMER">CUSTOMER</option>
             </select>
           </div>
         </div>
       </div>
 
       {/* Users Table */}
-      <div className="bg-[#111827]/80 border border-gray-800/80 rounded-2xl overflow-hidden shadow-lg">
+      <div className="bg-white border border-slate-100/90 rounded-[24px] overflow-hidden shadow-[0_8px_25px_rgba(0,0,0,0.025)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#162032] border-b border-gray-800 text-gray-400 uppercase font-mono text-[10px]">
+            <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase font-mono text-[10px]">
               <tr>
-                <th className="px-6 py-4">User</th>
-                <th className="px-6 py-4">Contact</th>
-                <th className="px-6 py-4">System Role</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Joined Date</th>
+                <th className="px-6 py-4 font-semibold">User</th>
+                <th className="px-6 py-4 font-semibold">Contact</th>
+                <th className="px-6 py-4 font-semibold">System Role</th>
+                <th className="px-6 py-4 font-semibold">Status</th>
+                <th className="px-6 py-4 font-semibold">Joined Date</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60 text-gray-300 font-sans">
+            <tbody className="divide-y divide-slate-100 text-slate-700 font-sans">
               {filteredUsers.map((user) => (
-                <tr key={user.id} className="hover:bg-gray-800/30 transition-all">
+                <tr key={user.id} className="hover:bg-slate-50/60 transition-all">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-gray-800 border border-gray-700/60 flex items-center justify-center text-white font-bold text-xs">
+                      <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center font-bold text-xs">
                         {user.name ? user.name.slice(0, 2).toUpperCase() : 'U'}
                       </div>
                       <div>
-                        <p className="font-semibold text-white text-sm">{user.name || 'Unnamed User'}</p>
-                        <p className="text-[10px] text-gray-500 font-mono">{user.id.slice(0, 8)}...</p>
+                        <p className="font-bold text-slate-900 text-sm">{user.name || 'Unnamed User'}</p>
+                        <p className="text-[10px] text-slate-400 font-mono">{user.id.slice(0, 8)}...</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4 space-y-1">
                     {user.email && (
-                      <div className="flex items-center gap-1.5 text-gray-300">
-                        <Mail className="w-3.5 h-3.5 text-gray-500" />
+                      <div className="flex items-center gap-1.5 text-slate-600">
+                        <Mail className="w-3.5 h-3.5 text-slate-400" />
                         <span>{user.email}</span>
                       </div>
                     )}
                     {user.phone && (
-                      <div className="flex items-center gap-1.5 text-gray-400 font-mono text-[11px]">
-                        <Phone className="w-3.5 h-3.5 text-gray-500" />
+                      <div className="flex items-center gap-1.5 text-slate-500 font-mono text-[11px]">
+                        <Phone className="w-3.5 h-3.5 text-slate-400" />
                         <span>{user.phone}</span>
                       </div>
                     )}
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] font-mono font-semibold ${
+                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[11px] font-mono font-semibold ${
                         roleBadgeColors[user.role] || roleBadgeColors.CUSTOMER
                       }`}
                     >
@@ -185,12 +185,12 @@ export default function UsersManagementPage() {
                     </span>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="inline-flex items-center gap-1 text-emerald-400 text-xs font-medium">
+                    <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/60 text-emerald-600 text-xs font-semibold">
                       <CheckCircle className="w-3.5 h-3.5" />
                       Verified
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-mono text-gray-400 text-xs">
+                  <td className="px-6 py-4 font-mono text-slate-400 text-xs">
                     {user.createdAt}
                   </td>
                 </tr>

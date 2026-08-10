@@ -59,10 +59,10 @@ export default function RestaurantsManagementPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Restaurant Management</h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Restaurant Management</h1>
+          <p className="text-xs text-slate-500 mt-1">
             Platform listings, owner branch verification, and status toggles
           </p>
         </div>
@@ -71,75 +71,75 @@ export default function RestaurantsManagementPage() {
       {/* Controls */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search restaurant, owner, address..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#111827] border border-gray-800 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/80 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 shadow-sm"
           />
         </div>
 
-        <div className="flex items-center gap-2 bg-[#111827] border border-gray-800 px-3 py-2 rounded-xl text-xs text-gray-400">
-          <Filter className="w-4 h-4 text-emerald-400" />
+        <div className="flex items-center gap-2 bg-white border border-slate-200/80 px-3.5 py-2.5 rounded-2xl text-xs text-slate-600 shadow-sm">
+          <Filter className="w-4 h-4 text-blue-600" />
           <span>City:</span>
           <select
             value={cityFilter}
             onChange={(e) => setCityFilter(e.target.value)}
-            className="bg-transparent text-white focus:outline-none cursor-pointer"
+            className="bg-transparent text-slate-900 font-semibold focus:outline-none cursor-pointer"
           >
-            <option value="ALL" className="bg-[#111827]">All Cities</option>
-            <option value="Bangalore" className="bg-[#111827]">Bangalore</option>
-            <option value="Gurgaon" className="bg-[#111827]">Gurgaon</option>
+            <option value="ALL">All Cities</option>
+            <option value="Bangalore">Bangalore</option>
+            <option value="Gurgaon">Gurgaon</option>
           </select>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-[#111827]/80 border border-gray-800/80 rounded-2xl overflow-hidden shadow-lg">
+      <div className="bg-white border border-slate-100/90 rounded-[24px] overflow-hidden shadow-[0_8px_25px_rgba(0,0,0,0.025)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#162032] border-b border-gray-800 text-gray-400 uppercase font-mono text-[10px]">
+            <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase font-mono text-[10px]">
               <tr>
-                <th className="px-6 py-4">Restaurant</th>
-                <th className="px-6 py-4">Location</th>
-                <th className="px-6 py-4">Owner Name</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4 text-right">Actions</th>
+                <th className="px-6 py-4 font-semibold">Restaurant</th>
+                <th className="px-6 py-4 font-semibold">Location</th>
+                <th className="px-6 py-4 font-semibold">Owner Name</th>
+                <th className="px-6 py-4 font-semibold">Status</th>
+                <th className="px-6 py-4 text-right font-semibold">Actions</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60 text-gray-300">
+            <tbody className="divide-y divide-slate-100 text-slate-700">
               {filtered.map((r) => (
-                <tr key={r.id} className="hover:bg-gray-800/30 transition-all">
+                <tr key={r.id} className="hover:bg-slate-50/60 transition-all">
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-3">
-                      <div className="w-9 h-9 rounded-xl bg-emerald-500/10 border border-emerald-500/20 flex items-center justify-center text-emerald-400">
-                        <Store className="w-5 h-5" />
+                      <div className="w-9 h-9 rounded-2xl bg-blue-50 text-blue-600 flex items-center justify-center">
+                        <Store className="w-4.5 h-4.5" />
                       </div>
                       <div>
-                        <p className="font-semibold text-white text-sm">{r.name}</p>
-                        <p className="text-[10px] text-gray-500 font-mono">ID: {r.id}</p>
+                        <p className="font-bold text-slate-900 text-sm">{r.name}</p>
+                        <p className="text-[10px] text-slate-400 font-mono">ID: {r.id}</p>
                       </div>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <div className="flex items-center gap-1.5 text-gray-300">
-                      <MapPin className="w-3.5 h-3.5 text-gray-500 shrink-0" />
-                      <span>{r.address}, <strong className="text-white">{r.city}</strong></span>
+                    <div className="flex items-center gap-1.5 text-slate-600">
+                      <MapPin className="w-3.5 h-3.5 text-slate-400 shrink-0" />
+                      <span>{r.address}, <strong className="text-slate-900 font-semibold">{r.city}</strong></span>
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="font-medium text-white">{r.ownerName}</span>
+                    <span className="font-semibold text-slate-900">{r.ownerName}</span>
                   </td>
                   <td className="px-6 py-4">
                     {r.isActive ? (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-emerald-500/10 border border-emerald-500/20 text-emerald-400 font-medium">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-emerald-50 border border-emerald-200/60 text-emerald-600 font-semibold text-xs">
                         <CheckCircle2 className="w-3.5 h-3.5" />
                         Active
                       </span>
                     ) : (
-                      <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-red-500/10 border border-red-500/20 text-red-400 font-medium">
+                      <span className="inline-flex items-center gap-1 px-3 py-1 rounded-full bg-red-50 border border-red-200/60 text-red-600 font-semibold text-xs">
                         <XCircle className="w-3.5 h-3.5" />
                         Suspended / Pending
                       </span>
@@ -148,10 +148,10 @@ export default function RestaurantsManagementPage() {
                   <td className="px-6 py-4 text-right">
                     <button
                       onClick={() => toggleStatus(r.id)}
-                      className={`px-3 py-1.5 rounded-xl font-medium text-xs transition-all cursor-pointer ${
+                      className={`px-3.5 py-1.5 rounded-full font-semibold text-xs transition-all cursor-pointer ${
                         r.isActive
-                          ? 'bg-red-500/10 text-red-400 hover:bg-red-500/20 border border-red-500/20'
-                          : 'bg-emerald-500/10 text-emerald-400 hover:bg-emerald-500/20 border border-emerald-500/20'
+                          ? 'bg-red-50 text-red-600 hover:bg-red-100 border border-red-200/60'
+                          : 'bg-emerald-50 text-emerald-600 hover:bg-emerald-100 border border-emerald-200/60'
                       }`}
                     >
                       {r.isActive ? 'Suspend' : 'Approve & Activate'}

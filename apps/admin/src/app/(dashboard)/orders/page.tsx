@@ -51,12 +51,12 @@ const mockOrders = [
 ];
 
 const statusColors: Record<string, string> = {
-  PENDING: 'bg-amber-500/10 text-amber-400 border-amber-500/30',
-  ACCEPTED: 'bg-blue-500/10 text-blue-400 border-blue-500/30',
-  PREPARING: 'bg-purple-500/10 text-purple-400 border-purple-500/30',
-  DELIVERED: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/30',
-  REJECTED: 'bg-red-500/10 text-red-400 border-red-500/30',
-  CANCELLED: 'bg-gray-500/10 text-gray-400 border-gray-500/30',
+  PENDING: 'bg-amber-50 text-amber-600 border-amber-200/60',
+  ACCEPTED: 'bg-blue-50 text-blue-600 border-blue-200/60',
+  PREPARING: 'bg-purple-50 text-purple-600 border-purple-200/60',
+  DELIVERED: 'bg-emerald-50 text-emerald-600 border-emerald-200/60',
+  REJECTED: 'bg-red-50 text-red-600 border-red-200/60',
+  CANCELLED: 'bg-slate-100 text-slate-600 border-slate-200/60',
 };
 
 export default function LiveOrdersPage() {
@@ -76,10 +76,10 @@ export default function LiveOrdersPage() {
   return (
     <div className="space-y-6">
       {/* Header */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-4 border-b border-gray-800/60">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-slate-200/80">
         <div>
-          <h1 className="text-2xl font-bold text-white tracking-tight">Live Orders Monitor</h1>
-          <p className="text-xs text-gray-400 mt-1">
+          <h1 className="text-2xl font-bold text-slate-900 tracking-tight">Live Orders Monitor</h1>
+          <p className="text-xs text-slate-500 mt-1">
             Real-time status tracking for customer orders across all active restaurants
           </p>
         </div>
@@ -88,73 +88,73 @@ export default function LiveOrdersPage() {
       {/* Controls */}
       <div className="flex flex-col sm:flex-row items-center justify-between gap-4">
         <div className="relative w-full sm:w-80">
-          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-gray-500" />
+          <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
             value={search}
             onChange={(e) => setSearch(e.target.value)}
             placeholder="Search by order ID, restaurant, customer..."
-            className="w-full pl-10 pr-4 py-2.5 bg-[#111827] border border-gray-800 rounded-xl text-xs text-white placeholder-gray-500 focus:outline-none focus:border-emerald-500"
+            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200/80 rounded-2xl text-xs text-slate-800 placeholder-slate-400 focus:outline-none focus:border-blue-500 shadow-sm"
           />
         </div>
 
-        <div className="flex items-center gap-2 bg-[#111827] border border-gray-800 px-3 py-2 rounded-xl text-xs text-gray-400">
-          <Filter className="w-4 h-4 text-emerald-400" />
+        <div className="flex items-center gap-2 bg-white border border-slate-200/80 px-3.5 py-2.5 rounded-2xl text-xs text-slate-600 shadow-sm">
+          <Filter className="w-4 h-4 text-blue-600" />
           <span>Status:</span>
           <select
             value={statusFilter}
             onChange={(e) => setStatusFilter(e.target.value)}
-            className="bg-transparent text-white focus:outline-none cursor-pointer"
+            className="bg-transparent text-slate-900 font-semibold focus:outline-none cursor-pointer"
           >
-            <option value="ALL" className="bg-[#111827]">All Statuses</option>
-            <option value="PENDING" className="bg-[#111827]">PENDING</option>
-            <option value="ACCEPTED" className="bg-[#111827]">ACCEPTED</option>
-            <option value="PREPARING" className="bg-[#111827]">PREPARING</option>
-            <option value="DELIVERED" className="bg-[#111827]">DELIVERED</option>
+            <option value="ALL">All Statuses</option>
+            <option value="PENDING">PENDING</option>
+            <option value="ACCEPTED">ACCEPTED</option>
+            <option value="PREPARING">PREPARING</option>
+            <option value="DELIVERED">DELIVERED</option>
           </select>
         </div>
       </div>
 
       {/* Table */}
-      <div className="bg-[#111827]/80 border border-gray-800/80 rounded-2xl overflow-hidden shadow-lg">
+      <div className="bg-white border border-slate-100/90 rounded-[24px] overflow-hidden shadow-[0_8px_25px_rgba(0,0,0,0.025)]">
         <div className="overflow-x-auto">
           <table className="w-full text-left text-xs">
-            <thead className="bg-[#162032] border-b border-gray-800 text-gray-400 uppercase font-mono text-[10px]">
+            <thead className="bg-slate-50/80 border-b border-slate-100 text-slate-500 uppercase font-mono text-[10px]">
               <tr>
-                <th className="px-6 py-4">Order ID</th>
-                <th className="px-6 py-4">Restaurant</th>
-                <th className="px-6 py-4">Customer</th>
-                <th className="px-6 py-4">Amount</th>
-                <th className="px-6 py-4">Status</th>
-                <th className="px-6 py-4">Time</th>
+                <th className="px-6 py-4 font-semibold">Order ID</th>
+                <th className="px-6 py-4 font-semibold">Restaurant</th>
+                <th className="px-6 py-4 font-semibold">Customer</th>
+                <th className="px-6 py-4 font-semibold">Amount</th>
+                <th className="px-6 py-4 font-semibold">Status</th>
+                <th className="px-6 py-4 font-semibold">Time</th>
               </tr>
             </thead>
-            <tbody className="divide-y divide-gray-800/60 text-gray-300">
+            <tbody className="divide-y divide-slate-100 text-slate-700">
               {filtered.map((ord) => (
-                <tr key={ord.id} className="hover:bg-gray-800/30 transition-all">
-                  <td className="px-6 py-4 font-mono font-bold text-emerald-400">
+                <tr key={ord.id} className="hover:bg-slate-50/60 transition-all">
+                  <td className="px-6 py-4 font-mono font-bold text-blue-600">
                     {ord.id}
                   </td>
-                  <td className="px-6 py-4 font-medium text-white">
+                  <td className="px-6 py-4 font-bold text-slate-900">
                     {ord.restaurantName}
                   </td>
-                  <td className="px-6 py-4 text-gray-300">
+                  <td className="px-6 py-4 text-slate-600">
                     {ord.customerName}
                   </td>
                   <td className="px-6 py-4">
-                    <span className="font-semibold text-white">{ord.total}</span>
-                    <span className="text-[10px] text-gray-500 font-mono block">{ord.paymentMethod} · {ord.paymentStatus}</span>
+                    <span className="font-bold text-slate-900">{ord.total}</span>
+                    <span className="text-[10px] text-slate-400 font-mono block">{ord.paymentMethod} · {ord.paymentStatus}</span>
                   </td>
                   <td className="px-6 py-4">
                     <span
-                      className={`inline-flex items-center gap-1 px-2.5 py-1 rounded-full border text-[11px] font-mono font-semibold ${
+                      className={`inline-flex items-center gap-1 px-3 py-1 rounded-full border text-[11px] font-mono font-semibold ${
                         statusColors[ord.status] || statusColors.PENDING
                       }`}
                     >
                       {ord.status}
                     </span>
                   </td>
-                  <td className="px-6 py-4 font-mono text-gray-500">
+                  <td className="px-6 py-4 font-mono text-slate-400">
                     {ord.time}
                   </td>
                 </tr>

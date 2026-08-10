@@ -54,9 +54,16 @@ export default function DashboardLayout({
         {children}
       </main>
 
+      {/* Brand Avatar Badge (Bottom Left) */}
+      <div className="fixed bottom-6 left-6 z-30 hidden md:block">
+        <div className="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-lg shadow-blue-600/20">
+          N
+        </div>
+      </div>
+
       {/* Floating Bottom Navigation Bar */}
-      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[600px] px-4">
-        <nav className="w-full bg-white/95 backdrop-blur-xl border border-slate-200 shadow-[0_12px_40px_rgba(15,23,42,0.08)] rounded-full p-1.5 flex items-center justify-between gap-1">
+      <div className="fixed bottom-6 left-1/2 -translate-x-1/2 z-30 w-full max-w-[620px] px-4">
+        <nav className="w-full bg-white/95 backdrop-blur-xl border border-slate-200/80 shadow-[0_12px_40px_rgba(15,23,42,0.06)] rounded-full p-1.5 flex items-center justify-between gap-1">
           <div className="flex items-center justify-between flex-1">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -65,12 +72,12 @@ export default function DashboardLayout({
                 <Link
                   key={item.href}
                   href={item.href}
-                  className="relative flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-2 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10 group"
+                  className="relative flex items-center gap-1.5 sm:gap-2 px-3.5 sm:px-4.5 py-2 rounded-full text-xs font-semibold transition-colors duration-300 select-none z-10 group"
                 >
                   {isActive && (
                     <motion.div
                       layoutId="activeTabPill"
-                      className="absolute inset-0 bg-slate-900 rounded-full z-[-1] shadow-lg shadow-slate-900/10"
+                      className="absolute inset-0 bg-blue-600 rounded-full z-[-1] shadow-md shadow-blue-600/25"
                       transition={{ type: 'spring', stiffness: 380, damping: 30 }}
                     />
                   )}
@@ -78,8 +85,8 @@ export default function DashboardLayout({
                     className="flex items-center gap-1.5 sm:gap-2"
                     whileTap={{ scale: 0.96 }}
                   >
-                    <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-800'}`} />
-                    <span className={`text-xs transition-colors duration-300 whitespace-nowrap hidden sm:inline ${isActive ? 'text-white' : 'text-slate-500 group-hover:text-slate-800'}`}>{item.name}</span>
+                    <Icon className={`w-4 h-4 shrink-0 transition-colors duration-300 ${isActive ? 'text-white' : 'text-slate-400 group-hover:text-slate-700'}`} />
+                    <span className={`text-xs transition-colors duration-300 whitespace-nowrap hidden sm:inline ${isActive ? 'text-white font-medium' : 'text-slate-500 group-hover:text-slate-700'}`}>{item.name}</span>
                   </motion.div>
                 </Link>
               );
@@ -87,19 +94,19 @@ export default function DashboardLayout({
           </div>
 
           {/* Divider */}
-          <div className="w-[1px] h-6 bg-slate-200 shrink-0 mx-1" />
+          <div className="w-[1px] h-5 bg-slate-200 shrink-0 mx-1.5" />
 
           {/* Profile Avatar & Sign Out Action */}
           <div className="flex items-center gap-1 shrink-0 pl-1 pr-1.5">
             <div 
-              className="w-8 h-8 rounded-full bg-slate-100 border border-slate-200 flex items-center justify-center text-slate-800 text-[10px] font-bold select-none cursor-default"
+              className="w-7.5 h-7.5 rounded-full bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-700 text-[10px] font-bold select-none cursor-default"
               title={`${user?.name || 'Super Admin'} (${user?.role || 'SUPER_ADMIN'})`}
             >
-              {user?.name?.substring(0, 2).toUpperCase() || 'SA'}
+              SU
             </div>
             <button
               onClick={handleLogout}
-              className="p-2 text-slate-400 hover:text-red-500 hover:bg-red-55/60 rounded-full transition-colors cursor-pointer flex items-center justify-center"
+              className="p-1.5 text-slate-400 hover:text-slate-700 hover:bg-slate-100 rounded-full transition-colors cursor-pointer flex items-center justify-center"
               title="Sign Out"
             >
               <LogOut className="w-4 h-4" />
