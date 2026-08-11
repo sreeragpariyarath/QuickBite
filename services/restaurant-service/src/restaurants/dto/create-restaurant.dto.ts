@@ -1,5 +1,5 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
-import { IsOptional, IsString, MinLength } from 'class-validator';
+import { IsArray, IsOptional, IsString, MinLength } from 'class-validator';
 
 export class CreateRestaurantDto {
   @ApiProperty({ example: 'Spice Garden', minLength: 2 })
@@ -28,6 +28,12 @@ export class CreateRestaurantDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  @ApiPropertyOptional({ example: ['Burgers', 'Fast Food'] })
+  @IsOptional()
+  @IsArray()
+  @IsString({ each: true })
+  cuisines?: string[];
 
   @ApiPropertyOptional({ example: '12345678901234' })
   @IsOptional()
