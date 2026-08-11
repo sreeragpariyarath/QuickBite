@@ -116,6 +116,14 @@ export default function LoginPage() {
           Sign up
         </Link>
       </p>
+
+      <p className="mt-2 text-center text-xs text-zinc-500">
+        Restaurant Owner / Partner?{' '}
+        <Link href="/admin/login" className="font-bold text-[#335438] hover:underline cursor-pointer">
+          Sign in to Partner Portal →
+        </Link>
+      </p>
+
       <p className="mt-3.5 border-t border-zinc-100 pt-3 text-center text-xs text-zinc-400">
         By proceeding, you agree to our Terms of Service and Privacy Policy.
       </p>

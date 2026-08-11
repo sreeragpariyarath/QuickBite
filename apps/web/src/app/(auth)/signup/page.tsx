@@ -1,6 +1,6 @@
 'use client';
 
-import { useState } from 'react';
+import { useState, Suspense } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
@@ -42,7 +42,6 @@ export default function SignupPage() {
   return (
     <AuthShell>
       <div className="mb-6 text-center mt-6 lg:mt-0">
-        {/* user-plus circle icon - hidden on mobile, visible on desktop */}
         <div className="mx-auto mb-3 hidden lg:flex h-12 w-12 items-center justify-center rounded-full bg-[#F2F3E9] text-[#335438]">
           <svg className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
             <path strokeLinecap="round" strokeLinejoin="round" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
@@ -54,7 +53,9 @@ export default function SignupPage() {
         </p>
       </div>
 
-      <SignupForm />
+      <Suspense fallback={<div className="text-center py-6 text-xs text-zinc-400">Loading signup...</div>}>
+        <SignupForm />
+      </Suspense>
 
       {googleError && (
         <p className="mt-2 text-center text-xs text-red-600">{googleError}</p>
@@ -102,6 +103,13 @@ export default function SignupPage() {
         Already have an account?{' '}
         <Link href="/login" className="font-semibold text-[#335438] hover:underline cursor-pointer">
           Sign in
+        </Link>
+      </p>
+
+      <p className="mt-2.5 text-center text-xs text-zinc-500 pt-2 border-t border-zinc-100">
+        Are you a restaurant owner?{' '}
+        <Link href="/signup?role=OWNER" className="font-bold text-[#335438] hover:underline cursor-pointer">
+          Register as Partner →
         </Link>
       </p>
     </AuthShell>

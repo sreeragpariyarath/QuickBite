@@ -1,14 +1,24 @@
+'use client';
+
+import { usePathname } from 'next/navigation';
 import { Header } from '@/components/header';
 
 /**
  * Layout for the main app: sticky header + width-constrained content.
- * Auth pages live in the (auth) group and render full-bleed without this.
+ * Admin/Partner routes skip the customer delivery header for clean rendering.
  */
 export default function AppLayout({
   children,
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const pathname = usePathname();
+  const isAdminRoute = pathname?.startsWith('/admin');
+
+  if (isAdminRoute) {
+    return <div className="min-h-screen bg-white">{children}</div>;
+  }
+
   return (
     <>
       <Header />

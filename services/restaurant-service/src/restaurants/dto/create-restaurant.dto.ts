@@ -28,4 +28,19 @@ export class CreateRestaurantDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  @ApiPropertyOptional({ example: '12345678901234' })
+  @IsOptional()
+  @IsString()
+  fssaiLicense?: string;
+
+  @ApiPropertyOptional({ example: '+919876543210' })
+  @IsOptional()
+  @IsString()
+  contactPhone?: string;
+
+  @ApiPropertyOptional({ example: '29ABCDE1234F1Z5' })
+  @IsOptional()
+  @IsString()
+  gstin?: string;
 }

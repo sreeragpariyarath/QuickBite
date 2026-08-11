@@ -10,6 +10,7 @@ export class AppService implements OnModuleInit {
 
   async onModuleInit() {
     await this.seedSuperAdmin();
+    await this.seedDefaultOwner();
   }
 
   private async seedSuperAdmin() {
@@ -43,6 +44,34 @@ export class AppService implements OnModuleInit {
       }
     } catch (err) {
       console.error('❌ Failed to seed Super Admin:', err);
+    }
+  }
+
+  private async seedDefaultOwner() {
+    const ownerEmail = 'owner@quickbite.com';
+    const ownerId = '11111111-1111-1111-1111-111111111111';
+
+    try {
+      const existing = await this.prisma.user.findUnique({
+        where: { email: ownerEmail },
+      });
+
+      if (!existing) {
+        const hashedPassword = await bcrypt.hash('owner123', 10);
+        await this.prisma.user.create({
+          data: {
+            id: ownerId,
+            email: ownerEmail,
+            password: hashedPassword,
+            role: UserRole.OWNER,
+            isEmailVerified: true,
+            name: 'Rajesh Kumar (Partner)',
+          },
+        });
+        console.log('✅ Default Owner successfully seeded!');
+      }
+    } catch (err) {
+      console.error('❌ Failed to seed Default Owner:', err);
     }
   }
 

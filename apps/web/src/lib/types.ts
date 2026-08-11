@@ -4,7 +4,7 @@ export interface Profile {
   email: string | null;
   isEmailVerified: boolean;
   name: string | null;
-  role: 'CUSTOMER' | 'OWNER';
+  role: 'CUSTOMER' | 'OWNER' | 'SUPER_ADMIN';
 }
 
 export interface MenuItem {
@@ -29,8 +29,23 @@ export interface Restaurant {
   address: string;
   city: string;
   imageUrl: string | null;
+  status?: 'PENDING_APPROVAL' | 'ACTIVE' | 'SUSPENDED' | 'REJECTED';
   isActive: boolean;
   cuisines: string[];
+  fssaiLicense?: string | null;
+  contactPhone?: string | null;
+  gstin?: string | null;
+}
+
+export interface RestaurantStaff {
+  id: string;
+  restaurantId: string;
+  userId: string;
+  name: string | null;
+  phone: string | null;
+  email: string | null;
+  role: 'MANAGER' | 'CASHIER' | 'KITCHEN_STAFF';
+  createdAt: string;
 }
 
 export interface GlobalCategory {
@@ -43,6 +58,7 @@ export interface GlobalCategory {
 export interface RestaurantDetail extends Restaurant {
   categories: Category[];
   menuItems: MenuItem[];
+  staff?: RestaurantStaff[];
 }
 
 export interface OrderItem {

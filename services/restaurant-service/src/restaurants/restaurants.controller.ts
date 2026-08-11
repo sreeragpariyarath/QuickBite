@@ -32,6 +32,8 @@ import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
+import { UpdateRestaurantStatusDto } from './dto/update-restaurant-status.dto';
+import { AddStaffDto } from './dto/add-staff.dto';
 import { JwtAuthGuard, JwtPayload } from '../auth/jwt-auth.guard';
 import { RolesGuard } from '../auth/roles.guard';
 import { Roles } from '../auth/roles.decorator';
@@ -42,65 +44,72 @@ import { CurrentUser } from '../auth/current-user.decorator';
 export class RestaurantsController {
   constructor(private readonly restaurantsService: RestaurantsService) {}
 
-  // ---------- Public ----------
+  // ---------- Public / Filtered ----------
 
   @Get()
   @ApiOperation({
     summary: 'List restaurants',
     description:
-      'All active restaurants, optionally filtered by city (case-insensitive) and/or cuisine. Public — no auth required.',
+      'All active restaurants, optionally filtered by city, cuisine, ownerId, or status.',
   })
-  @ApiQuery({
-    name: 'city',
-    required: false,
-    example: 'Kochi',
-    description: 'Filter by city',
-  })
-  @ApiQuery({
-    name: 'cuisine',
-    required: false,
-    example: 'Burgers',
-    description: 'Filter by cuisine tag',
-  })
-  @ApiOkResponse({ description: 'Array of active restaurants' })
+  @ApiQuery({ name: 'city', required: false, example: 'Kochi' })
+  @ApiQuery({ name: 'cuisine', required: false, example: 'Burgers' })
+  @ApiQuery({ name: 'ownerId', required: false })
+  @ApiQuery({ name: 'status', required: false, example: 'PENDING_APPROVAL' })
+  @ApiOkResponse({ description: 'Array of restaurants' })
   findAll(
     @Query('city') city?: string,
     @Query('cuisine') cuisine?: string,
     @Query('ownerId') ownerId?: string,
+    @Query('status') status?: string,
   ) {
-    return this.restaurantsService.findAll(city, cuisine, ownerId);
+    return this.restaurantsService.findAll(city, cuisine, ownerId, status);
   }
 
   @Get(':id')
   @ApiOperation({
-    summary: 'Restaurant details (with menu)',
-    description:
-      'Restaurant with its categories and available menu items. Public — no auth required.',
+    summary: 'Restaurant details (with menu & staff)',
+    description: 'Restaurant with its categories, menu items, and staff.',
   })
   @ApiParam({ name: 'id', format: 'uuid' })
-  @ApiOkResponse({ description: 'Restaurant with nested menu' })
+  @ApiOkResponse({ description: 'Restaurant details' })
   @ApiNotFoundResponse({ description: 'Restaurant not found' })
   findOne(@Param('id', ParseUUIDPipe) id: string) {
     return this.restaurantsService.findOne(id);
   }
 
-  // ---------- Owner only ----------
+  // ---------- Super Admin Endpoints ----------
+
+  @Patch(':id/status')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('SUPER_ADMIN')
+  @ApiBearerAuth()
+  @ApiOperation({
+    summary: 'Approve / Suspend restaurant status',
+    description: 'SUPER_ADMIN role required. Updates restaurant status to ACTIVE, SUSPENDED, or REJECTED.',
+  })
+  @ApiParam({ name: 'id', format: 'uuid' })
+  @ApiOkResponse({ description: 'Restaurant status updated' })
+  @ApiForbiddenResponse({ description: 'SUPER_ADMIN role required' })
+  updateStatus(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body() dto: UpdateRestaurantStatusDto,
+  ) {
+    return this.restaurantsService.updateStatus(id, dto);
+  }
+
+  // ---------- Owner Endpoints ----------
 
   @Post()
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
   @ApiOperation({
-    summary: 'Create restaurant',
-    description:
-      'OWNER role required. Names are not globally unique (branches and same-name restaurants are allowed), but the same owner cannot create the same name at the same address twice.',
+    summary: 'Submit restaurant for onboarding approval',
+    description: 'OWNER role required. Creates a new restaurant application with PENDING_APPROVAL status.',
   })
-  @ApiCreatedResponse({ description: 'Restaurant created' })
-  @ApiConflictResponse({
-    description: 'You already have a restaurant with this name at this address',
-  })
-  @ApiUnauthorizedResponse({ description: 'Missing or invalid access token' })
-  @ApiForbiddenResponse({ description: 'CUSTOMER role cannot create restaurants' })
+  @ApiCreatedResponse({ description: 'Restaurant application submitted' })
+  @ApiConflictResponse({ description: 'Duplicate name/address for this owner' })
   create(@CurrentUser() user: JwtPayload, @Body() dto: CreateRestaurantDto) {
     return this.restaurantsService.create(user.sub, dto);
   }
@@ -109,14 +118,9 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Update restaurant',
-    description: 'Only the owner of this restaurant.',
-  })
+  @ApiOperation({ summary: 'Update restaurant details' })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiOkResponse({ description: 'Restaurant updated' })
-  @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
-  @ApiNotFoundResponse({ description: 'Restaurant not found' })
   update(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: JwtPayload,
@@ -125,18 +129,63 @@ export class RestaurantsController {
     return this.restaurantsService.update(id, user.sub, dto);
   }
 
+  // ---------- Staff / Manager Management ----------
+
+  @Post(':id/staff')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('OWNER')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Invite or assign staff member (Manager/Cashier/Kitchen)' })
+  @ApiParam({ name: 'id', format: 'uuid' })
+  @ApiCreatedResponse({ description: 'Staff member assigned' })
+  addStaff(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: JwtPayload,
+    @Body() dto: AddStaffDto,
+  ) {
+    return this.restaurantsService.addStaff(id, user.sub, dto);
+  }
+
+  @Get(':id/staff')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('OWNER')
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'List staff members for restaurant' })
+  @ApiParam({ name: 'id', format: 'uuid' })
+  @ApiOkResponse({ description: 'List of staff members' })
+  getStaff(
+    @Param('id', ParseUUIDPipe) id: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.restaurantsService.getStaff(id, user.sub);
+  }
+
+  @Delete(':id/staff/:staffId')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('OWNER')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Remove staff member from restaurant' })
+  @ApiParam({ name: 'id', format: 'uuid' })
+  @ApiParam({ name: 'staffId', format: 'uuid' })
+  @ApiNoContentResponse({ description: 'Staff member removed' })
+  removeStaff(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Param('staffId', ParseUUIDPipe) staffId: string,
+    @CurrentUser() user: JwtPayload,
+  ) {
+    return this.restaurantsService.removeStaff(id, staffId, user.sub);
+  }
+
+  // ---------- Categories & Menu Items ----------
+
   @Post(':id/categories')
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Add category',
-    description: 'Only the owner of this restaurant.',
-  })
+  @ApiOperation({ summary: 'Add category' })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiCreatedResponse({ description: 'Category created' })
-  @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
-  @ApiNotFoundResponse({ description: 'Restaurant not found' })
   addCategory(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: JwtPayload,
@@ -149,17 +198,9 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Add menu item',
-    description:
-      'Only the owner of this restaurant. categoryId is optional.',
-  })
+  @ApiOperation({ summary: 'Add menu item' })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiCreatedResponse({ description: 'Menu item created' })
-  @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
-  @ApiNotFoundResponse({
-    description: 'Restaurant or category not found in this restaurant',
-  })
   addMenuItem(
     @Param('id', ParseUUIDPipe) id: string,
     @CurrentUser() user: JwtPayload,
@@ -172,15 +213,10 @@ export class RestaurantsController {
   @UseGuards(JwtAuthGuard, RolesGuard)
   @Roles('OWNER')
   @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Update menu item',
-    description: 'Only the owner of this restaurant.',
-  })
+  @ApiOperation({ summary: 'Update menu item' })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiParam({ name: 'itemId', format: 'uuid' })
   @ApiOkResponse({ description: 'Menu item updated' })
-  @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
-  @ApiNotFoundResponse({ description: 'Menu item not found in this restaurant' })
   updateMenuItem(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('itemId', ParseUUIDPipe) itemId: string,
@@ -195,15 +231,10 @@ export class RestaurantsController {
   @Roles('OWNER')
   @HttpCode(HttpStatus.NO_CONTENT)
   @ApiBearerAuth()
-  @ApiOperation({
-    summary: 'Delete menu item',
-    description: 'Only the owner of this restaurant. Returns 204.',
-  })
+  @ApiOperation({ summary: 'Delete menu item' })
   @ApiParam({ name: 'id', format: 'uuid' })
   @ApiParam({ name: 'itemId', format: 'uuid' })
   @ApiNoContentResponse({ description: 'Menu item deleted' })
-  @ApiForbiddenResponse({ description: 'You do not own this restaurant' })
-  @ApiNotFoundResponse({ description: 'Menu item not found in this restaurant' })
   removeMenuItem(
     @Param('id', ParseUUIDPipe) id: string,
     @Param('itemId', ParseUUIDPipe) itemId: string,

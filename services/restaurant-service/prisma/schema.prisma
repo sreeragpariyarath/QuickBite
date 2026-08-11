@@ -7,29 +7,65 @@ datasource db {
   provider = "postgresql"
 }
 
+enum RestaurantStatus {
+  PENDING_APPROVAL
+  ACTIVE
+  SUSPENDED
+  REJECTED
+}
+
+enum StaffRole {
+  MANAGER
+  CASHIER
+  KITCHEN_STAFF
+}
+
 model Restaurant {
-  id          String  @id @default(uuid()) @db.Uuid
-  ownerId     String  @db.Uuid
-  name        String
-  description String?
-  address     String
-  city        String
-  imageUrl    String?
-  isActive    Boolean @default(true)
+  id           String           @id @default(uuid()) @db.Uuid
+  ownerId      String           @db.Uuid
+  name         String
+  description  String?
+  address      String
+  city         String
+  imageUrl     String?
+  status       RestaurantStatus @default(PENDING_APPROVAL)
+  isActive     Boolean          @default(false)
+  fssaiLicense String?
+  contactPhone String?
+  gstin        String?
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   categories Category[]
   menuItems  MenuItem[]
-  cuisines   String[]   @default([])
+  staff      RestaurantStaff[]
+  cuisines   String[]          @default([])
 
   // Names are not globally unique (real cities have same-name restaurants;
   // same owner may run branches at different addresses) — but the same owner
   // cannot create the same restaurant twice at the same address
   @@unique([ownerId, name, address])
   @@index([city])
+  @@index([status])
   @@map("restaurants")
+}
+
+model RestaurantStaff {
+  id           String     @id @default(uuid()) @db.Uuid
+  restaurantId String     @db.Uuid
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id], onDelete: Cascade)
+  userId       String     @db.Uuid
+  name         String?
+  phone        String?
+  email        String?
+  role         StaffRole  @default(MANAGER)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@unique([restaurantId, userId])
+  @@map("restaurant_staff")
 }
 
 model Category {

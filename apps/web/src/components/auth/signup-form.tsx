@@ -1,6 +1,7 @@
 'use client';
 
 import { useState } from 'react';
+import { useSearchParams } from 'next/navigation';
 import { motion } from 'framer-motion';
 import { User, Mail, Lock, ChevronRight } from 'lucide-react';
 import { api, AUTH_URL } from '@/lib/api';
@@ -13,6 +14,9 @@ interface RegisterResponse {
 }
 
 export function SignupForm() {
+  const searchParams = useSearchParams();
+  const role = searchParams.get('role') === 'OWNER' ? 'OWNER' : 'CUSTOMER';
+
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -27,7 +31,7 @@ export function SignupForm() {
     try {
       const res = await api<RegisterResponse>(AUTH_URL, '/auth/register/email', {
         method: 'POST',
-        body: { name, email, password },
+        body: { name, email, password, role },
       });
       setDone(res);
     } catch (e) {
@@ -50,7 +54,7 @@ export function SignupForm() {
         <h3 className="text-lg font-bold text-zinc-900">Check your inbox</h3>
         <p className="mt-2 text-sm text-zinc-600 leading-relaxed">
           We sent a verification link to <strong>{email}</strong>. Click it to
-          activate your account, then log in.
+          activate your {role === 'OWNER' ? 'Partner' : 'Customer'} account, then log in.
         </p>
         {done.devVerificationUrl && (
           <a
@@ -65,7 +69,13 @@ export function SignupForm() {
   }
 
   return (
-    <form onSubmit={signup} className="space-y-5">
+    <form onSubmit={signup} className="space-y-4">
+      {role === 'OWNER' && (
+        <div className="bg-[#F2F3E9]/80 border border-[#335438]/20 rounded-xl px-3.5 py-2 text-center text-xs text-[#335438] font-semibold">
+          Registering as Restaurant Partner Account
+        </div>
+      )}
+
       <TextField
         label="Full name"
         icon={<User className="h-5 w-5 text-zinc-400" />}
@@ -100,7 +110,7 @@ export function SignupForm() {
         required
       />
       <Button type="submit" className="relative font-bold mt-2" fullWidth loading={busy}>
-        <span>Create account</span>
+        <span>Create {role === 'OWNER' ? 'Partner' : 'Customer'} account</span>
         <span className="absolute right-4 top-1/2 -translate-y-1/2">
           <ChevronRight className="h-4 w-4 stroke-[3]" />
         </span>

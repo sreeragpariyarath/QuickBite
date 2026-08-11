@@ -15,15 +15,20 @@ import {
   Edit3, 
   TrendingUp, 
   CheckCircle2, 
-  Clock 
+  Clock,
+  Users,
+  Shield,
+  Phone,
+  Mail,
+  UserCheck
 } from 'lucide-react';
 import { api, RESTAURANT_URL, ORDER_URL } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
-import type { Restaurant, Category, MenuItem, Order } from '@/lib/types';
+import type { Restaurant, Category, MenuItem, Order, RestaurantStaff } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/text-field';
 
-type Tab = 'restaurants' | 'orders';
+type Tab = 'restaurants' | 'orders' | 'staff';
 
 export default function AdminDashboardPage() {
   const router = useRouter();
@@ -51,6 +56,19 @@ export default function AdminDashboardPage() {
   const [restCity, setRestCity] = useState('');
   const [restImgUrl, setRestImgUrl] = useState('');
   const [restCuisines, setRestCuisines] = useState('');
+  const [restFssai, setRestFssai] = useState('');
+  const [restPhone, setRestPhone] = useState('');
+  const [restGstin, setRestGstin] = useState('');
+
+  // Staff Management state
+  const [staffList, setStaffList] = useState<RestaurantStaff[]>([]);
+  const [loadingStaff, setLoadingStaff] = useState(false);
+  const [showAddStaff, setShowAddStaff] = useState(false);
+  const [staffUserId, setStaffUserId] = useState('');
+  const [staffName, setStaffName] = useState('');
+  const [staffPhone, setStaffPhone] = useState('');
+  const [staffEmail, setStaffEmail] = useState('');
+  const [staffRole, setStaffRole] = useState<'MANAGER' | 'CASHIER' | 'KITCHEN_STAFF'>('MANAGER');
 
   // Form inputs: Create Category
   const [showAddCat, setShowAddCat] = useState(false);
@@ -71,7 +89,7 @@ export default function AdminDashboardPage() {
     if (!authLoading) {
       if (!profile) {
         router.push('/admin/login');
-      } else if (profile.role !== 'OWNER') {
+      } else if (profile.role !== 'OWNER' && (profile.role as string) !== 'SUPER_ADMIN') {
         router.push('/');
       }
     }
@@ -108,6 +126,20 @@ export default function AdminDashboardPage() {
     }
   };
 
+  // Fetch staff members for selected restaurant
+  const fetchStaff = async (id: string) => {
+    setLoadingStaff(true);
+    try {
+      const data = await api<RestaurantStaff[]>(RESTAURANT_URL, `/restaurants/${id}/staff`, { auth: true });
+      setStaffList(data || []);
+    } catch (e) {
+      console.error('Failed to fetch staff members:', e);
+      setStaffList([]);
+    } finally {
+      setLoadingStaff(false);
+    }
+  };
+
   // Fetch incoming orders
   const fetchOrders = async () => {
     if (!profile) return;
@@ -124,7 +156,7 @@ export default function AdminDashboardPage() {
 
   // Initial Data Fetch triggers
   useEffect(() => {
-    if (profile?.role === 'OWNER') {
+    if (profile?.role === 'OWNER' || (profile?.role as string) === 'SUPER_ADMIN') {
       fetchRestaurants();
       fetchOrders();
     }
@@ -133,8 +165,10 @@ export default function AdminDashboardPage() {
   useEffect(() => {
     if (selectedRestId) {
       fetchRestaurantDetail(selectedRestId);
+      fetchStaff(selectedRestId);
     } else {
       setRestDetail(null);
+      setStaffList([]);
     }
   }, [selectedRestId]);
 
@@ -157,6 +191,9 @@ export default function AdminDashboardPage() {
           city: restCity,
           imageUrl: restImgUrl || undefined,
           cuisines: cuisinesArr,
+          fssaiLicense: restFssai || undefined,
+          contactPhone: restPhone || undefined,
+          gstin: restGstin || undefined,
         },
       });
       // Reset form states
@@ -166,10 +203,63 @@ export default function AdminDashboardPage() {
       setRestCity('');
       setRestImgUrl('');
       setRestCuisines('');
+      setRestFssai('');
+      setRestPhone('');
+      setRestGstin('');
       setShowAddRest(false);
       await fetchRestaurants();
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to create restaurant');
+    } finally {
+      setActionBusy(null);
+    }
+  };
+
+  // Action: Add Staff Member / Invite Manager
+  const handleAddStaff = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRestId || actionBusy) return;
+    setActionBusy('add_staff');
+
+    try {
+      await api(RESTAURANT_URL, `/restaurants/${selectedRestId}/staff`, {
+        method: 'POST',
+        auth: true,
+        body: {
+          userId: staffUserId,
+          name: staffName || undefined,
+          phone: staffPhone || undefined,
+          email: staffEmail || undefined,
+          role: staffRole,
+        },
+      });
+      setStaffUserId('');
+      setStaffName('');
+      setStaffPhone('');
+      setStaffEmail('');
+      setStaffRole('MANAGER');
+      setShowAddStaff(false);
+      await fetchStaff(selectedRestId);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to add staff member');
+    } finally {
+      setActionBusy(null);
+    }
+  };
+
+  // Action: Remove Staff Member
+  const handleDeleteStaff = async (staffId: string) => {
+    if (!selectedRestId || actionBusy || !confirm('Are you sure you want to remove this staff member?')) return;
+    setActionBusy(`delete_staff_${staffId}`);
+
+    try {
+      await api(RESTAURANT_URL, `/restaurants/${selectedRestId}/staff/${staffId}`, {
+        method: 'DELETE',
+        auth: true,
+      });
+      await fetchStaff(selectedRestId);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to remove staff member');
     } finally {
       setActionBusy(null);
     }
@@ -291,7 +381,7 @@ export default function AdminDashboardPage() {
     setShowAddDish(true);
   };
 
-  if (authLoading || !profile || profile.role !== 'OWNER') {
+  if (authLoading || !profile || (profile.role !== 'OWNER' && (profile.role as string) !== 'SUPER_ADMIN')) {
     return (
       <div className="flex h-[60vh] items-center justify-center">
         <Loader2 className="h-8 w-8 animate-spin text-[#335438]" />
@@ -339,6 +429,17 @@ export default function AdminDashboardPage() {
             {pendingOrders.length > 0 && (
               <span className="h-2 w-2 rounded-full bg-red-500 animate-ping" />
             )}
+          </button>
+          <button
+            onClick={() => setActiveTab('staff')}
+            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all focus:outline-none cursor-pointer ${
+              activeTab === 'staff'
+                ? 'bg-white text-[#335438] shadow-xs'
+                : 'text-zinc-600 hover:text-zinc-900'
+            }`}
+          >
+            <UserCheck className="h-4 w-4" />
+            Staff & Managers
           </button>
         </div>
       </div>
@@ -398,6 +499,24 @@ export default function AdminDashboardPage() {
                   required
                 />
                 <TextField
+                  label="FSSAI License No."
+                  value={restFssai}
+                  onChange={(e) => setRestFssai(e.target.value)}
+                  placeholder="e.g. 11223344556677"
+                />
+                <TextField
+                  label="Contact Phone"
+                  value={restPhone}
+                  onChange={(e) => setRestPhone(e.target.value)}
+                  placeholder="e.g. +919876543210"
+                />
+                <TextField
+                  label="GSTIN (optional)"
+                  value={restGstin}
+                  onChange={(e) => setRestGstin(e.target.value)}
+                  placeholder="e.g. 29ABCDE1234F1Z5"
+                />
+                <TextField
                   label="Image URL"
                   value={restImgUrl}
                   onChange={(e) => setRestImgUrl(e.target.value)}
@@ -405,7 +524,7 @@ export default function AdminDashboardPage() {
                 />
                 <div className="flex gap-2 justify-end pt-1">
                   <Button type="button" variant="secondary" className="text-xs font-bold py-1.5 h-auto px-3" onClick={() => setShowAddRest(false)}>Cancel</Button>
-                  <Button type="submit" className="text-xs font-bold py-1.5 h-auto px-3 bg-[#335438]" loading={actionBusy === 'create_restaurant'}>Create</Button>
+                  <Button type="submit" className="text-xs font-bold py-1.5 h-auto px-3 bg-[#335438]" loading={actionBusy === 'create_restaurant'}>Submit for Approval</Button>
                 </div>
               </form>
             )}
@@ -435,8 +554,23 @@ export default function AdminDashboardPage() {
                       {r.imageUrl && (
                         <img src={r.imageUrl} alt={r.name} className="w-12 h-12 object-cover rounded-xl shrink-0 bg-zinc-100 border border-zinc-150" />
                       )}
-                      <div className="overflow-hidden">
-                        <h4 className="text-sm font-bold text-zinc-800 truncate">{r.name}</h4>
+                      <div className="overflow-hidden flex-1">
+                        <div className="flex items-center justify-between gap-2">
+                          <h4 className="text-sm font-bold text-zinc-800 truncate">{r.name}</h4>
+                          {r.status === 'ACTIVE' || r.isActive ? (
+                            <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">
+                              Active
+                            </span>
+                          ) : r.status === 'PENDING_APPROVAL' ? (
+                            <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shrink-0 animate-pulse">
+                              Pending Approval
+                            </span>
+                          ) : (
+                            <span className="text-[9px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full shrink-0">
+                              Suspended
+                            </span>
+                          )}
+                        </div>
                         <p className="text-[11px] font-medium text-zinc-500 truncate mt-0.5">{r.address}, {r.city}</p>
                         <div className="flex gap-1 flex-wrap mt-1.5">
                           {r.cuisines.slice(0, 3).map((c, i) => (
@@ -904,6 +1038,170 @@ export default function AdminDashboardPage() {
 
             </div>
           )}
+        </div>
+      )}
+
+      {/* RENDER TAB: STAFF MANAGEMENT */}
+      {activeTab === 'staff' && (
+        <div className="space-y-6 animate-scale-in">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white border border-zinc-200/80 rounded-2xl p-5 shadow-xs">
+            <div>
+              <h2 className="text-base font-bold text-zinc-900">Staff & Restaurant Managers</h2>
+              <p className="text-xs text-zinc-500 mt-0.5">Assign managers, cashiers, and kitchen staff to manage daily restaurant operations.</p>
+            </div>
+            
+            <div className="flex items-center gap-3">
+              {/* Select Active Store */}
+              <div className="flex items-center gap-2 bg-zinc-50 border border-zinc-200 px-3 py-1.5 rounded-xl text-xs">
+                <Store className="h-4 w-4 text-[#335438]" />
+                <select
+                  value={selectedRestId || ''}
+                  onChange={(e) => setSelectedRestId(e.target.value)}
+                  className="bg-transparent text-zinc-900 font-bold focus:outline-none cursor-pointer"
+                >
+                  {restaurants.map((r) => (
+                    <option key={r.id} value={r.id}>{r.name} ({r.city})</option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                onClick={() => setShowAddStaff(!showAddStaff)}
+                disabled={!selectedRestId}
+                className="flex items-center gap-1.5 px-4 py-2 bg-[#335438] hover:bg-[#28422c] text-white text-xs font-bold rounded-xl shadow-xs transition focus:outline-none cursor-pointer disabled:opacity-50"
+              >
+                <Plus className="h-4 w-4" />
+                Invite Manager / Staff
+              </button>
+            </div>
+          </div>
+
+          {/* Form Expansion: Invite Staff */}
+          {showAddStaff && (
+            <form onSubmit={handleAddStaff} className="bg-white border border-zinc-200/80 rounded-2xl p-6 shadow-sm space-y-4 max-w-xl mx-auto animate-scale-in">
+              <h3 className="text-sm font-bold text-zinc-900 border-b border-zinc-100 pb-2">Invite Staff Member to Restaurant</h3>
+              
+              <TextField
+                label="Manager / Staff User ID"
+                value={staffUserId}
+                onChange={(e) => setStaffUserId(e.target.value)}
+                placeholder="UUID e.g. 11111111-1111-1111-1111-111111111111"
+                required
+              />
+              <TextField
+                label="Full Name"
+                value={staffName}
+                onChange={(e) => setStaffName(e.target.value)}
+                placeholder="e.g. Ananya Sharma"
+              />
+              <div className="grid grid-cols-2 gap-4">
+                <TextField
+                  label="Phone Number"
+                  value={staffPhone}
+                  onChange={(e) => setStaffPhone(e.target.value)}
+                  placeholder="e.g. +919876543211"
+                />
+                <TextField
+                  label="Email Address"
+                  value={staffEmail}
+                  onChange={(e) => setStaffEmail(e.target.value)}
+                  placeholder="e.g. ananya@example.com"
+                />
+              </div>
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-zinc-700">Staff Operational Role</label>
+                <select
+                  value={staffRole}
+                  onChange={(e) => setStaffRole(e.target.value as any)}
+                  className="w-full px-3 py-2 bg-white border border-zinc-200 rounded-xl text-xs font-bold text-zinc-900 focus:outline-none focus:border-[#335438]"
+                >
+                  <option value="MANAGER">Restaurant Manager (Full Operations & Menu)</option>
+                  <option value="CASHIER">Cashier (Order Accepting & Payments)</option>
+                  <option value="KITCHEN_STAFF">Kitchen Display Staff (Order Prep Statuses)</option>
+                </select>
+              </div>
+
+              <div className="flex gap-2 justify-end pt-2 border-t border-zinc-100">
+                <Button type="button" variant="secondary" className="text-xs font-bold py-1.5 h-auto px-4" onClick={() => setShowAddStaff(false)}>Cancel</Button>
+                <Button type="submit" className="text-xs font-bold py-1.5 h-auto px-4 bg-[#335438]" loading={actionBusy === 'add_staff'}>Send Invitation & Assign</Button>
+              </div>
+            </form>
+          )}
+
+          {/* Staff List Table */}
+          <div className="bg-white border border-zinc-200/80 rounded-2xl overflow-hidden shadow-xs">
+            {loadingStaff ? (
+              <div className="flex justify-center py-12">
+                <Loader2 className="h-6 w-6 animate-spin text-zinc-400" />
+              </div>
+            ) : staffList.length === 0 ? (
+              <div className="text-center py-12 text-zinc-500 space-y-2">
+                <Users className="h-8 w-8 text-zinc-300 mx-auto" />
+                <p className="text-xs font-bold text-zinc-700">No staff members assigned yet.</p>
+                <p className="text-[11px] text-zinc-400">Click "Invite Manager / Staff" above to grant operational access to your team.</p>
+              </div>
+            ) : (
+              <div className="overflow-x-auto">
+                <table className="w-full text-left text-xs">
+                  <thead className="bg-zinc-50 border-b border-zinc-100 text-zinc-500 font-mono text-[10px] uppercase">
+                    <tr>
+                      <th className="px-6 py-3.5 font-bold">Staff Member</th>
+                      <th className="px-6 py-3.5 font-bold">Assigned Role</th>
+                      <th className="px-6 py-3.5 font-bold">User UUID</th>
+                      <th className="px-6 py-3.5 font-bold">Assigned Date</th>
+                      <th className="px-6 py-3.5 text-right font-bold">Actions</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-zinc-100 text-zinc-700 font-medium">
+                    {staffList.map((s) => (
+                      <tr key={s.id} className="hover:bg-zinc-50/50">
+                        <td className="px-6 py-4">
+                          <div className="flex items-center gap-3">
+                            <div className="h-8 w-8 rounded-full bg-[#F2F3E9] text-[#335438] flex items-center justify-center font-bold text-xs">
+                              {s.name ? s.name[0] : 'M'}
+                            </div>
+                            <div>
+                              <p className="font-bold text-zinc-900 text-xs">{s.name || 'Unnamed Staff'}</p>
+                              <p className="text-[10px] text-zinc-400">{s.phone || s.email || 'No contact provided'}</p>
+                            </div>
+                          </div>
+                        </td>
+                        <td className="px-6 py-4">
+                          <span className={`inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full text-[10px] font-bold border ${
+                            s.role === 'MANAGER'
+                              ? 'bg-purple-50 text-purple-700 border-purple-200'
+                              : s.role === 'CASHIER'
+                              ? 'bg-blue-50 text-blue-700 border-blue-200'
+                              : 'bg-orange-50 text-orange-700 border-orange-200'
+                          }`}>
+                            <Shield className="h-3 w-3" />
+                            {s.role}
+                          </span>
+                        </td>
+                        <td className="px-6 py-4 font-mono text-[10px] text-zinc-500">
+                          {s.userId}
+                        </td>
+                        <td className="px-6 py-4 text-zinc-400 text-[11px]">
+                          {new Date(s.createdAt).toLocaleDateString()}
+                        </td>
+                        <td className="px-6 py-4 text-right">
+                          <button
+                            onClick={() => handleDeleteStaff(s.id)}
+                            disabled={actionBusy === `delete_staff_${s.id}`}
+                            className="p-1.5 hover:bg-red-50 text-zinc-400 hover:text-red-600 rounded-lg transition focus:outline-none cursor-pointer"
+                            title="Revoke Staff Access"
+                          >
+                            <Trash2 className="h-4 w-4" />
+                          </button>
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
+          </div>
         </div>
       )}
     </div>

@@ -11,6 +11,8 @@ import { UpdateRestaurantDto } from './dto/update-restaurant.dto';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { CreateMenuItemDto } from './dto/create-menu-item.dto';
 import { UpdateMenuItemDto } from './dto/update-menu-item.dto';
+import { RestaurantStatusEnum, UpdateRestaurantStatusDto } from './dto/update-restaurant-status.dto';
+import { AddStaffDto } from './dto/add-staff.dto';
 
 @Injectable()
 export class RestaurantsService implements OnModuleInit {
@@ -21,19 +23,31 @@ export class RestaurantsService implements OnModuleInit {
   async create(ownerId: string, dto: CreateRestaurantDto) {
     try {
       return await this.prisma.restaurant.create({
-        data: { ...dto, ownerId },
+        data: {
+          ...dto,
+          ownerId,
+          status: 'PENDING_APPROVAL',
+          isActive: false,
+        },
       });
     } catch (err) {
       this.rethrowDuplicate(err);
     }
   }
 
-  findAll(city?: string, cuisine?: string, ownerId?: string) {
+  findAll(city?: string, cuisine?: string, ownerId?: string, status?: string) {
     return this.prisma.restaurant.findMany({
       where: {
-        ...(ownerId ? { ownerId } : { isActive: true }),
+        ...(status
+          ? { status: status as any }
+          : ownerId
+          ? { ownerId }
+          : { isActive: true }),
         ...(city ? { city: { equals: city, mode: 'insensitive' } } : {}),
         ...(cuisine ? { cuisines: { has: cuisine } } : {}),
+      },
+      include: {
+        staff: true,
       },
       orderBy: { createdAt: 'desc' },
     });
@@ -51,6 +65,7 @@ export class RestaurantsService implements OnModuleInit {
         menuItems: {
           where: { isAvailable: true, categoryId: null },
         },
+        staff: true,
       },
     });
 
@@ -72,6 +87,82 @@ export class RestaurantsService implements OnModuleInit {
     } catch (err) {
       this.rethrowDuplicate(err);
     }
+  }
+
+  /** Super Admin Status Approval / Suspension */
+  async updateStatus(id: string, dto: UpdateRestaurantStatusDto) {
+    const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
+    if (!restaurant) {
+      throw new NotFoundException('Restaurant not found');
+    }
+
+    const isActive = dto.status === RestaurantStatusEnum.ACTIVE;
+
+    return this.prisma.restaurant.update({
+      where: { id },
+      data: {
+        status: dto.status as any,
+        isActive,
+      },
+    });
+  }
+
+  // ---------- Staff / Manager Management ----------
+
+  async addStaff(restaurantId: string, ownerId: string, dto: AddStaffDto) {
+    await this.assertOwnership(restaurantId, ownerId);
+
+    try {
+      return await this.prisma.restaurantStaff.upsert({
+        where: {
+          restaurantId_userId: {
+            restaurantId,
+            userId: dto.userId,
+          },
+        },
+        update: {
+          role: dto.role as any,
+          name: dto.name,
+          phone: dto.phone,
+          email: dto.email,
+        },
+        create: {
+          restaurantId,
+          userId: dto.userId,
+          name: dto.name,
+          phone: dto.phone,
+          email: dto.email,
+          role: dto.role as any,
+        },
+      });
+    } catch (err) {
+      throw new ConflictException('Failed to assign staff member');
+    }
+  }
+
+  async getStaff(restaurantId: string, ownerId: string) {
+    await this.assertOwnership(restaurantId, ownerId);
+
+    return this.prisma.restaurantStaff.findMany({
+      where: { restaurantId },
+      orderBy: { createdAt: 'desc' },
+    });
+  }
+
+  async removeStaff(restaurantId: string, staffId: string, ownerId: string) {
+    await this.assertOwnership(restaurantId, ownerId);
+
+    const staff = await this.prisma.restaurantStaff.findUnique({
+      where: { id: staffId },
+    });
+
+    if (!staff || staff.restaurantId !== restaurantId) {
+      throw new NotFoundException('Staff member not found in this restaurant');
+    }
+
+    await this.prisma.restaurantStaff.delete({
+      where: { id: staffId },
+    });
   }
 
   /** Maps the (ownerId, name, address) unique violation (P2002) to a 409. */
@@ -209,6 +300,8 @@ export class RestaurantsService implements OnModuleInit {
           imageUrl: 'https://images.unsplash.com/photo-1568901346375-23c9450c58cd?q=80&w=400',
           cuisines: ['Burgers', 'American'],
           ownerId,
+          status: 'ACTIVE' as const,
+          isActive: true,
         },
         {
           name: 'Pizza House',
@@ -218,6 +311,8 @@ export class RestaurantsService implements OnModuleInit {
           imageUrl: 'https://images.unsplash.com/photo-1513104890138-7c749659a591?q=80&w=400',
           cuisines: ['Pizza', 'Italian'],
           ownerId,
+          status: 'ACTIVE' as const,
+          isActive: true,
         },
         {
           name: 'Wok Express',
@@ -227,6 +322,8 @@ export class RestaurantsService implements OnModuleInit {
           imageUrl: 'https://images.unsplash.com/photo-1585032226651-759b368d7246?q=80&w=400',
           cuisines: ['Chinese', 'Asian'],
           ownerId,
+          status: 'ACTIVE' as const,
+          isActive: true,
         },
         {
           name: 'Sweet Truth',
@@ -236,6 +333,8 @@ export class RestaurantsService implements OnModuleInit {
           imageUrl: 'https://images.unsplash.com/photo-1578985545062-69928b1d9587?q=80&w=400',
           cuisines: ['Desserts', 'Bakery'],
           ownerId,
+          status: 'ACTIVE' as const,
+          isActive: true,
         },
         {
           name: 'Andhra Ruchulu',
@@ -245,6 +344,8 @@ export class RestaurantsService implements OnModuleInit {
           imageUrl: 'https://images.unsplash.com/photo-1541832676-9b763b0239ab?q=80&w=400',
           cuisines: ['Indian'],
           ownerId,
+          status: 'ACTIVE' as const,
+          isActive: true,
         },
         {
           name: 'Burger King',
@@ -254,6 +355,8 @@ export class RestaurantsService implements OnModuleInit {
           imageUrl: 'https://images.unsplash.com/photo-1534790566855-4cb788d389ec?q=80&w=400',
           cuisines: ['Burgers', 'Fast Food'],
           ownerId,
+          status: 'ACTIVE' as const,
+          isActive: true,
         },
       ];
 

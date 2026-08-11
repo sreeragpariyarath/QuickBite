@@ -39,8 +39,8 @@ export default function AdminLoginPage() {
       // 2. Fetch authenticated profile
       const userProfile = await loginWithTokens(res.accessToken, res.refreshToken);
 
-      // 3. Enforce OWNER role checks
-      if (userProfile?.role === 'OWNER') {
+      // 3. Enforce OWNER / SUPER_ADMIN role checks
+      if (userProfile?.role === 'OWNER' || userProfile?.role === 'SUPER_ADMIN') {
         router.push('/admin');
       } else {
         // Clear session if not authorized
@@ -99,9 +99,12 @@ export default function AdminLoginPage() {
         </Button>
       </form>
 
-      <p className="mt-6 text-center text-xs text-zinc-400 leading-normal border-t border-zinc-100 pt-4">
-        Need a partner account? Sign up on the main portal or contact admin support.
-      </p>
+      <div className="mt-6 text-center text-xs text-zinc-500 border-t border-zinc-100 pt-4 space-y-1">
+        <p>Don't have a partner account yet?</p>
+        <Link href="/signup?role=OWNER" className="font-bold text-[#335438] hover:underline cursor-pointer inline-block">
+          Register as Restaurant Partner →
+        </Link>
+      </div>
     </AuthShell>
   );
 }
