@@ -117,7 +117,7 @@ export default function LoginPage() {
         </Link>
       </p>
 
-      <p className="mt-2 text-center text-xs text-zinc-500">
+      <p className="mt-4 text-center text-[10px] text-zinc-500">
         Restaurant Owner / Partner?{' '}
         <Link href="/admin/login" className="font-bold text-[#335438] hover:underline cursor-pointer">
           Sign in to Partner Portal →

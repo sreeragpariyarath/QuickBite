@@ -27,6 +27,7 @@ import { useAuth } from '@/lib/auth';
 import type { Restaurant, Category, MenuItem, Order, RestaurantStaff } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { TextField } from '@/components/ui/text-field';
+import { PartnerHeader } from '@/components/partner-header';
 
 type Tab = 'restaurants' | 'orders' | 'staff';
 
@@ -395,54 +396,14 @@ export default function AdminDashboardPage() {
   const completedOrders = orders.filter(o => ['DELIVERED', 'REJECTED', 'CANCELLED'].includes(o.status));
 
   return (
-    <div className="space-y-8 select-none py-6 max-w-6xl mx-auto px-4">
-      {/* Top Welcome Title */}
-      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-zinc-200 pb-5">
-        <div>
-          <h1 className="text-2xl font-bold tracking-tight text-zinc-900">Partner Dashboard</h1>
-          <p className="text-sm text-zinc-500 mt-1">Logged in as {profile.name} ({profile.email})</p>
-        </div>
-        
-        {/* Navigation Tabs buttons */}
-        <div className="flex bg-zinc-100 rounded-xl p-1 w-fit border border-zinc-200/40">
-          <button
-            onClick={() => setActiveTab('restaurants')}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all focus:outline-none cursor-pointer ${
-              activeTab === 'restaurants'
-                ? 'bg-white text-[#335438] shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
-          >
-            <Store className="h-4 w-4" />
-            My Restaurants
-          </button>
-          <button
-            onClick={() => setActiveTab('orders')}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all focus:outline-none cursor-pointer ${
-              activeTab === 'orders'
-                ? 'bg-white text-[#335438] shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
-          >
-            <ShoppingBag className="h-4 w-4" />
-            Incoming Orders
-            {pendingOrders.length > 0 && (
-              <span className="h-2 w-2 rounded-full bg-red-500 animate-ping" />
-            )}
-          </button>
-          <button
-            onClick={() => setActiveTab('staff')}
-            className={`flex items-center gap-2 px-4 py-2 text-xs font-bold rounded-lg transition-all focus:outline-none cursor-pointer ${
-              activeTab === 'staff'
-                ? 'bg-white text-[#335438] shadow-xs'
-                : 'text-zinc-600 hover:text-zinc-900'
-            }`}
-          >
-            <UserCheck className="h-4 w-4" />
-            Staff & Managers
-          </button>
-        </div>
-      </div>
+    <div className="min-h-screen bg-slate-50/50 pb-28">
+      <PartnerHeader
+        activeTab={activeTab}
+        onTabChange={setActiveTab}
+        pendingOrdersCount={pendingOrders.length}
+      />
+      
+      <div className="space-y-8 select-none py-6 max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
 
       {/* RENDER TAB: RESTAURANTS */}
       {activeTab === 'restaurants' && (
@@ -1204,6 +1165,7 @@ export default function AdminDashboardPage() {
           </div>
         </div>
       )}
+      </div>
     </div>
   );
 }
