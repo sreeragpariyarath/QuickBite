@@ -55,15 +55,16 @@ export class RestaurantsController {
   @ApiQuery({ name: 'city', required: false, example: 'Kochi' })
   @ApiQuery({ name: 'cuisine', required: false, example: 'Burgers' })
   @ApiQuery({ name: 'ownerId', required: false })
-  @ApiQuery({ name: 'status', required: false, example: 'PENDING_APPROVAL' })
+  @ApiQuery({ name: 'all', required: false, example: 'true' })
   @ApiOkResponse({ description: 'Array of restaurants' })
   findAll(
     @Query('city') city?: string,
     @Query('cuisine') cuisine?: string,
     @Query('ownerId') ownerId?: string,
     @Query('status') status?: string,
+    @Query('all') all?: string,
   ) {
-    return this.restaurantsService.findAll(city, cuisine, ownerId, status);
+    return this.restaurantsService.findAll(city, cuisine, ownerId, status, all === 'true');
   }
 
   @Get(':id')
@@ -127,6 +128,18 @@ export class RestaurantsController {
     @Body() dto: UpdateRestaurantDto,
   ) {
     return this.restaurantsService.update(id, user.sub, dto);
+  }
+
+  @Delete(':id')
+  @UseGuards(JwtAuthGuard, RolesGuard)
+  @Roles('SUPER_ADMIN', 'OWNER')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  @ApiBearerAuth()
+  @ApiOperation({ summary: 'Delete restaurant' })
+  @ApiParam({ name: 'id', format: 'uuid' })
+  @ApiNoContentResponse({ description: 'Restaurant deleted' })
+  removeRestaurant(@Param('id', ParseUUIDPipe) id: string) {
+    return this.restaurantsService.removeRestaurant(id);
   }
 
   // ---------- Staff / Manager Management ----------

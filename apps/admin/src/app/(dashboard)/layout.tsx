@@ -9,10 +9,10 @@ import {
   Store,
   ShoppingBag,
   LogOut,
-  Bell,
-  Sparkles,
+  Loader2,
 } from 'lucide-react';
-import { clearAuthToken, getAuthToken, getStoredUser } from '@/lib/api';
+import { clearAuthToken, getAuthToken } from '@/lib/api';
+import { useAuth } from '@/hooks/use-auth';
 import { motion } from 'framer-motion';
 
 const navItems = [
@@ -29,22 +29,33 @@ export default function DashboardLayout({
 }) {
   const pathname = usePathname();
   const router = useRouter();
-  const [user, setUser] = useState<any>(null);
+  const { profile, loading, logout } = useAuth();
+  const [authChecked, setAuthChecked] = useState(false);
 
   useEffect(() => {
     const token = getAuthToken();
-    const storedUser = getStoredUser();
     if (!token) {
-      setUser({ name: 'Super Admin', email: 'admin@quickbite.com', role: 'SUPER_ADMIN' });
+      router.push('/login');
     } else {
-      setUser(storedUser || { name: 'Super Admin', email: 'admin@quickbite.com', role: 'SUPER_ADMIN' });
+      setAuthChecked(true);
     }
   }, [router]);
 
+  // Auth Guard: Throw unauthenticated users out to /login
+  if (loading || !authChecked) {
+    return (
+      <div className="min-h-screen bg-[#f8fafc] flex flex-col items-center justify-center gap-3">
+        <Loader2 className="w-8 h-8 animate-spin text-blue-600" />
+        <p className="text-xs font-semibold text-slate-500">Verifying session authentication...</p>
+      </div>
+    );
+  }
+
   const handleLogout = () => {
-    clearAuthToken();
-    router.push('/login');
+    logout();
   };
+
+  const userInitial = profile?.name ? profile.name.slice(0, 2).toUpperCase() : 'SA';
 
   return (
     <div className="min-h-screen bg-[#f8fafc] text-slate-800 flex flex-col font-sans select-none relative">
@@ -57,7 +68,7 @@ export default function DashboardLayout({
       {/* Brand Avatar Badge (Bottom Left) */}
       <div className="fixed bottom-6 left-6 z-30 hidden md:block">
         <div className="w-9 h-9 rounded-full bg-blue-600 text-white font-bold flex items-center justify-center text-sm shadow-lg shadow-blue-600/20">
-          N
+          QB
         </div>
       </div>
 
@@ -100,9 +111,9 @@ export default function DashboardLayout({
           <div className="flex items-center gap-1 shrink-0 pl-1 pr-1.5">
             <div 
               className="w-7.5 h-7.5 rounded-full bg-slate-100 border border-slate-200/80 flex items-center justify-center text-slate-700 text-[10px] font-bold select-none cursor-default"
-              title={`${user?.name || 'Super Admin'} (${user?.role || 'SUPER_ADMIN'})`}
+              title={`${profile?.name || 'Super Admin'} (${profile?.role || 'SUPER_ADMIN'})`}
             >
-              SU
+              {userInitial}
             </div>
             <button
               onClick={handleLogout}

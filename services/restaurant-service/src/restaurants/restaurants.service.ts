@@ -35,17 +35,26 @@ export class RestaurantsService implements OnModuleInit {
     }
   }
 
-  findAll(city?: string, cuisine?: string, ownerId?: string, status?: string) {
+  findAll(city?: string, cuisine?: string, ownerId?: string, status?: string, all?: boolean) {
+    const where: any = {};
+
+    if (status) {
+      where.status = status;
+    } else if (ownerId) {
+      where.ownerId = ownerId;
+    } else if (!all) {
+      where.isActive = true;
+    }
+
+    if (city) {
+      where.city = { equals: city, mode: 'insensitive' };
+    }
+    if (cuisine) {
+      where.cuisines = { has: cuisine };
+    }
+
     return this.prisma.restaurant.findMany({
-      where: {
-        ...(status
-          ? { status: status as any }
-          : ownerId
-          ? { ownerId }
-          : { isActive: true }),
-        ...(city ? { city: { equals: city, mode: 'insensitive' } } : {}),
-        ...(cuisine ? { cuisines: { has: cuisine } } : {}),
-      },
+      where,
       include: {
         staff: true,
       },
@@ -105,6 +114,14 @@ export class RestaurantsService implements OnModuleInit {
         isActive,
       },
     });
+  }
+
+  async removeRestaurant(id: string) {
+    const restaurant = await this.prisma.restaurant.findUnique({ where: { id } });
+    if (!restaurant) {
+      throw new NotFoundException('Restaurant not found');
+    }
+    return this.prisma.restaurant.delete({ where: { id } });
   }
 
   // ---------- Staff / Manager Management ----------

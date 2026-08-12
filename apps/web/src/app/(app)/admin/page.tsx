@@ -20,7 +20,9 @@ import {
   Shield,
   Phone,
   Mail,
-  UserCheck
+  UserCheck,
+  RefreshCw,
+  Radio
 } from 'lucide-react';
 import { api, RESTAURANT_URL, ORDER_URL } from '@/lib/api';
 import { useAuth } from '@/lib/auth';
@@ -84,6 +86,18 @@ export default function AdminDashboardPage() {
   const [dishImgUrl, setDishImgUrl] = useState('');
   const [dishCatId, setDishCatId] = useState<string>('');
   const [dishAvailable, setDishAvailable] = useState(true);
+
+  // Edit Store State
+  const [showEditStore, setShowEditStore] = useState(false);
+  const [editRestName, setEditRestName] = useState('');
+  const [editRestDesc, setEditRestDesc] = useState('');
+  const [editRestAddress, setEditRestAddress] = useState('');
+  const [editRestCity, setEditRestCity] = useState('');
+  const [editRestPhone, setEditRestPhone] = useState('');
+  const [editRestFssai, setEditRestFssai] = useState('');
+  const [editRestGstin, setEditRestGstin] = useState('');
+  const [editRestImgUrl, setEditRestImgUrl] = useState('');
+  const [editRestCuisines, setEditRestCuisines] = useState('');
 
   // Authentication Guard
   useEffect(() => {
@@ -173,6 +187,17 @@ export default function AdminDashboardPage() {
     }
   }, [selectedRestId]);
 
+  // Live KDS Polling Interval (Syncs every 8 seconds)
+  useEffect(() => {
+    if (activeTab !== 'orders' || !profile) return;
+
+    const interval = setInterval(() => {
+      fetchOrders();
+    }, 8000);
+
+    return () => clearInterval(interval);
+  }, [activeTab, profile]);
+
   // Action: Create Restaurant
   const handleCreateRestaurant = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -211,6 +236,57 @@ export default function AdminDashboardPage() {
       await fetchRestaurants();
     } catch (err) {
       alert(err instanceof Error ? err.message : 'Failed to create restaurant');
+    } finally {
+      setActionBusy(null);
+    }
+  };
+
+  const openEditStore = (r: Restaurant) => {
+    setEditRestName(r.name || '');
+    setEditRestDesc(r.description || '');
+    setEditRestAddress(r.address || '');
+    setEditRestCity(r.city || '');
+    setEditRestPhone(r.contactPhone || '');
+    setEditRestFssai(r.fssaiLicense || '');
+    setEditRestGstin(r.gstin || '');
+    setEditRestImgUrl(r.imageUrl || '');
+    setEditRestCuisines(r.cuisines ? r.cuisines.join(', ') : '');
+    setShowEditStore(true);
+    setShowAddRest(false);
+  };
+
+  const handleEditRestaurant = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!selectedRestId || actionBusy) return;
+    setActionBusy('edit_restaurant');
+
+    const cuisinesArray = editRestCuisines
+      .split(',')
+      .map((c) => c.trim())
+      .filter(Boolean);
+
+    try {
+      await api(RESTAURANT_URL, `/restaurants/${selectedRestId}`, {
+        method: 'PATCH',
+        auth: true,
+        body: {
+          name: editRestName,
+          description: editRestDesc || undefined,
+          address: editRestAddress,
+          city: editRestCity,
+          contactPhone: editRestPhone || undefined,
+          fssaiLicense: editRestFssai || undefined,
+          gstin: editRestGstin || undefined,
+          imageUrl: editRestImgUrl || undefined,
+          cuisines: cuisinesArray,
+        },
+      });
+
+      setShowEditStore(false);
+      await fetchRestaurants();
+      await fetchRestaurantDetail(selectedRestId);
+    } catch (err) {
+      alert(err instanceof Error ? err.message : 'Failed to update store');
     } finally {
       setActionBusy(null);
     }
@@ -490,6 +566,83 @@ export default function AdminDashboardPage() {
               </form>
             )}
 
+            {/* Form Expansion: Edit Store */}
+            {showEditStore && (
+              <form onSubmit={handleEditRestaurant} className="bg-white border border-zinc-200/80 rounded-2xl p-4 shadow-sm space-y-3 animate-scale-in">
+                <div className="flex items-center justify-between border-b border-zinc-100 pb-2">
+                  <h3 className="text-xs font-bold text-zinc-900 flex items-center gap-1.5">
+                    <Edit3 className="w-3.5 h-3.5 text-[#335438]" />
+                    Edit Restaurant Profile
+                  </h3>
+                  <button type="button" onClick={() => setShowEditStore(false)} className="text-zinc-400 hover:text-zinc-700">
+                    <X className="w-4 h-4" />
+                  </button>
+                </div>
+
+                <TextField
+                  label="Restaurant Name"
+                  value={editRestName}
+                  onChange={(e) => setEditRestName(e.target.value)}
+                  placeholder="e.g. Dosa Palace"
+                  required
+                />
+                <TextField
+                  label="Description"
+                  value={editRestDesc}
+                  onChange={(e) => setEditRestDesc(e.target.value)}
+                  placeholder="e.g. Authentic South Indian Delicacies"
+                />
+                <TextField
+                  label="Address"
+                  value={editRestAddress}
+                  onChange={(e) => setEditRestAddress(e.target.value)}
+                  placeholder="Address"
+                  required
+                />
+                <TextField
+                  label="City"
+                  value={editRestCity}
+                  onChange={(e) => setEditRestCity(e.target.value)}
+                  placeholder="City"
+                  required
+                />
+                <TextField
+                  label="Cuisines (comma separated)"
+                  value={editRestCuisines}
+                  onChange={(e) => setEditRestCuisines(e.target.value)}
+                  placeholder="e.g. South Indian, Dosa"
+                />
+                <TextField
+                  label="FSSAI License No."
+                  value={editRestFssai}
+                  onChange={(e) => setEditRestFssai(e.target.value)}
+                  placeholder="14-digit license"
+                />
+                <TextField
+                  label="Contact Phone"
+                  value={editRestPhone}
+                  onChange={(e) => setEditRestPhone(e.target.value)}
+                  placeholder="+91..."
+                />
+                <TextField
+                  label="GSTIN"
+                  value={editRestGstin}
+                  onChange={(e) => setEditRestGstin(e.target.value)}
+                  placeholder="GSTIN"
+                />
+                <TextField
+                  label="Image URL"
+                  value={editRestImgUrl}
+                  onChange={(e) => setEditRestImgUrl(e.target.value)}
+                  placeholder="https://..."
+                />
+                <div className="flex gap-2 justify-end pt-1">
+                  <Button type="button" variant="secondary" className="text-xs font-bold py-1.5 h-auto px-3" onClick={() => setShowEditStore(false)}>Cancel</Button>
+                  <Button type="submit" className="text-xs font-bold py-1.5 h-auto px-3 bg-[#335438]" loading={actionBusy === 'edit_restaurant'}>Save Changes</Button>
+                </div>
+              </form>
+            )}
+
             {/* Restaurant List Cards */}
             {loadingRest ? (
               <div className="flex justify-center py-8">
@@ -505,7 +658,7 @@ export default function AdminDashboardPage() {
                   <div
                     key={r.id}
                     onClick={() => setSelectedRestId(r.id)}
-                    className={`p-4 rounded-2xl border text-left cursor-pointer transition ${
+                    className={`p-4 rounded-2xl border text-left cursor-pointer transition relative group ${
                       selectedRestId === r.id
                         ? 'border-[#335438] bg-[#F2F3E9]/40 shadow-xs'
                         : 'border-zinc-200 bg-white hover:border-zinc-300'
@@ -513,24 +666,45 @@ export default function AdminDashboardPage() {
                   >
                     <div className="flex gap-3">
                       {r.imageUrl && (
-                        <img src={r.imageUrl} alt={r.name} className="w-12 h-12 object-cover rounded-xl shrink-0 bg-zinc-100 border border-zinc-150" />
+                        <img 
+                          src={r.imageUrl} 
+                          alt={r.name} 
+                          className="w-12 h-12 object-cover rounded-xl shrink-0 bg-zinc-100 border border-zinc-150"
+                          onError={(e) => {
+                            (e.currentTarget as HTMLElement).style.display = 'none';
+                          }}
+                        />
                       )}
                       <div className="overflow-hidden flex-1">
                         <div className="flex items-center justify-between gap-2">
                           <h4 className="text-sm font-bold text-zinc-800 truncate">{r.name}</h4>
-                          {r.status === 'ACTIVE' || r.isActive ? (
-                            <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">
-                              Active
-                            </span>
-                          ) : r.status === 'PENDING_APPROVAL' ? (
-                            <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shrink-0 animate-pulse">
-                              Pending Approval
-                            </span>
-                          ) : (
-                            <span className="text-[9px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full shrink-0">
-                              Suspended
-                            </span>
-                          )}
+                          <div className="flex items-center gap-1.5">
+                            {r.status === 'ACTIVE' || r.isActive ? (
+                              <span className="text-[9px] font-bold text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-0.5 rounded-full shrink-0">
+                                Active
+                              </span>
+                            ) : r.status === 'PENDING_APPROVAL' ? (
+                              <span className="text-[9px] font-bold text-amber-700 bg-amber-50 border border-amber-200 px-2 py-0.5 rounded-full shrink-0 animate-pulse">
+                                Pending Approval
+                              </span>
+                            ) : (
+                              <span className="text-[9px] font-bold text-red-700 bg-red-50 border border-red-200 px-2 py-0.5 rounded-full shrink-0">
+                                Suspended
+                              </span>
+                            )}
+
+                            <button
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                setSelectedRestId(r.id);
+                                openEditStore(r);
+                              }}
+                              className="p-1 text-zinc-400 hover:text-[#335438] hover:bg-[#F2F3E9] rounded-md transition cursor-pointer"
+                              title="Edit Store Profile"
+                            >
+                              <Edit3 className="w-3.5 h-3.5" />
+                            </button>
+                          </div>
                         </div>
                         <p className="text-[11px] font-medium text-zinc-500 truncate mt-0.5">{r.address}, {r.city}</p>
                         <div className="flex gap-1 flex-wrap mt-1.5">
@@ -553,6 +727,18 @@ export default function AdminDashboardPage() {
                 <div className="flex items-center justify-between border-b border-zinc-100 pb-3">
                   <h2 className="text-sm font-bold text-zinc-700 uppercase tracking-wider">Restaurant Menu Manager</h2>
                   <div className="flex gap-2">
+                    {(() => {
+                      const selectedStore = restaurants.find((r) => r.id === selectedRestId);
+                      return selectedStore ? (
+                        <button
+                          onClick={() => openEditStore(selectedStore)}
+                          className="flex items-center gap-1 px-3 py-1.5 border border-zinc-200 bg-white hover:bg-zinc-50 text-zinc-700 text-[11px] font-bold rounded-lg transition focus:outline-none cursor-pointer"
+                        >
+                          <Edit3 className="h-3.5 w-3.5 text-zinc-500" />
+                          Edit Store
+                        </button>
+                      ) : null;
+                    })()}
                     <button
                       onClick={() => {
                         setShowAddCat(true);
@@ -797,9 +983,33 @@ export default function AdminDashboardPage() {
         </div>
       )}
 
-      {/* RENDER TAB: ORDERS */}
+      {/* RENDER TAB: ORDERS (Kitchen Display System) */}
       {activeTab === 'orders' && (
         <div className="space-y-6">
+          {/* KDS Live Header Bar */}
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 pb-2 border-b border-zinc-150">
+            <div>
+              <h2 className="text-base font-bold text-zinc-900 tracking-tight flex items-center gap-2">
+                Kitchen Display System (KDS)
+                <span className="inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full bg-emerald-50 border border-emerald-200 text-emerald-700 font-bold text-[10px]">
+                  <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 animate-ping" />
+                  Live Auto-Sync (8s)
+                </span>
+              </h2>
+              <p className="text-xs text-zinc-500 mt-0.5">
+                Real-time incoming orders, preparation queue & delivery status pipeline
+              </p>
+            </div>
+
+            <button
+              onClick={fetchOrders}
+              disabled={loadingOrders}
+              className="flex items-center gap-1.5 px-3 py-1.5 bg-white border border-zinc-200 hover:bg-zinc-50 rounded-xl text-xs font-bold text-zinc-700 shadow-xs transition cursor-pointer self-start sm:self-auto"
+            >
+              <RefreshCw className={`w-3.5 h-3.5 ${loadingOrders ? 'animate-spin text-[#335438]' : ''}`} />
+              <span>Sync Orders</span>
+            </button>
+          </div>
           
           {/* Header Stats Indicator Row */}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">

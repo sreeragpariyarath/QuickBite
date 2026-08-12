@@ -1,5 +1,6 @@
 import { ApiProperty, ApiPropertyOptional } from '@nestjs/swagger';
 import {
+  IsBoolean,
   IsNumber,
   IsOptional,
   IsPositive,
@@ -38,4 +39,12 @@ export class CreateMenuItemDto {
   @IsOptional()
   @IsString()
   imageUrl?: string;
+
+  @ApiPropertyOptional({
+    example: true,
+    description: 'Whether the dish is available for ordering',
+  })
+  @IsOptional()
+  @IsBoolean()
+  isAvailable?: boolean;
 }
