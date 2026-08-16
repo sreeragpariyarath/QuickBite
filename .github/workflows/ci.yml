@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - feature/*
   pull_request:
     branches:
       - main
@@ -50,10 +51,14 @@ jobs:
         working-directory: services/${{ matrix.service }}
         run: pnpm exec nest build
 
-  # 2. Next.js Frontend CI
+  # 2. Frontend Applications CI (apps/web & apps/admin)
   frontend:
-    name: Frontend CI (apps/web)
+    name: Frontend CI (${{ matrix.app }})
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        app: [apps/web, apps/admin]
     env:
       NEXT_PUBLIC_FIREBASE_API_KEY: "mock-api-key-for-ci-build"
       NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN: "mock-auth-domain-for-ci-build"
@@ -81,5 +86,5 @@ jobs:
         run: pnpm install --frozen-lockfile
 
       - name: Type Check & Build
-        working-directory: apps/web
+        working-directory: ${{ matrix.app }}
         run: pnpm build
