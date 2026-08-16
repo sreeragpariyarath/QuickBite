@@ -1,4 +1,5 @@
 import { UserItem, UserRole } from '@/types';
+import { SelectOption } from '@/components/ui';
 
 export const MOCK_USERS: UserItem[] = [
   {
@@ -57,3 +58,14 @@ export const ROLE_BADGE_COLORS: Record<UserRole, string> = {
   DRIVER: 'bg-teal-50 text-teal-600 border-teal-200/60',
   CUSTOMER: 'bg-slate-100 text-slate-600 border-slate-200/60',
 };
+
+export const USER_ROLE_OPTIONS: SelectOption[] = [
+  { label: 'All Roles', value: 'ALL' },
+  { label: 'Super Admin', value: 'SUPER_ADMIN' },
+  { label: 'Store Owner', value: 'OWNER' },
+  { label: 'Store Manager', value: 'MANAGER' },
+  { label: 'Cashier', value: 'CASHIER' },
+  { label: 'Kitchen Staff', value: 'KITCHEN_STAFF' },
+  { label: 'Delivery Driver', value: 'DRIVER' },
+  { label: 'Customer', value: 'CUSTOMER' },
+];
