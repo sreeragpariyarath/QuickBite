@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "private": true,
+  "packageManager": "pnpm@9.15.0",
   "scripts": {
     "postman": "node scripts/generate-postman-collections.js",
     "generate:api": "pnpm --filter auth-service openapi && pnpm --filter restaurant-service openapi && pnpm --filter order-service openapi && pnpm postman"
@@ -10,13 +11,6 @@
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "9.15.0",
-      "onFail": "download"
-    }
-  },
   "devDependencies": {
     "@nestjs/cli": "^11.0.21",
     "openapi-to-postmanv2": "^6.3.0",
